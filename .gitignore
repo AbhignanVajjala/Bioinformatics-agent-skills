@@ -1,0 +1,25 @@
+.venv/
+__pycache__/
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+artifacts/
+build/
+dist/
+
+.cache/
+
+evals/reports/eval-*/cache/
+
+# Local credentials and machine-specific files
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+.DS_Store
+
+# Retain only the reviewed publication evidence snapshot
+/evals/reports/*
+!/evals/reports/publication/
+evals/reports/**/cache/

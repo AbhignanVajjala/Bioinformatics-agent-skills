@@ -1,0 +1,16 @@
+{
+  "completed_stages": [],
+  "pending_stages": [
+    "Inspect study inputs"
+  ],
+  "known_issues": [
+    "Template; no analysis executed"
+  ],
+  "next_commands": [],
+  "artifacts": [],
+  "reviewer": {
+    "identity": "unassigned",
+    "kind": "agent",
+    "independent": false
+  }
+}

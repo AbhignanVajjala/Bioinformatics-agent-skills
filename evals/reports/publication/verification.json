@@ -1,0 +1,129 @@
+[
+  {
+    "command": [
+      "/workspace/Bioinformatics-agent-skills/.venv/bin/python",
+      "-m",
+      "pip",
+      "check"
+    ],
+    "started_at": "2026-11-17T17:16:29.619908+00:00",
+    "ended_at": "2026-11-17T17:16:29.989876+00:00",
+    "exit_status": 0,
+    "stdout": "No broken requirements found.\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      ".venv/bin/ruff",
+      "check",
+      "."
+    ],
+    "started_at": "2026-11-17T17:16:29.990147+00:00",
+    "ended_at": "2026-11-17T17:16:30.003962+00:00",
+    "exit_status": 0,
+    "stdout": "All checks passed!\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      ".venv/bin/ruff",
+      "format",
+      "--check",
+      "."
+    ],
+    "started_at": "2026-11-17T17:16:30.004195+00:00",
+    "ended_at": "2026-11-17T17:16:30.013603+00:00",
+    "exit_status": 0,
+    "stdout": "12 files already formatted\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/Bioinformatics-agent-skills/.venv/bin/python",
+      "scripts/validate_skills.py"
+    ],
+    "started_at": "2026-11-17T17:16:30.013802+00:00",
+    "ended_at": "2026-11-17T17:16:30.111885+00:00",
+    "exit_status": 0,
+    "stdout": "13 skills checked; 0 structural/link errors\n\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/Bioinformatics-agent-skills/.venv/bin/python",
+      "scripts/build_catalog.py",
+      "--check"
+    ],
+    "started_at": "2026-11-17T17:16:30.112108+00:00",
+    "ended_at": "2026-11-17T17:16:30.190225+00:00",
+    "exit_status": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/Bioinformatics-agent-skills/.venv/bin/python",
+      "-m",
+      "pytest",
+      "-q",
+      "--junitxml=evals/reports/publication/pytest.xml"
+    ],
+    "started_at": "2026-11-17T17:16:30.190431+00:00",
+    "ended_at": "2026-11-17T17:16:41.111924+00:00",
+    "exit_status": 0,
+    "stdout": "........................................................................ [100%]\n- generated xml file: /workspace/Bioinformatics-agent-skills/evals/reports/publication/pytest.xml -\n72 passed in 10.46s\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/Bioinformatics-agent-skills/.venv/bin/python",
+      "examples/bulk-rnaseq/run.py",
+      "--output",
+      "artifacts/publication/bulk-rnaseq"
+    ],
+    "started_at": "2026-11-17T17:16:41.112249+00:00",
+    "ended_at": "2026-11-17T17:16:41.822398+00:00",
+    "exit_status": 0,
+    "stdout": "PASS: RNA-seq readiness/QC; DE NOT_RUN. Artifacts: artifacts/publication/bulk-rnaseq\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/Bioinformatics-agent-skills/.venv/bin/python",
+      "examples/multiomics/run.py",
+      "--output",
+      "artifacts/publication/multiomics"
+    ],
+    "started_at": "2026-11-17T17:16:41.823220+00:00",
+    "ended_at": "2026-11-17T17:16:42.178620+00:00",
+    "exit_status": 0,
+    "stdout": "PASS: paired-assay reconciliation and descriptive concordance. Artifacts: artifacts/publication/multiomics\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/Bioinformatics-agent-skills/.venv/bin/python",
+      "examples/metabolic-modeling/run.py",
+      "--output",
+      "artifacts/publication/metabolic-modeling"
+    ],
+    "started_at": "2026-11-17T17:16:42.179333+00:00",
+    "ended_at": "2026-11-17T17:16:43.332208+00:00",
+    "exit_status": 0,
+    "stdout": "PASS: FBA objective=10.0; pFBA/FVA, sensitivity and infeasibility checked. Artifacts: artifacts/publication/metabolic-modeling\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/workspace/Bioinformatics-agent-skills/.venv/bin/python",
+      "scripts/run_evals.py",
+      "--output",
+      "evals/reports/publication/latest.json"
+    ],
+    "started_at": "2026-11-17T17:16:43.332795+00:00",
+    "ended_at": "2026-11-17T17:16:48.416707+00:00",
+    "exit_status": 0,
+    "stdout": "{\"NOT_RUN\": 5, \"PASS\": 7}\n",
+    "stderr": ""
+  }
+]

@@ -1,0 +1,14 @@
+{
+  "run_id": "template-not-executed",
+  "checks": [
+    {
+      "check_id": "design-review",
+      "domain": "statistical_methodology",
+      "status": "NOT_RUN",
+      "evidence_path": null,
+      "severity": "MAJOR",
+      "explanation": "Template awaiting study data and design review",
+      "remediation": "Record actual model matrix and rank check"
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "claims": [
+    {
+      "claim": "The study supports the planned contrast",
+      "claim_type": "hypothesized",
+      "source_or_artifact": [],
+      "analysis_run_id": null,
+      "verification_method": "Pending design inspection",
+      "status": "NOT_RUN",
+      "limitations": [
+        "Template; no analysis executed"
+      ],
+      "uncertainties": [
+        "Replication and confounding unknown"
+      ],
+      "approval_status": "pending",
+      "reviewer": {
+        "identity": "unassigned",
+        "kind": "agent",
+        "independent": false
+      }
+    }
+  ]
+}

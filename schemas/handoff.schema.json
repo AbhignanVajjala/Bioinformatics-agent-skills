@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "handoff",
+  "description": "Project artifact contract v1; structural validity is not scientific validation.",
+  "type": "object",
+  "properties": {
+    "completed_stages": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "pending_stages": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "known_issues": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "next_commands": {
+      "type": "array",
+      "items": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        },
+        "minItems": 1
+      }
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "reviewer": {
+      "type": "object",
+      "properties": {
+        "identity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "kind": {
+          "enum": [
+            "agent",
+            "human",
+            "tool"
+          ]
+        },
+        "independent": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "identity",
+        "kind",
+        "independent"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "completed_stages",
+    "pending_stages",
+    "known_issues",
+    "next_commands",
+    "artifacts",
+    "reviewer"
+  ],
+  "additionalProperties": false
+}

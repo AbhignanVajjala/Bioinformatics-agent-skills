@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=75,<81"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bioinformatics-agent-skills"
+version = "0.1.0"
+description = "Experimental scientific agent skills and executable readiness gates"
+requires-python = ">=3.11"
+license = "MIT"
+dependencies = ["PyYAML==6.0.2", "jsonschema==4.23.0", "rfc3339-validator==0.1.4", "numpy==2.2.6", "pandas==2.2.3"]
+
+[project.optional-dependencies]
+dev = ["pytest==8.3.5", "ruff==0.11.13"]
+examples = ["matplotlib==3.10.3", "scipy==1.15.3", "cobra==0.29.1"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F"]

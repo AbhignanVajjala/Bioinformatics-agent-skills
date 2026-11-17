@@ -1,0 +1,15 @@
+{
+  "source": "locally generated demonstration",
+  "synthetic": true,
+  "access_restrictions": "No human data; local synthetic fixture",
+  "organism": "synthetic; no organism implied",
+  "modality": "bulk RNA-seq count-like simulation",
+  "sample_ids": [
+    "sample-1",
+    "sample-2"
+  ],
+  "reference": "not applicable",
+  "version": "template-v1",
+  "license": "Project license for original synthetic fixture",
+  "files": []
+}

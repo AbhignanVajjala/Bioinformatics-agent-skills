@@ -1,0 +1,121 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "scientific_claim_ledger",
+  "description": "Project artifact contract v1; structural validity is not scientific validation.",
+  "type": "object",
+  "properties": {
+    "claims": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "claim": {
+            "type": "string",
+            "minLength": 1
+          },
+          "claim_type": {
+            "enum": [
+              "observed",
+              "computed",
+              "association",
+              "predicted",
+              "hypothesized",
+              "experimentally_validated",
+              "clinically_validated"
+            ]
+          },
+          "source_or_artifact": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "analysis_run_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "verification_method": {
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "enum": [
+              "PASS",
+              "WARN",
+              "FAIL",
+              "NOT_RUN",
+              "BLOCKED"
+            ]
+          },
+          "limitations": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "uncertainties": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "approval_status": {
+            "enum": [
+              "pending",
+              "approved",
+              "rejected",
+              "not_applicable"
+            ]
+          },
+          "reviewer": {
+            "type": "object",
+            "properties": {
+              "identity": {
+                "type": "string",
+                "minLength": 1
+              },
+              "kind": {
+                "enum": [
+                  "agent",
+                  "human",
+                  "tool"
+                ]
+              },
+              "independent": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "identity",
+              "kind",
+              "independent"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "claim",
+          "claim_type",
+          "source_or_artifact",
+          "analysis_run_id",
+          "verification_method",
+          "status",
+          "limitations",
+          "uncertainties",
+          "approval_status",
+          "reviewer"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "claims"
+  ],
+  "additionalProperties": false
+}

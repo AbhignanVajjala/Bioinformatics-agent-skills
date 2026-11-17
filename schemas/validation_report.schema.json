@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "validation_report",
+  "description": "Project artifact contract v1; structural validity is not scientific validation.",
+  "type": "object",
+  "properties": {
+    "run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "check_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "domain": {
+            "enum": [
+              "input_integrity",
+              "computation",
+              "statistical_methodology",
+              "biological_interpretation",
+              "provenance_reporting"
+            ]
+          },
+          "status": {
+            "enum": [
+              "PASS",
+              "WARN",
+              "FAIL",
+              "NOT_RUN",
+              "BLOCKED"
+            ]
+          },
+          "evidence_path": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "severity": {
+            "enum": [
+              "CRITICAL",
+              "MAJOR",
+              "MINOR",
+              "ADVISORY"
+            ]
+          },
+          "explanation": {
+            "type": "string",
+            "minLength": 1
+          },
+          "remediation": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "check_id",
+          "domain",
+          "status",
+          "evidence_path",
+          "severity",
+          "explanation",
+          "remediation"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "run_id",
+    "checks"
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,22 @@
+{
+  "question": "Can the synthetic design support a condition contrast?",
+  "study_type": "exploratory",
+  "estimand": "Condition-associated log fold change, if a valid DE model is fitted",
+  "experimental_unit": "independent synthetic donor",
+  "cohorts": [
+    "control",
+    "treated"
+  ],
+  "analysis_plan": [
+    "Check integer counts and full-rank design before choosing DESeq2"
+  ],
+  "covariates": [
+    "batch"
+  ],
+  "intended_claims": [
+    "Analysis readiness only"
+  ],
+  "key_risks": [
+    "Synthetic data do not validate biological effects"
+  ]
+}

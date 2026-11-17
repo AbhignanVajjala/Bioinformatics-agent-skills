@@ -1,0 +1,13 @@
+{
+  "run_id": "template-not-executed",
+  "git_revision": null,
+  "software": {},
+  "inputs": [],
+  "parameters": {},
+  "random_seed": null,
+  "commands": [],
+  "started_at": "2000-01-01T00:00:00Z",
+  "ended_at": "2000-01-01T00:00:00Z",
+  "exit_status": -1,
+  "outputs": []
+}

@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "research_spec",
+  "description": "Project artifact contract v1; structural validity is not scientific validation.",
+  "type": "object",
+  "properties": {
+    "question": {
+      "type": "string",
+      "minLength": 1
+    },
+    "study_type": {
+      "enum": [
+        "exploratory",
+        "confirmatory"
+      ]
+    },
+    "estimand": {
+      "type": "string",
+      "minLength": 1
+    },
+    "experimental_unit": {
+      "type": "string",
+      "minLength": 1
+    },
+    "cohorts": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "analysis_plan": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "covariates": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "intended_claims": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "key_risks": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  },
+  "required": [
+    "question",
+    "study_type",
+    "estimand",
+    "experimental_unit",
+    "cohorts",
+    "analysis_plan",
+    "covariates",
+    "intended_claims",
+    "key_risks"
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,39 @@
+[
+  {
+    "url": "https://raw.githubusercontent.com/opencobra/cobrapy/0.29.1/documentation_builder/simulating.rst",
+    "checked_date": "2026-11-17",
+    "verification": "UNVERIFIED",
+    "reason": "HTTP Error 404: Not Found"
+  },
+  {
+    "url": "https://www.bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html",
+    "checked_date": "2026-11-17",
+    "verification": "UNVERIFIED",
+    "reason": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+  },
+  {
+    "url": "https://raw.githubusercontent.com/bioFAM/MOFA2/master/README.md",
+    "checked_date": "2026-11-17",
+    "http_status": 200,
+    "bytes": 931,
+    "verification": "retrieved, not endorsement or complete methodology review"
+  },
+  {
+    "url": "https://www.go-fair.org/fair-principles/",
+    "checked_date": "2026-11-17",
+    "verification": "UNVERIFIED",
+    "reason": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+  },
+  {
+    "url": "https://nf-co.re/docs/guidelines/pipelines/overview",
+    "checked_date": "2026-11-17",
+    "verification": "UNVERIFIED",
+    "reason": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+  },
+  {
+    "url": "https://www.ga4gh.org/our-work/framework-for-responsible-sharing-of-genomic-and-health-related-data/",
+    "checked_date": "2026-11-17",
+    "verification": "UNVERIFIED",
+    "reason": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+  }
+]

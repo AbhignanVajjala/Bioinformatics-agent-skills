@@ -1,4 +1,106 @@
-# Phase 2 milestone 1 — Local agent evaluation
+# Development progress
+
+## Phase 2 milestone 2 — Controlled pilot `BLOCKED`
+
+The native Windows isolation probe passed from a normal host process on Windows
+25H2 build 26200.9974 with `codex-cli 0.169.0-alpha.11.1`. The same runner inside
+the managed Codex shell received `native MXC is unavailable on this executor`.
+The host surfaced two runner defects separately. Its Codex process needed
+`SystemDrive`, and its sandboxed command needed `SYSTEMROOT`. The runner now
+passes these values explicitly. The inner MXC policy still limits filesystem reads,
+blocks writes and disables tool network access. Shell environment inheritance
+remains off.
+
+The host smoke command passed isolation and stopped at the ChatGPT login check.
+The fresh evaluation home had no verified login. This run has no model output,
+activation signal, token usage or pilot adjudication. See
+[implementation status](implementation-status.md#phase-2-milestone-2--2026-11-18)
+for the individual probe outcomes and evidence.
+
+### Continue from normal local PowerShell
+
+Open PowerShell from Windows and run these commands in the same terminal. The
+dedicated home is on the local profile, away from the checkout and evaluation
+reports. The login command opens the ChatGPT sign-in flow in the browser.
+[Codex CLI authentication](https://learn.chatgpt.com/docs/auth?surface=cli).
+
+```powershell
+Set-Location -LiteralPath 'C:\Users\kukka\OneDrive\Documents\GitHub\Bioinformatics-agent-skills'
+$python = (Resolve-Path -LiteralPath '.venv/Scripts/python.exe').Path
+$cli = (Get-Command codex.exe -CommandType Application -ErrorAction Stop).Source
+$authHome = Join-Path $env:LOCALAPPDATA 'BioinformaticsAgentSkills\codex-auth'
+$evidence = Join-Path $env:LOCALAPPDATA 'BioinformaticsAgentSkills\milestone2'
+
+& $python scripts/run_agent_evals.py --probe --codex $cli --output-dir $evidence
+if ($LASTEXITCODE -ne 0) { throw 'MXC isolation probe failed. See the reported directory.' }
+
+New-Item -ItemType Directory -Path $authHome -Force | Out-Null
+$previousCodexHome = [Environment]::GetEnvironmentVariable('CODEX_HOME', 'Process')
+try {
+    $env:CODEX_HOME = $authHome
+    & $cli login -c 'forced_login_method="chatgpt"'
+    if ($LASTEXITCODE -ne 0) { throw 'ChatGPT sign-in failed.' }
+} finally {
+    [Environment]::SetEnvironmentVariable('CODEX_HOME', $previousCodexHome, 'Process')
+}
+```
+
+Enter a model ID available to your ChatGPT account. The next block runs one
+baseline turn and checks its exact response before starting the five-case pilot.
+The same model and tool settings are used for both modes in every pair.
+
+```powershell
+$model = Read-Host 'Codex model ID'
+$smoke = & $python scripts/run_agent_evals.py --execute --smoke --codex $cli `
+    --model $model --codex-home $authHome --output-dir $evidence
+$smokeExit = $LASTEXITCODE
+$smoke
+if ($smokeExit -ne 0) { throw 'Smoke run stopped. See the reported directory.' }
+$smokeReport = Get-Content -Raw -LiteralPath $smoke[0] | ConvertFrom-Json
+$smokeDir = Join-Path (Split-Path -Parent $smoke[0]) $smokeReport.results[0].artifact_dir
+$answer = Get-Content -Raw -LiteralPath (Join-Path $smokeDir 'response.txt')
+if ($smokeReport.results[0].status -ne 'COMPLETED' -or $answer.Trim() -cne 'READY') {
+    throw 'Smoke evidence did not match the expected READY response.'
+}
+
+& $python scripts/run_agent_evals.py --execute --pilot --codex $cli `
+    --model $model --codex-home $authHome --output-dir $evidence
+```
+
+### Pilot review
+
+`--pilot` selects five scenarios for ten total turns. It also works without
+`--execute` to produce an offline plan. The default 114-turn plan stays intact.
+
+| Scenario | What to check in the evidence |
+|---|---|
+| Explicit `$research-specification` invocation | Inspect available runtime evidence for how the requested skill was handled. The response should specify the estimand, donor pairing and design gates. |
+| Automatic research-specification selection | Use the same paired RNA-seq task without the skill name. Review skill evidence and the adequacy of the response separately. |
+| Negative control for scientific-prompt-engineering | A FASTQ rename request should be handled as file housekeeping and preserve file contents. Review any evidence of unnecessary prompt-engineering skill use. |
+| Enrichment background | Check that eligible tested genes define the universe, assignments account for species and ambiguous identifiers, and the response addresses multiplicity. |
+| Survival censoring | Check that censoring is retained and the response proposes a suitable estimand and censoring-aware analysis. |
+
+Record the reviewer, quoted response evidence, evaluation status and unresolved
+uncertainty separately from execution status. The explicit request is a user
+prompt condition. A request mention or observed skill-file read alone leaves
+activation or scientific adequacy unresolved. Preserve raw JSONL, final messages
+and reported token usage under the evidence directory.
+[Skill discovery and explicit invocation](https://learn.chatgpt.com/docs/build-skills),
+[scientific evaluation rubric](../evals/rubrics/scientific-review.md).
+
+### WSL2 route
+
+Ubuntu WSL2 is installed. The host inventory found Python 3.14.4 and
+`/usr/bin/bwrap`. The `codex` on its PATH resolved to the Windows app's mounted
+resources directory. Linux CLI identity and sandbox behavior were unverified.
+OpenAI supports native Linux Codex in WSL2 with bubblewrap. A Linux adaptation
+of this harness needs its own isolation probe before it can run the pilot.
+The current harness preflight requires native Windows MXC. Legacy Windows
+`elevated` mode requires separate provisioning and was outside this milestone.
+[WSL2 setup](https://learn.chatgpt.com/docs/windows/wsl),
+[native Windows sandbox](https://learn.chatgpt.com/docs/windows/windows-sandbox?translationFallback=pt-BR).
+
+## Phase 2 milestone 1 — Local agent evaluation
 
 Baseline `7ba97ae` on the local Windows feature branch `phase2-agent-evaluations`.
 The milestone adds [the agent runner](../scripts/run_agent_evals.py) and
@@ -74,7 +176,4 @@ this executor`. This was a local sandbox command. No model turn, login attempt
 or benchmark adjudication took place. See the [implementation status](implementation-status.md)
 for commands and offline validation evidence.
 
-On a host that passes the isolation probe, the remaining tasks are to collect a
-single live smoke response, verify the discovery and activation evidence available
-from that CLI version, then run selected pairs and eventually the full benchmark
-with human adjudication. No further Phase 2 milestone was started.
+Milestone 2 records the follow-up host probe and the controlled pilot plan above.

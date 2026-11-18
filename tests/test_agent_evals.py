@@ -95,7 +95,31 @@ def test_only_case_inputs_form_candidate_prompts(tmp_path):
     ]
 
 
+def test_pilot_plan_has_five_cases_with_matched_prompts(tmp_path):
+    assert runner.main(["--pilot", "--output-dir", str(tmp_path)]) == 0
+    _, report = report_in(tmp_path)
+    rows = report["results"]
+    assert report["summary"] == {"NOT_RUN": 10}
+    assert {row["id"] for row in rows} == {
+        "research-specification-explicit-pilot",
+        "research-specification-positive-1",
+        "scientific-prompt-engineering-negative-2",
+        "enrichment-background",
+        "survival-censoring",
+    }
+    cases, _, _ = runner.load_inputs(ROOT)
+    _, prompt = cases["research-specification-positive-1"]
+    assert rows[0]["prompt_sha256"] == runner.digest(b"$research-specification " + prompt)
+    for baseline, enabled in zip(rows[::2], rows[1::2], strict=True):
+        assert baseline["id"] == enabled["id"]
+        assert [baseline["mode"], enabled["mode"]] == ["baseline", "skills"]
+        assert baseline["prompt_sha256"] == enabled["prompt_sha256"]
+        assert baseline["evaluation_status"] == enabled["evaluation_status"] == "NOT_RUN"
+
+
 def test_child_environment_is_allowlisted(tmp_path, monkeypatch):
+    if sys.platform == "win32":
+        monkeypatch.setenv("SystemDrive", Path("C:/").drive)
     for name in (
         "OPENAI_API_KEY",
         "CODEX_API_KEY",
@@ -116,6 +140,8 @@ def test_child_environment_is_allowlisted(tmp_path, monkeypatch):
     assert Path(env["CODEX_HOME"]).is_relative_to(tmp_path)
     assert Path(env["TEMP"]).is_dir()
     assert env["HOME"] == env["USERPROFILE"]
+    if sys.platform == "win32":
+        assert env["SystemDrive"] == Path("C:/").drive
 
 
 @pytest.mark.parametrize(
@@ -314,6 +340,11 @@ def test_preflight_refuses_unsafe_runtime_without_persisting_login_output(
         result = b"codex-cli 0.169.0\n"
         if command[1] == "sandbox":
             assert "windows.require_mxc=true" in command
+            assert 'shell_environment_policy.inherit="none"' in command
+            system_root_arg = next(
+                arg for arg in command if arg.startswith("shell_environment_policy.set.SYSTEMROOT=")
+            )
+            assert json.loads(system_root_arg.split("=", 1)[1]) == env["SystemRoot"]
             assert "--include-managed-config" in command
             assert (cwd / "inside.txt").is_file()
             assert (cwd.parent / "outside.txt").is_file()

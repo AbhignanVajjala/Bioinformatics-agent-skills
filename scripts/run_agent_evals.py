@@ -23,6 +23,12 @@ ROOT = Path(__file__).resolve().parents[1]
 MANIFESTS = ("evals/cases/triggers.json", "evals/cases/scientific.json")
 RUBRIC = "evals/rubrics/scientific-review.md"
 MODES = ("baseline", "skills")
+PILOT_CASES = (
+    "research-specification-positive-1",
+    "scientific-prompt-engineering-negative-2",
+    "enrichment-background",
+    "survival-censoring",
+)
 PROFILE = "agent-eval"
 FEATURES_OFF = ("apps", "hooks", "plugins", "memories", "skill_mcp_dependency_install")
 
@@ -109,8 +115,13 @@ def isolated_env(scratch: Path, codex_home: Path | None) -> dict:
     }
     for path in locations.values():
         path.mkdir(parents=True, exist_ok=True)
-    # Windows needs SystemRoot for process startup. Keep host PATH and all secrets out.
-    system = {name: os.environ[name] for name in ("SystemRoot", "WINDIR") if name in os.environ}
+    # Windows process startup needs SystemRoot. Native MXC also needs SystemDrive.
+    # Keep host PATH and credentials out of the child environment.
+    system = {
+        name: os.environ[name]
+        for name in ("SystemRoot", "SystemDrive", "WINDIR")
+        if name in os.environ
+    }
     search_path = os.defpath
     if os.name == "nt":
         system32 = Path(system["SystemRoot"]) / "System32"
@@ -135,7 +146,16 @@ def overrides(workspace: Path) -> list[str]:
         *(f"features.{name}=false" for name in FEATURES_OFF),
     ]
     if os.name == "nt":
-        settings.extend(('windows.sandbox="mxc"', "windows.require_mxc=true"))
+        # MXC launches the sandboxed command with this explicit environment.
+        # Preserve Windows startup metadata without inheriting the CLI environment.
+        system_root = json.dumps(os.environ["SystemRoot"], ensure_ascii=False)
+        settings.extend(
+            (
+                'windows.sandbox="mxc"',
+                "windows.require_mxc=true",
+                f"shell_environment_policy.set.SYSTEMROOT={system_root}",
+            )
+        )
     return [arg for setting in settings for arg in ("-c", setting)]
 
 
@@ -378,6 +398,7 @@ def main(argv: list[str] | None = None) -> int:
     select.add_argument("--case", action="append", help="select a case ID; repeat for multiple")
     select.add_argument("--all", action="store_true", help="explicitly select the full benchmark")
     select.add_argument("--smoke", action="store_true", help="one harmless synthetic prompt")
+    select.add_argument("--pilot", action="store_true", help="five fixed pilot scenarios")
     parser.add_argument("--mode", choices=MODES)
     parser.add_argument("--model", help="explicit CLI model identifier for live runs")
     parser.add_argument(
@@ -393,7 +414,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.timeout < 1:
         parser.error("--timeout must be positive")
     if args.execute and not (
-        (args.case or args.all or args.smoke) and args.model and args.codex_home
+        (args.case or args.all or args.smoke or args.pilot) and args.model and args.codex_home
     ):
         parser.error("--execute requires explicit selection, --model and --codex-home")
     if args.codex_home is not None:
@@ -425,6 +446,16 @@ def main(argv: list[str] | None = None) -> int:
             parser.error("--codex-home must be dedicated and contain no user guidance or skills")
     if args.smoke:
         cases = {"smoke": ("smoke", b"Reply with the word READY.")}
+    elif args.pilot:
+        cases = {case_id: cases[case_id] for case_id in PILOT_CASES}
+        _, discovery_prompt = cases["research-specification-positive-1"]
+        cases = {
+            "research-specification-explicit-pilot": (
+                "trigger",
+                b"$research-specification " + discovery_prompt,
+            ),
+            **cases,
+        }
     elif args.case:
         unknown = sorted(set(args.case) - cases.keys())
         if unknown:

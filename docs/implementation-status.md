@@ -1,5 +1,59 @@
 # Implementation status
 
+## Phase 2 milestone 2 — 2026-11-18
+
+**BLOCKED at ChatGPT sign-in.** The native Windows MXC isolation check passed
+from a host process, and no model turn or scientific pilot was executed. This
+checkpoint starts from `fb438986bb9076a70aaa94e1f3369760462953dd`. Runbook and
+pilot review criteria are in [development progress](development-progress.md).
+
+Diagnostics used Windows 25H2 build 26200.9974, PowerShell 7.6.9, Python 3.14.8,
+and `codex-cli 0.169.0-alpha.11.1` from the installed Windows app. Commands below
+are from the checkout with the corresponding existing virtual environment active.
+Evidence directories are under the ignored `artifacts/phase2-milestone2/`.
+
+| Command and context | Result and evidence directory |
+|---|---|
+| `python scripts/run_agent_evals.py --probe --output-dir artifacts/phase2-milestone2/managed` in the managed Codex shell | Exit 1. `native MXC is unavailable on this executor`. Report under `managed/agent-eval-d0a4eb4a6f1c435c8d47594abd3aa75a/`. |
+| Same probe from a host process with `--output-dir artifacts/phase2-milestone2/host` | Exit 1. `MXC requires nonempty Unicode host SystemDrive`. Report under `host/agent-eval-32ecdfe119814fe2898b3946baa6f501/`. |
+| Host probe with `SystemDrive` restored and `--output-dir artifacts/phase2-milestone2/host-systemdrive` | Exit 1. MXC's explicit command environment lacked `SYSTEMROOT`. Report under `host-systemdrive/agent-eval-9ad5f15bb8344e84bc0aa91887bdd8a0/`. |
+| Host probe with both corrections and `--output-dir artifacts/phase2-milestone2/host-final` | Exit 0, `ISOLATION_OK`. Read inside succeeded. Sibling read and in-workspace write were denied. Report under `host-final/agent-eval-55a01739982b4c6586b412cc2f1a0803/`. |
+| `python scripts/run_agent_evals.py --execute --smoke --model gpt-6-sol --codex-home $authCheck --output-dir artifacts/phase2-milestone2/smoke` from a host process with a freshly created dedicated auth home | Exit 1. Isolation exited 0 and login status exited 1 with `chatgpt_authenticated: false`. Smoke `BLOCKED`, adjudication `NOT_RUN`. Report under `smoke/agent-eval-94e7f1b372a3487aaa8d12332ed0e442/`. |
+
+The messages identify a limitation of the managed executor and two separate
+runner environment omissions on the host. The user config declares Windows
+`elevated` mode. The probes selected MXC per invocation and left that config
+intact. The corrected test still uses
+`windows.require_mxc=true`, the confined read-only profile, disabled tool
+networking, and `shell_environment_policy.inherit="none"`. The successful probe
+tested filesystem boundaries. It did not run a model or verify network behavior
+end to end. No login credentials were read into evaluation artifacts.
+
+`wsl.exe --list --verbose` returned `Wsl/E_ACCESSDENIED` from the managed shell
+and listed Ubuntu as WSL version 2 when run on the host. The host inventory found
+`/usr/bin/bwrap`, Python 3.14.4, and a `codex` path in the Windows app's mounted
+resources. The runner requires Windows MXC for live execution, and no Linux
+Codex sandbox test was run.
+
+| Offline validation command | Observed result |
+|---|---|
+| `python -m pytest -q --junitxml artifacts/phase2-milestone2/pytest-final.xml` | **95 passed, 0 failed, 0 skipped**, Python 3.12.10 with the Milestone 1 dependency environment and local caches |
+| `ruff check .` and `ruff format --check .` | Both exit 0, 14 Python files formatted |
+| `python scripts/validate_skills.py` and `python scripts/build_catalog.py --check` | Both exit 0, 13 skills and 0 structural or link errors |
+| `python scripts/run_evals.py --output artifacts/phase2-milestone2/deterministic.json` | Exit 0, seven tool scenarios `PASS`, five agent scenarios `NOT_RUN` |
+| `python scripts/run_agent_evals.py --output-dir artifacts/phase2-milestone2/plans` | Exit 0, all 114 benchmark turns `NOT_RUN` |
+| `python scripts/run_agent_evals.py --pilot --output-dir artifacts/phase2-milestone2/pilot-plan` | Exit 0, five scenarios and ten planned turns, all `NOT_RUN` |
+
+Evidence SHA-256 values are below. Live responses, skill access, token usage and
+behavioral evaluation have no evidence because inference did not start.
+
+| Artifact | SHA-256 |
+|---|---|
+| Corrected host probe report | `f98a832259ec53762104a63d3ace025b9c5caaa9c987ba8da2f651d754ac2a51` |
+| Blocked smoke report | `c8d2990d059437f9344db2e86506a6537fa0775075fdff7f7dee5fa814195f6d` |
+| Offline pilot plan report | `d77f3ab621748dc62a6233ae6341ace5f2945665f497094f09adcb9305e9c7a8` |
+| Final pytest XML | `a1c90c322471902ddbb2a7275fb788785fff0224d42775bfa564b66512f15e0f` |
+
 ## Phase 2 milestone 1 — 2026-11-18
 
 The local Windows branch `phase2-agent-evaluations` starts from `7ba97ae`.

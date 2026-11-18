@@ -1,4 +1,63 @@
-# Implementation status — 2026-11-17
+# Implementation status
+
+## Phase 2 milestone 1 — 2026-11-18
+
+The local Windows branch `phase2-agent-evaluations` starts from `7ba97ae`.
+The new [agent evaluation runner](../scripts/run_agent_evals.py) plans the 52 trigger
+and five scientific agent scenarios in baseline and skill-enabled configurations.
+It has an explicit live Codex CLI mode with preflight isolation, fresh sessions
+and structured execution evidence. The runner leaves behavioral adjudication
+`NOT_RUN` until review. See [development progress](development-progress.md) for
+operation, evidence semantics, and remaining work.
+
+Validation used Windows build 26200 and PowerShell 7.6.9. The installed Python
+3.14.8 was used for the dependency-light harness check. For the full suite, a
+portable Python 3.12.10 and an isolated virtual environment were placed in
+`artifacts/phase2-validation/`. The runtime came from the official Python NuGet
+package (archive SHA-256
+`0eb85c2dfccccf1b17352de4c397f69194035b7d37149eacc16f1147d93de3b8`).
+The project used the versions in `requirements-tested.txt` plus Windows
+`colorama==0.4.6`. During Phase 1 checks, `PYTHONUTF8=1` handled the checkout's UTF-8
+materials, `PYTHONPATH` pointed to `src`, and `XDG_CACHE_HOME` and `MPLCONFIGDIR`
+used ignored artifact paths. Commands below use the corresponding virtual
+environment's interpreter.
+
+| Command | Observed result |
+|---|---|
+| `python -m pytest -q tests/test_agent_evals.py --junitxml artifacts/phase2-validation/harness-py314.xml` | **22 passed, 0 failed, 0 skipped** with Python 3.14.8 |
+| `python -m pytest -q --junitxml artifacts/phase2-validation/pytest-final.xml` | **94 passed, 0 failed, 0 skipped** with Python 3.12.10, including all 72 Phase 1 tests |
+| `python -m pip check` | Exit 0, no broken requirements |
+| `ruff check .` and `ruff format --check .` | Exit 0 for both; 14 Python files formatted |
+| `python scripts/validate_skills.py` | Exit 0, 13 skills, 0 structural or link errors |
+| `python scripts/build_catalog.py --check` | Exit 0 |
+| `python examples/bulk-rnaseq/run.py --output artifacts/phase2-validation/bulk-rnaseq` | Exit 0, readiness/QC PASS, DE NOT_RUN |
+| `python examples/multiomics/run.py --output artifacts/phase2-validation/multiomics` | Exit 0, specimen reconciliation and descriptive concordance PASS |
+| `python examples/metabolic-modeling/run.py --output artifacts/phase2-validation/metabolic-modeling` | Exit 0, FBA objective 10.0, pFBA/FVA, sensitivity and infeasibility checked |
+| `python scripts/run_evals.py --output artifacts/phase2-validation/deterministic.json` | Exit 0, **7 tool scenarios PASS** across 11 pytest cases and **5 agent scenarios NOT_RUN** |
+| `python scripts/run_agent_evals.py --output-dir artifacts/phase2-validation/plans` | Exit 0, **114 planned turns NOT_RUN** |
+| `python scripts/run_agent_evals.py --probe --output-dir artifacts/phase2-validation/preflight` | Exit 1, local CLI `0.169.0-alpha.11.1` found, native MXC unavailable on this executor |
+
+The initial Python 3.14.8 harness run had 13 passes and six failures. Windows
+platform reporting unexpectedly invoked a shell, and the test temp directory
+inside the checkout violated the intended isolation checks. The runner now
+gets the Windows version without a subprocess, and validation uses the native
+temporary directory for pytest fixtures. The final runs above have no test failures.
+
+Local evidence under `artifacts/phase2-validation/` includes example artifacts,
+`pytest-final.xml` with SHA-256
+`91c2dc5ca182c97fecee80174f2d25bf8d60fcce7f15296697dfc38ddc7941b4`,
+and `deterministic.json` with SHA-256
+`cb455861bc2cba1ce78ebac0a7261cdeb012c8ad71739c5bf1c9d1c694101272`.
+The final plan is `plans/agent-eval-0cd6d51fadb249bd8a2a5019010db572/report.json`
+with SHA-256 `34f3aa47c02059d41545446201ca29cbbaf7a5f73753a0d1bfee60f4933ff7fd`.
+The CLI preflight logs are under
+`preflight/agent-eval-4e6d9076b1494141b37c85f9568291d1/`. That early preflight
+used the same MXC configuration as the final runner. Its `isolation.stderr`
+SHA-256 is `e01fec220084dcad78090dbc2c818a5c9f4f565e65b8cc26c65f479ffe497ccb`.
+Live response collection, skill discovery, activation and performance remain
+`NOT_RUN`. The local sandbox probe failed before any login check or inference.
+
+## Phase 1 record — 2026-11-17
 
 **Experimental prototype with executed synthetic scientific checks.** Original implementation
 is present in the existing checkout. At the first milestone no commit, push, package publication or deployment

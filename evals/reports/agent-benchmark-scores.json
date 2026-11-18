@@ -1,0 +1,1314 @@
+{
+  "schema_version": 1,
+  "review": {
+    "status": "PROVISIONAL",
+    "reviewer": "Codex automated review of saved evidence",
+    "independent_human_methodological_review": "PENDING",
+    "date": "2026-11-18",
+    "status_rules": {
+      "PASS": "All scored criteria in the relevant scope were demonstrated. In critical_errors and unsupported_conclusions, PASS means no such issue was observed.",
+      "FAIL": "A required response behavior is missing or violated. Scores for workflow and response-specific checks are diagnostic and do not change the manifest criteria.",
+      "BLOCKED": "A required signal cannot be verified. No trigger PASS or FAIL is assigned from file access, a mention, or missing telemetry alone."
+    },
+    "no_composite_score": true
+  },
+  "source": {
+    "run_id": "agent-eval-7e2fa2331d71450a8dd5020640971e6d",
+    "report_sha256": "07af7e9c06cb30a9dcae81e6fcbdccd7f7858d6edfc5da900fae4bd60f2eca32",
+    "provider": "ChatGPT",
+    "requested_model": "gpt-6.1-sol",
+    "resolved_model": null,
+    "cli_version": "codex-cli 0.168.0",
+    "input_sha256": {
+      "evals/cases/triggers.json": "cd78a1eb39e6633f54992ca9ba3d7c22b6815d79bdcc4af4f0200d07c31d016a",
+      "evals/cases/scientific.json": "20367f423e53a55aff8d8646272001faf6736eae5764d55b0715e8e9dbb846b9",
+      "evals/rubrics/scientific-review.md": "66d180ada45f3b55ae1c331ec17facf78435cd29f61bda08a88f251dcc5e0f83",
+      "scripts/run_agent_evals.py": "51055889d3e5045d00fee1872319fc50fee0130fce6c4422277345caa7e7b769"
+    },
+    "skill_sha256": {
+      ".agents/skills/bioinformatics-skill-authoring/SKILL.md": "26d8c00a5a5681bd0bea43e3a0f199bc53f0c4ba709fa3351ae185b3cb03f21f",
+      ".agents/skills/bulk-rnaseq-differential-expression/references/methods.md": "08b0d4f71fb4746a614c3dad67c977c4d1713c487085663af343f8514f8ddf71",
+      ".agents/skills/bulk-rnaseq-differential-expression/SKILL.md": "64ee764e4f754ea3f1e643a71cb9999972afa56b1adb5feecae87c2f9a719fec",
+      ".agents/skills/genome-scale-metabolic-modeling/references/methods.md": "282a5e1da3c494de4addd94c22ed6f21ef1907a740998941b59471c0cab249dd",
+      ".agents/skills/genome-scale-metabolic-modeling/SKILL.md": "f34f8b7a07c252a2f70257b99448f9a7d9f7db49c6549fb1fc85f124995d2b5e",
+      ".agents/skills/multiomics-integration/references/methods.md": "1a0a85d797037ff0a8365ff6570afb4ddb0087e2fa2c705845ddb148efe17061",
+      ".agents/skills/multiomics-integration/SKILL.md": "50a85150177d33b8164c3864d669ddb6ef5f2ab263941257206439933b10302c",
+      ".agents/skills/research-reproducibility-audit/SKILL.md": "6c3d3021446c61bb6e815c8c1f259396955bccdb1458a85bade10398a974873a",
+      ".agents/skills/research-specification/SKILL.md": "7b28ec35c55b6f217d5ba61d70ed4106d8210f9bb19795300e1b373220ae2000",
+      ".agents/skills/research-task-decomposition/SKILL.md": "b47bab3f97df0f69ea283cc45e77f12a515e17e84c2ec816a4be48cc0ca9202c",
+      ".agents/skills/scientific-agent-orchestration/SKILL.md": "6b702dc2c2fef60c81b0a8488156bc55b6d5faab0626a0d6d6afc7f54a5a36e6",
+      ".agents/skills/scientific-context-engineering/SKILL.md": "e5d284af1a890766be69236b48334b47848baa55948bb7f3fa76c0f2a27fe128",
+      ".agents/skills/scientific-debugging/SKILL.md": "d1bc154d335503a90b89e84f549977cfca9b60a747fde9f0847af9ce26aa20eb",
+      ".agents/skills/scientific-prompt-engineering/SKILL.md": "09387b08274e20f750bb6c133fe8e02a8b4263ba64719a6e64deefe0480c6b42",
+      ".agents/skills/source-grounded-scientific-reasoning/SKILL.md": "893c9bc56330428292b1e95df11d33df2233b6f984d5cc5e91710f667d02e4f8",
+      ".agents/skills/verification-before-scientific-claims/SKILL.md": "538cb9cfdbec56e581236c7930ce8c084909b023575036f929d5478c30afe48a"
+    }
+  },
+  "evidence_checks": {
+    "completed": 10,
+    "exit_zero": 10,
+    "distinct_thread_ids": 10,
+    "matching_final_responses": 10,
+    "verified_artifact_files": 40,
+    "verified_prompt_pairs": 5,
+    "prompts_match_original_inputs": true,
+    "normalized_cli_configuration_matches": true,
+    "recorded_steps_passed": [
+      "version",
+      "isolation",
+      "chatgpt_login"
+    ],
+    "runner_reported_skill_reads": 0,
+    "trace_backed_file_reads": 4,
+    "trace_read_method": "Successful Get-Content item named a staged relative SKILL.md path and its output contained the matching document headings. This is file access evidence."
+  },
+  "provisional_benchmark_counts": {
+    "PASS": 0,
+    "FAIL": 4,
+    "BLOCKED": 6
+  },
+  "pairs": [
+    {
+      "case_id": "research-specification-explicit-pilot",
+      "attempts": [
+        "attempt-001",
+        "attempt-002"
+      ],
+      "comparison": "Both supplied a provisional paired estimand and gating plan. The skills reply included three named artifact drafts and a read of the requested skill. The baseline reply stated that the named skill was unavailable. Invocation remains unverified."
+    },
+    {
+      "case_id": "research-specification-positive-1",
+      "attempts": [
+        "attempt-003",
+        "attempt-004"
+      ],
+      "comparison": "Both used a pair-conditional count model and checked identifiability and FDR. The skills reply specified raw-count provenance or supported import, residual degrees of freedom and precision planning. The baseline called the coefficient population-average and later clarified its pair-conditional interpretation. Both omitted the canonical handoff. The skills trace showed two file reads."
+    },
+    {
+      "case_id": "scientific-prompt-engineering-negative-2",
+      "attempts": [
+        "attempt-005",
+        "attempt-006"
+      ],
+      "comparison": "Both respected the read-only boundary and made no change. Baseline offered a literal-path command and a compressed-extension reminder. Skills asked for file path and new name. The absence of an observed skill read leaves non-invocation unverified."
+    },
+    {
+      "case_id": "enrichment-background",
+      "attempts": [
+        "attempt-007",
+        "attempt-008"
+      ],
+      "comparison": "Both rejected selected genes as the universe, flagged species/version and mapping ambiguity, and withheld a result. Skills asked to document ambiguity resolution and deduplication. Both omitted multiplicity control."
+    },
+    {
+      "case_id": "survival-censoring",
+      "attempts": [
+        "attempt-009",
+        "attempt-010"
+      ],
+      "comparison": "Both preserved censoring and recommended Kaplan–Meier. Baseline supplied correct descriptive survival values and median. Skills stated the event coding convention and explained why regression was unwarranted for this fixture. Both omitted an explicit estimand, censoring assumptions and diagnostic checks."
+    }
+  ],
+  "limitations": [
+    "One response per case and condition, with baseline first in each pair. Differences do not identify a causal skill effect or general effectiveness.",
+    "Resolved backend model version and semantic activation remain unverified.",
+    "Only reviewed excerpts and nonsensitive metadata are retained here. Raw transcripts and runtime artifacts remain local."
+  ],
+  "turns": [
+    {
+      "case_id": "research-specification-explicit-pilot",
+      "track": "trigger",
+      "mode": "baseline",
+      "attempt": "attempt-001",
+      "execution_status": "COMPLETED",
+      "exit_status": 0,
+      "recorded_evaluation_status": "NOT_RUN",
+      "provisional_benchmark_status": "BLOCKED",
+      "benchmark_reason": "Expected invocation or non-invocation cannot be verified from the trace.",
+      "activation": {
+        "runner_status": "UNOBSERVABLE",
+        "review_status": "UNVERIFIED",
+        "expected_when_skill_available": true,
+        "criterion_status": "BLOCKED",
+        "observed_file_accesses": []
+      },
+      "artifact_sha256": {
+        "prompt.txt": "cab01599e55c8117cb81f7601c70ff5873639234ba52689151ee76712d8e9501",
+        "response.txt": "bb2c707b258f585facb5cea013eec8ad298ba8c1b6e0c34e321347974f2a3535",
+        "events.jsonl": "e224de65b3e149add500f803631e4a21325f5e06d9070e962a695ce6294eb498"
+      },
+      "usage": {
+        "input_tokens": 35812,
+        "cached_input_tokens": 33152,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 1137,
+        "reasoning_output_tokens": 78
+      },
+      "dimensions": {
+        "scientific_correctness": {
+          "status": "PASS",
+          "criteria": [
+            {
+              "criterion": "paired_estimand_and_unit",
+              "scope": "benchmark",
+              "status": "PASS",
+              "severity": null,
+              "reason": "Defines a conditional treatment/reference ratio, recognizes independent pairs and distinguishes technical replicates.",
+              "response_excerpts": [
+                "conditional on donor",
+                "technical replicates do not increase biological sample size"
+              ]
+            }
+          ]
+        },
+        "methodological_completeness": {
+          "status": "PASS",
+          "criteria": [
+            {
+              "criterion": "pairing_and_design_gates",
+              "scope": "benchmark",
+              "status": "PASS",
+              "severity": null,
+              "reason": "Proposes paired count modeling and checks rank, QC, biological replication and the primary testing family.",
+              "response_excerpts": [
+                "a full-rank design matrix",
+                "control Benjamini–Hochberg FDR"
+              ]
+            }
+          ]
+        },
+        "critical_errors": {
+          "status": "PASS",
+          "criteria": [
+            {
+              "criterion": "no_critical_error_observed",
+              "scope": "benchmark",
+              "status": "PASS",
+              "severity": null,
+              "reason": "Avoids confounded treatment inference and pseudoreplication.",
+              "response_excerpts": [
+                "stop the affected contrast if unidentifiable"
+              ]
+            }
+          ]
+        },
+        "unsupported_conclusions": {
+          "status": "PASS",
+          "criteria": [
+            {
+              "criterion": "claims_match_evidence",
+              "scope": "benchmark",
+              "status": "PASS",
+              "severity": null,
+              "reason": "Limits interpretation to relative expression and separates a before/after change from an identified treatment effect.",
+              "response_excerpts": [
+                "A causal interpretation requires randomization or defensible identification assumptions."
+              ]
+            }
+          ]
+        },
+        "research_workflow_quality": {
+          "status": "PASS",
+          "criteria": [
+            {
+              "criterion": "actionable_provisional_plan",
+              "scope": "benchmark",
+              "status": "PASS",
+              "severity": null,
+              "reason": "Sets failure actions and lists details required to finalize the plan. The explicit pilot asks for an estimand and gates.",
+              "response_excerpts": [
+                "To finalize this specification, the key missing details are"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "research-specification-explicit-pilot",
+      "track": "trigger",
+      "mode": "skills",
+      "attempt": "attempt-002",
+      "execution_status": "COMPLETED",
+      "exit_status": 0,
+      "recorded_evaluation_status": "NOT_RUN",
+      "provisional_benchmark_status": "BLOCKED",
+      "benchmark_reason": "Expected invocation or non-invocation cannot be verified from the trace.",
+      "activation": {
+        "runner_status": "UNOBSERVABLE",
+        "review_status": "UNVERIFIED",
+        "expected_when_skill_available": true,
+        "criterion_status": "BLOCKED",
+        "observed_file_accesses": [
+          {
+            "item_id": "item_1",
+            "file": ".agents/skills/research-specification/SKILL.md"
+          }
+        ]
+      },
+      "artifact_sha256": {
+        "prompt.txt": "cab01599e55c8117cb81f7601c70ff5873639234ba52689151ee76712d8e9501",
+        "response.txt": "06b9a004cbff073c8352124d45fa3a4e6d2ba8c1b1754b8de80d56a27cd3b402",
+        "events.jsonl": "0700d90d61b310d16b52516b74e73c24ae8a72cd0e1e3dcee4e607c3f32bcd65"
+      },
+      "usage": {
+        "input_tokens": 26891,
+        "cached_input_tokens": 12928,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 1505,
+        "reasoning_output_tokens": 32
+      },
+      "dimensions": {
+        "scientific_correctness": {
+          "status": "PASS",
+          "criteria": [
+            {
+              "criterion": "paired_estimand_and_unit",
+              "scope": "benchmark",
+              "status": "PASS",
+              "severity": null,
+              "reason": "Defines the within-subject relative expression contrast and specifies subjects as biological units.",
+              "response_excerpts": [
+                "Within-subject treatment-associated expression difference",
+                "technical libraries do not increase independent sample size"
+              ]
+            }
+          ]
+        },
+        "methodological_completeness": {
+          "status": "PASS",
+          "criteria": [
+            {
+              "criterion": "pairing_and_design_gates",
+              "scope": "benchmark",
+              "status": "PASS",
+              "severity": null,
+              "reason": "Covers count validity, complete-pair policy, rank, residual degrees of freedom, QC, FDR, sensitivity and interpretation.",
+              "response_excerpts": [
+                "Design matrix has full rank, residual degrees of freedom, and informative condition variation",
+                "Apply Benjamini–Hochberg correction across the primary tested gene family"
+              ]
+            }
+          ]
+        },
+        "critical_errors": {
+          "status": "PASS",
+          "criteria": [
+            {
+              "criterion": "no_critical_error_observed",
+              "scope": "benchmark",
+              "status": "PASS",
+              "severity": null,
+              "reason": "Blocks unidentified designs and unsupported replication.",
+              "response_excerpts": [
+                "Halt confirmatory inference if units are unidentified or independent replication is absent"
+              ]
+            }
+          ]
+        },
+        "unsupported_conclusions": {
+          "status": "PASS",
+          "criteria": [
+            {
+              "criterion": "claims_match_evidence",
+              "scope": "benchmark",
+              "status": "PASS",
+              "severity": null,
+              "reason": "Leaves population, pairing and reviewer unresolved and treats the plan as provisional.",
+              "response_excerpts": [
+                "Treatment-associated comparison; confirmatory intent unconfirmed"
+              ]
+            }
+          ]
+        },
+        "research_workflow_quality": {
+          "status": "PASS",
+          "criteria": [
+            {
+              "criterion": "actionable_provisional_plan",
+              "scope": "benchmark",
+              "status": "PASS",
+              "severity": null,
+              "reason": "Provides identifiable drafts for all three artifacts in the response and explicitly records their execution status.",
+              "response_excerpts": [
+                "Files cannot be saved in this read-only workspace; their proposed contents follow.",
+                "Manifest checks, design-rank checks, QC, model fitting, and sensitivity analyses are all `NOT_RUN`."
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "research-specification-positive-1",
+      "track": "trigger",
+      "mode": "baseline",
+      "attempt": "attempt-003",
+      "execution_status": "COMPLETED",
+      "exit_status": 0,
+      "recorded_evaluation_status": "NOT_RUN",
+      "provisional_benchmark_status": "BLOCKED",
+      "benchmark_reason": "Expected invocation or non-invocation cannot be verified from the trace.",
+      "activation": {
+        "runner_status": "UNOBSERVABLE",
+        "review_status": "UNVERIFIED",
+        "expected_when_skill_available": true,
+        "criterion_status": "BLOCKED",
+        "observed_file_accesses": []
+      },
+      "artifact_sha256": {
+        "prompt.txt": "9283aec7b24a70fb4b1f36d01d921a0f3011e44f197865af305353196a709ed6",
+        "response.txt": "03bf2a9ea1cc12ce0cc2e1cd6fc7eee069369c51a1f35de6dd4ddf39c55eb276",
+        "events.jsonl": "8f82462c8ede14ac3c74e7b15badefb4320e750b345343c14bac3619be98c7dd"
+      },
+      "usage": {
+        "input_tokens": 34905,
+        "cached_input_tokens": 27392,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 756,
+        "reasoning_output_tokens": 0
+      },
+      "dimensions": {
+        "scientific_correctness": {
+          "status": "PASS",
+          "criteria": [
+            {
+              "criterion": "paired_estimand_and_unit",
+              "scope": "benchmark",
+              "status": "PASS",
+              "severity": null,
+              "reason": "The common pair-conditional coefficient and independent pair unit are explicit. The earlier population-average wording is imprecise for the specified model without further assumptions.",
+              "response_excerpts": [
+                "population-average within-pair treatment effect",
+                "The treatment coefficient is a common effect conditional on pair"
+              ]
+            }
+          ]
+        },
+        "methodological_completeness": {
+          "status": "FAIL",
+          "criteria": [
+            {
+              "criterion": "pairing_and_design_gates",
+              "scope": "benchmark",
+              "status": "PASS",
+              "severity": null,
+              "reason": "Addresses identity, rank, confounding, missing pairs, normalization, diagnostics and prespecified FDR.",
+              "response_excerpts": [
+                "Verify pair IDs, condition labels, biological replication, and a full-rank design.",
+                "control BH FDR at 5% across tested genes"
+              ]
+            },
+            {
+              "criterion": "count_input_and_power_preflight",
+              "scope": "benchmark",
+              "status": "FAIL",
+              "severity": "major",
+              "reason": "Chooses a count model and lists sequencing/quantification QC, but never requires raw counts or a supported count import or gives a prospective assessment of precision or power.",
+              "response_excerpts": [
+                "Use a negative-binomial count model with library-size offsets",
+                "Check read quality, depth, mapping/assignment, strandedness, rRNA content, and coverage"
+              ]
+            }
+          ]
+        },
+        "critical_errors": {
+          "status": "PASS",
+          "criteria": [
+            {
+              "criterion": "no_critical_error_observed",
+              "scope": "benchmark",
+              "status": "PASS",
+              "severity": null,
+              "reason": "No erroneous testing or inference is reported.",
+              "response_excerpts": [
+                "Biological pairs determine replication; sequencing lanes do not."
+              ]
+            }
+          ]
+        },
+        "unsupported_conclusions": {
+          "status": "PASS",
+          "criteria": [
+            {
+              "criterion": "claims_match_evidence",
+              "scope": "benchmark",
+              "status": "PASS",
+              "severity": null,
+              "reason": "Qualifies uncontrolled pre/post results and bounds claims to relative expression.",
+              "response_excerpts": [
+                "A causal treatment interpretation requires additional assumptions because time effects are inseparable from treatment."
+              ]
+            }
+          ]
+        },
+        "research_workflow_quality": {
+          "status": "FAIL",
+          "criteria": [
+            {
+              "criterion": "specification_handoff",
+              "scope": "skill_workflow",
+              "status": "FAIL",
+              "severity": "major",
+              "reason": "The canonical skill calls for a research specification, analysis plan, acceptance checks and reviewer identity. This response gives a usable gate table but no three-part handoff or reviewer field.",
+              "response_excerpts": [
+                "If a gate fails, document remediation or downgrade the affected claims rather than silently changing the analysis."
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "research-specification-positive-1",
+      "track": "trigger",
+      "mode": "skills",
+      "attempt": "attempt-004",
+      "execution_status": "COMPLETED",
+      "exit_status": 0,
+      "recorded_evaluation_status": "NOT_RUN",
+      "provisional_benchmark_status": "BLOCKED",
+      "benchmark_reason": "Expected invocation or non-invocation cannot be verified from the trace.",
+      "activation": {
+        "runner_status": "UNOBSERVABLE",
+        "review_status": "UNVERIFIED",
+        "expected_when_skill_available": true,
+        "criterion_status": "BLOCKED",
+        "observed_file_accesses": [
+          {
+            "item_id": "item_1",
+            "file": ".agents/skills/research-specification/SKILL.md"
+          },
+          {
+            "item_id": "item_1",
+            "file": ".agents/skills/bulk-rnaseq-differential-expression/SKILL.md"
+          }
+        ]
+      },
+      "artifact_sha256": {
+        "prompt.txt": "9283aec7b24a70fb4b1f36d01d921a0f3011e44f197865af305353196a709ed6",
+        "response.txt": "f28d2ba50bcd5dadf39bb996a78b8e2533ad6384f978f8b0e928aa70dd6eb5a4",
+        "events.jsonl": "1ee1e4ec27cc9fb39d37f298d9ddac7e53ec618a65f6d8fedf8cb01e47b538db"
+      },
+      "usage": {
+        "input_tokens": 26430,
+        "cached_input_tokens": 5504,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 875,
+        "reasoning_output_tokens": 0
+      },
+      "dimensions": {
+        "scientific_correctness": {
+          "status": "PASS",
+          "criteria": [
+            {
+              "criterion": "paired_estimand_and_unit",
+              "scope": "benchmark",
+              "status": "PASS",
+              "severity": null,
+              "reason": "Defines a subject-blocked log-link coefficient, converts it to log2 fold change and distinguishes independent biological units from aliquots.",
+              "response_excerpts": [
+                "Report \\(\\beta_g/\\log(2)\\)",
+                "libraries and aliquots are not independent replicates"
+              ]
+            }
+          ]
+        },
+        "methodological_completeness": {
+          "status": "PASS",
+          "criteria": [
+            {
+              "criterion": "pairing_and_design_gates",
+              "scope": "benchmark",
+              "status": "PASS",
+              "severity": null,
+              "reason": "Verifies count-to-metadata correspondence and covers rank, residual degrees of freedom, exclusions, FDR, diagnostics and interpretation.",
+              "response_excerpts": [
+                "Check rank, residual degrees of freedom and batch allocation.",
+                "Define the tested-gene family and FDR threshold in advance"
+              ]
+            },
+            {
+              "criterion": "count_input_and_power_preflight",
+              "scope": "benchmark",
+              "status": "PASS",
+              "severity": null,
+              "reason": "Explicitly requires compatible count provenance and power planning grounded in biological pairs.",
+              "response_excerpts": [
+                "Require raw gene counts with known provenance, or a supported transcript-to-gene import.",
+                "Pair count adequacy should be assessed using justified effect and dispersion assumptions."
+              ]
+            }
+          ]
+        },
+        "critical_errors": {
+          "status": "PASS",
+          "criteria": [
+            {
+              "criterion": "no_critical_error_observed",
+              "scope": "benchmark",
+              "status": "PASS",
+              "severity": null,
+              "reason": "No pseudoreplication, invalid count use or unidentifiable inference is endorsed.",
+              "response_excerpts": [
+                "Perfect condition–batch confounding blocks separate treatment estimation."
+              ]
+            }
+          ]
+        },
+        "unsupported_conclusions": {
+          "status": "PASS",
+          "criteria": [
+            {
+              "criterion": "claims_match_evidence",
+              "scope": "benchmark",
+              "status": "PASS",
+              "severity": null,
+              "reason": "Keeps claims proportionate and states that no analysis gates were executed.",
+              "response_excerpts": [
+                "Significant expression changes alone do not establish mechanism, therapeutic efficacy or clinical benefit."
+              ]
+            }
+          ]
+        },
+        "research_workflow_quality": {
+          "status": "FAIL",
+          "criteria": [
+            {
+              "criterion": "specification_handoff",
+              "scope": "skill_workflow",
+              "status": "FAIL",
+              "severity": "major",
+              "reason": "Prescribes preservation of evidence and clearly labels the plan provisional, but omits the canonical three-part handoff and reviewer identity.",
+              "response_excerpts": [
+                "Retain inputs, design, exclusions, code, versions, diagnostics and results."
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "scientific-prompt-engineering-negative-2",
+      "track": "trigger",
+      "mode": "baseline",
+      "attempt": "attempt-005",
+      "execution_status": "COMPLETED",
+      "exit_status": 0,
+      "recorded_evaluation_status": "NOT_RUN",
+      "provisional_benchmark_status": "BLOCKED",
+      "benchmark_reason": "Expected invocation or non-invocation cannot be verified from the trace.",
+      "activation": {
+        "runner_status": "UNOBSERVABLE",
+        "review_status": "UNVERIFIED",
+        "expected_when_skill_available": false,
+        "criterion_status": "BLOCKED",
+        "observed_file_accesses": []
+      },
+      "artifact_sha256": {
+        "prompt.txt": "52e585ea6a358026a11870a90ca89334a421fc48185d1303dc1d1b0a857b7a26",
+        "response.txt": "e5f460e8abf94e1e3ab09683461b0784d2dcbedfda22051030167de090e6e270",
+        "events.jsonl": "bf560874b2ae877dff7903dded409b8a726d0e1722f17f99da3bb432ab56053d"
+      },
+      "usage": {
+        "input_tokens": 35072,
+        "cached_input_tokens": 32768,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 202,
+        "reasoning_output_tokens": 0
+      },
+      "dimensions": {
+        "scientific_correctness": {
+          "status": "PASS",
+          "criteria": [
+            {
+              "criterion": "content_preserving_rename",
+              "scope": "benchmark",
+              "status": "PASS",
+              "severity": null,
+              "reason": "Uses a file rename with a literal source path. It preserves file bytes and notes the compressed extension.",
+              "response_excerpts": [
+                "without changing its contents:",
+                "For compressed files, keep the `.fastq.gz` extension."
+              ]
+            }
+          ]
+        },
+        "methodological_completeness": {
+          "status": "PASS",
+          "criteria": [
+            {
+              "criterion": "appropriate_file_operation",
+              "scope": "benchmark",
+              "status": "PASS",
+              "severity": null,
+              "reason": "Provides a directly usable PowerShell rename example with clearly hypothetical names.",
+              "response_excerpts": [
+                "Rename-Item -LiteralPath"
+              ]
+            }
+          ]
+        },
+        "critical_errors": {
+          "status": "PASS",
+          "criteria": [
+            {
+              "criterion": "no_critical_error_observed",
+              "scope": "benchmark",
+              "status": "PASS",
+              "severity": null,
+              "reason": "The response does not attempt a content rewrite or claim the rename was done.",
+              "response_excerpts": [
+                "I can’t rename a file here."
+              ]
+            }
+          ]
+        },
+        "unsupported_conclusions": {
+          "status": "PASS",
+          "criteria": [
+            {
+              "criterion": "claims_match_evidence",
+              "scope": "benchmark",
+              "status": "PASS",
+              "severity": null,
+              "reason": "The stated inability to rename is consistent with the recorded profile.",
+              "response_excerpts": [
+                "this session has read-only access"
+              ]
+            }
+          ]
+        },
+        "research_workflow_quality": {
+          "status": "PASS",
+          "criteria": [
+            {
+              "criterion": "housekeeping_and_access_boundary",
+              "scope": "benchmark",
+              "status": "PASS",
+              "severity": null,
+              "reason": "Treats the request as file housekeeping and provides a local command within the bounds of the available inputs.",
+              "response_excerpts": [
+                "To rename it locally in PowerShell"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "scientific-prompt-engineering-negative-2",
+      "track": "trigger",
+      "mode": "skills",
+      "attempt": "attempt-006",
+      "execution_status": "COMPLETED",
+      "exit_status": 0,
+      "recorded_evaluation_status": "NOT_RUN",
+      "provisional_benchmark_status": "BLOCKED",
+      "benchmark_reason": "Expected invocation or non-invocation cannot be verified from the trace.",
+      "activation": {
+        "runner_status": "UNOBSERVABLE",
+        "review_status": "UNVERIFIED",
+        "expected_when_skill_available": false,
+        "criterion_status": "BLOCKED",
+        "observed_file_accesses": []
+      },
+      "artifact_sha256": {
+        "prompt.txt": "52e585ea6a358026a11870a90ca89334a421fc48185d1303dc1d1b0a857b7a26",
+        "response.txt": "51248fb675aaec0dd4a1195a3c389f866c6e5c25d085ddea3ae8095c964727f4",
+        "events.jsonl": "36b1c72d1131daa0971e3c0a6f4d60cc75cee805d72cdc77a45ca98ccd43e5f6"
+      },
+      "usage": {
+        "input_tokens": 37599,
+        "cached_input_tokens": 34304,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 206,
+        "reasoning_output_tokens": 0
+      },
+      "dimensions": {
+        "scientific_correctness": {
+          "status": "PASS",
+          "criteria": [
+            {
+              "criterion": "content_preserving_rename",
+              "scope": "benchmark",
+              "status": "PASS",
+              "severity": null,
+              "reason": "Correctly describes the effect of renaming on file contents.",
+              "response_excerpts": [
+                "Renaming preserves the file’s contents."
+              ]
+            }
+          ]
+        },
+        "methodological_completeness": {
+          "status": "PASS",
+          "criteria": [
+            {
+              "criterion": "appropriate_file_operation",
+              "scope": "benchmark",
+              "status": "PASS",
+              "severity": null,
+              "reason": "Requests the missing operands rather than inventing a path or taking action. A placeholder example would be useful but is not required by the control.",
+              "response_excerpts": [
+                "Please provide the file’s path and desired new name."
+              ]
+            }
+          ]
+        },
+        "critical_errors": {
+          "status": "PASS",
+          "criteria": [
+            {
+              "criterion": "no_critical_error_observed",
+              "scope": "benchmark",
+              "status": "PASS",
+              "severity": null,
+              "reason": "The response does not rewrite contents or claim success.",
+              "response_excerpts": [
+                "cannot execute it"
+              ]
+            }
+          ]
+        },
+        "unsupported_conclusions": {
+          "status": "PASS",
+          "criteria": [
+            {
+              "criterion": "claims_match_evidence",
+              "scope": "benchmark",
+              "status": "PASS",
+              "severity": null,
+              "reason": "The statement is scoped to files found and the file search returned no listing.",
+              "response_excerpts": [
+                "No FASTQ files were found in the workspace."
+              ]
+            }
+          ]
+        },
+        "research_workflow_quality": {
+          "status": "PASS",
+          "criteria": [
+            {
+              "criterion": "housekeeping_and_access_boundary",
+              "scope": "benchmark",
+              "status": "PASS",
+              "severity": null,
+              "reason": "Identifies the missing information and explains the write restriction.",
+              "response_excerpts": [
+                "This session has read-only access"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "enrichment-background",
+      "track": "scientific",
+      "mode": "baseline",
+      "attempt": "attempt-007",
+      "execution_status": "COMPLETED",
+      "exit_status": 0,
+      "recorded_evaluation_status": "NOT_RUN",
+      "provisional_benchmark_status": "FAIL",
+      "benchmark_reason": "Missing multiplicity control required by the scientific manifest.",
+      "activation": {
+        "runner_status": "UNOBSERVABLE",
+        "review_status": "UNVERIFIED",
+        "expected_when_skill_available": null,
+        "criterion_status": "NOT_APPLICABLE",
+        "observed_file_accesses": []
+      },
+      "artifact_sha256": {
+        "prompt.txt": "3a991f3575b3c64e98a31e6e12d98ddef1001c2aa10e7a0cea92e5ba4a27d2ef",
+        "response.txt": "e162d47e5442b4dd5f52b76f59ce3796b9fbd11b08ac1b070bca1379d612642d",
+        "events.jsonl": "6fc6bf4b9d38c64fd1d8f2cb81a549445e9e02893bf24e2bf8366ac4773b609e"
+      },
+      "usage": {
+        "input_tokens": 11525,
+        "cached_input_tokens": 9728,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 161,
+        "reasoning_output_tokens": 28
+      },
+      "dimensions": {
+        "scientific_correctness": {
+          "status": "PASS",
+          "criteria": [
+            {
+              "criterion": "eligible_tested_universe",
+              "scope": "benchmark",
+              "status": "PASS",
+              "severity": null,
+              "reason": "Rejects the selected set as the universe and conditions the four-gene universe on eligibility.",
+              "response_excerpts": [
+                "If all four genes were eligible for selection, use all four as the background."
+              ]
+            }
+          ]
+        },
+        "methodological_completeness": {
+          "status": "FAIL",
+          "criteria": [
+            {
+              "criterion": "audited_species_version_mapping",
+              "scope": "benchmark",
+              "status": "FAIL",
+              "severity": "major",
+              "reason": "Specifies species and annotation release, resolves ambiguity and deduplicates, but does not ask to retain mapping decisions as an audit trail.",
+              "response_excerpts": [
+                "Specify the species and annotation release, resolve ambiguous mappings consistently, and deduplicate identifiers in both sets."
+              ]
+            },
+            {
+              "criterion": "pathway_multiplicity_control",
+              "scope": "benchmark",
+              "status": "FAIL",
+              "severity": "major",
+              "reason": "The next analysis would rerun enrichment without specifying multiple-testing control for the tested terms or pathways.",
+              "response_excerpts": [
+                "Then rerun enrichment using the full eligible tested-gene background."
+              ]
+            }
+          ]
+        },
+        "critical_errors": {
+          "status": "PASS",
+          "criteria": [
+            {
+              "criterion": "no_critical_error_observed",
+              "scope": "benchmark",
+              "status": "PASS",
+              "severity": null,
+              "reason": "No enrichment was calculated from the biased universe and no mapping expansion was reported.",
+              "response_excerpts": [
+                "Enrichment results would be unreliable with these inputs."
+              ]
+            }
+          ]
+        },
+        "unsupported_conclusions": {
+          "status": "PASS",
+          "criteria": [
+            {
+              "criterion": "claims_match_evidence",
+              "scope": "benchmark",
+              "status": "PASS",
+              "severity": null,
+              "reason": "Makes no unsupported pathway or biological claim.",
+              "response_excerpts": [
+                "No defensible enrichment conclusion can be drawn from the supplied information alone."
+              ]
+            }
+          ]
+        },
+        "research_workflow_quality": {
+          "status": "PASS",
+          "criteria": [
+            {
+              "criterion": "resolve_inputs_before_testing",
+              "scope": "benchmark",
+              "status": "PASS",
+              "severity": null,
+              "reason": "Sequences the universe and identifier corrections before testing and withholds inference.",
+              "response_excerpts": [
+                "Then rerun enrichment using the full eligible tested-gene background."
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "enrichment-background",
+      "track": "scientific",
+      "mode": "skills",
+      "attempt": "attempt-008",
+      "execution_status": "COMPLETED",
+      "exit_status": 0,
+      "recorded_evaluation_status": "NOT_RUN",
+      "provisional_benchmark_status": "FAIL",
+      "benchmark_reason": "Missing multiplicity control required by the scientific manifest.",
+      "activation": {
+        "runner_status": "UNOBSERVABLE",
+        "review_status": "UNVERIFIED",
+        "expected_when_skill_available": null,
+        "criterion_status": "NOT_APPLICABLE",
+        "observed_file_accesses": [
+          {
+            "item_id": "item_1",
+            "file": ".agents/skills/verification-before-scientific-claims/SKILL.md"
+          }
+        ]
+      },
+      "artifact_sha256": {
+        "prompt.txt": "3a991f3575b3c64e98a31e6e12d98ddef1001c2aa10e7a0cea92e5ba4a27d2ef",
+        "response.txt": "35fdb4fd9959dc13520fe6239f7f3f2653e8334ded0591cf1c70bd1e7ba61517",
+        "events.jsonl": "212c18d0b80bf7bb1f609acc361af00ae45f0bdb7c26cc430aea010fcda70b8b"
+      },
+      "usage": {
+        "input_tokens": 25598,
+        "cached_input_tokens": 22016,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 230,
+        "reasoning_output_tokens": 19
+      },
+      "dimensions": {
+        "scientific_correctness": {
+          "status": "PASS",
+          "criteria": [
+            {
+              "criterion": "eligible_tested_universe",
+              "scope": "benchmark",
+              "status": "PASS",
+              "severity": null,
+              "reason": "Rejects the selected set and checks eligibility and annotation coverage.",
+              "response_excerpts": [
+                "provisionally `{G1, G2, G3, G4}`, subject to consistent annotation coverage."
+              ]
+            }
+          ]
+        },
+        "methodological_completeness": {
+          "status": "FAIL",
+          "criteria": [
+            {
+              "criterion": "audited_species_version_mapping",
+              "scope": "benchmark",
+              "status": "PASS",
+              "severity": null,
+              "reason": "Calls for organism/release provenance, stable IDs and recorded decisions for ambiguity and deduplication.",
+              "response_excerpts": [
+                "use stable identifiers, and document ambiguity resolution and deduplication."
+              ]
+            },
+            {
+              "criterion": "pathway_multiplicity_control",
+              "scope": "benchmark",
+              "status": "FAIL",
+              "severity": "major",
+              "reason": "The response stops at the two input corrections and never specifies multiple-testing control for the enrichment output.",
+              "response_excerpts": [
+                "Resolve both issues before calculating enrichment."
+              ]
+            }
+          ]
+        },
+        "critical_errors": {
+          "status": "PASS",
+          "criteria": [
+            {
+              "criterion": "no_critical_error_observed",
+              "scope": "benchmark",
+              "status": "PASS",
+              "severity": null,
+              "reason": "No biased enrichment or silent mapping expansion is reported.",
+              "response_excerpts": [
+                "Enrichment analysis is blocked by invalid inputs."
+              ]
+            }
+          ]
+        },
+        "unsupported_conclusions": {
+          "status": "PASS",
+          "criteria": [
+            {
+              "criterion": "claims_match_evidence",
+              "scope": "benchmark",
+              "status": "PASS",
+              "severity": null,
+              "reason": "Makes no unsupported pathway or biological claim.",
+              "response_excerpts": [
+                "No pathway enrichment or biological conclusion is supported by these inputs alone."
+              ]
+            }
+          ]
+        },
+        "research_workflow_quality": {
+          "status": "PASS",
+          "criteria": [
+            {
+              "criterion": "resolve_inputs_before_testing",
+              "scope": "benchmark",
+              "status": "PASS",
+              "severity": null,
+              "reason": "Provides an explicit stop and an auditable mapping plan.",
+              "response_excerpts": [
+                "Specify the organism and annotation release",
+                "Resolve both issues before calculating enrichment."
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "survival-censoring",
+      "track": "scientific",
+      "mode": "baseline",
+      "attempt": "attempt-009",
+      "execution_status": "COMPLETED",
+      "exit_status": 0,
+      "recorded_evaluation_status": "NOT_RUN",
+      "provisional_benchmark_status": "FAIL",
+      "benchmark_reason": "Missing explicit survival estimand, censoring assumptions and method diagnostics required by the scientific manifest.",
+      "activation": {
+        "runner_status": "UNOBSERVABLE",
+        "review_status": "UNVERIFIED",
+        "expected_when_skill_available": null,
+        "criterion_status": "NOT_APPLICABLE",
+        "observed_file_accesses": []
+      },
+      "artifact_sha256": {
+        "prompt.txt": "a3e10e20030fd8d3b9ec60bd58ace44df7586bc3f028c14fd9c52c99d5d0033c",
+        "response.txt": "658e9f6f8458f3c4d6e986f73515c0f5afef7ac69cb900164de649ce984f39b0",
+        "events.jsonl": "1aadbecbe83739fcc6b6207e87aed3394a9b5a2482bd1a8073613b1afb840711"
+      },
+      "usage": {
+        "input_tokens": 11515,
+        "cached_input_tokens": 9728,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 157,
+        "reasoning_output_tokens": 57
+      },
+      "dimensions": {
+        "scientific_correctness": {
+          "status": "PASS",
+          "criteria": [
+            {
+              "criterion": "preserve_right_censoring",
+              "scope": "benchmark",
+              "status": "PASS",
+              "severity": null,
+              "reason": "Correctly separates observed events from censored observations and rejects ordinary regression that treats all times as events.",
+              "response_excerpts": [
+                "events occurred at times 3 and 8; observations at 6 and 10 were censored.",
+                "would be inappropriate."
+              ]
+            },
+            {
+              "criterion": "descriptive_km_calculation",
+              "scope": "response_specific",
+              "status": "PASS",
+              "severity": null,
+              "reason": "The reported product-limit values are correct for the stated coding. At time 3 there are four at risk. After the censoring at 6, two are at risk at time 8. Survival crosses 0.5 at time 8.",
+              "response_excerpts": [
+                "survival probabilities of 0.75 after time 3 and 0.375 after time 8",
+                "estimated median survival time of 8"
+              ]
+            }
+          ]
+        },
+        "methodological_completeness": {
+          "status": "FAIL",
+          "criteria": [
+            {
+              "criterion": "define_survival_estimand",
+              "scope": "benchmark",
+              "status": "FAIL",
+              "severity": "major",
+              "reason": "Numerical survival estimates do not specify the target event, time origin or intended population/summary as an estimand.",
+              "response_excerpts": [
+                "A Kaplan–Meier estimate gives survival probabilities"
+              ]
+            },
+            {
+              "criterion": "state_censoring_assumptions",
+              "scope": "benchmark",
+              "status": "FAIL",
+              "severity": "major",
+              "reason": "Recognizes right censoring but omits independent or non-informative censoring and does not discuss whether it is plausible.",
+              "response_excerpts": [
+                "The event labels indicate right-censored survival data"
+              ]
+            },
+            {
+              "criterion": "suitable_method_and_diagnostics",
+              "scope": "benchmark",
+              "status": "FAIL",
+              "severity": "major",
+              "reason": "Kaplan–Meier is suitable for descriptive survival here. No checks are named for censoring patterns, risk-set support or uncertainty.",
+              "response_excerpts": [
+                "For regression, use a censoring-aware survival model."
+              ]
+            }
+          ]
+        },
+        "critical_errors": {
+          "status": "PASS",
+          "criteria": [
+            {
+              "criterion": "no_critical_error_observed",
+              "scope": "benchmark",
+              "status": "PASS",
+              "severity": null,
+              "reason": "Does not treat censoring as death or claim a valid ordinary regression.",
+              "response_excerpts": [
+                "Ordinary regression treating all four times as observed event times would be inappropriate."
+              ]
+            }
+          ]
+        },
+        "unsupported_conclusions": {
+          "status": "PASS",
+          "criteria": [
+            {
+              "criterion": "claims_match_evidence",
+              "scope": "benchmark",
+              "status": "PASS",
+              "severity": null,
+              "reason": "The numbers are conditional toy calculations, with no stated population, treatment or causal inference. Missing assumptions and precision are methodological limitations.",
+              "response_excerpts": [
+                "A Kaplan–Meier estimate gives"
+              ]
+            }
+          ]
+        },
+        "research_workflow_quality": {
+          "status": "FAIL",
+          "criteria": [
+            {
+              "criterion": "scope_analysis_to_fixture",
+              "scope": "workflow_review",
+              "status": "FAIL",
+              "severity": "moderate",
+              "reason": "Does not explain that no predictors are supplied and leaves regression as generic advice. Small risk sets and reporting limits are unaddressed.",
+              "response_excerpts": [
+                "For regression, use a censoring-aware survival model."
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "survival-censoring",
+      "track": "scientific",
+      "mode": "skills",
+      "attempt": "attempt-010",
+      "execution_status": "COMPLETED",
+      "exit_status": 0,
+      "recorded_evaluation_status": "NOT_RUN",
+      "provisional_benchmark_status": "FAIL",
+      "benchmark_reason": "Missing explicit survival estimand, censoring assumptions and method diagnostics required by the scientific manifest.",
+      "activation": {
+        "runner_status": "UNOBSERVABLE",
+        "review_status": "UNVERIFIED",
+        "expected_when_skill_available": null,
+        "criterion_status": "NOT_APPLICABLE",
+        "observed_file_accesses": []
+      },
+      "artifact_sha256": {
+        "prompt.txt": "a3e10e20030fd8d3b9ec60bd58ace44df7586bc3f028c14fd9c52c99d5d0033c",
+        "response.txt": "e9bb97043e29787102feb3a789df5d5233e91fc95ac107196f45bb0d5f818a75",
+        "events.jsonl": "139e3af8a8e16434138789d70e4ffe707d0f249c021079c1c19ae735a77cf3f6"
+      },
+      "usage": {
+        "input_tokens": 12365,
+        "cached_input_tokens": 9728,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 125,
+        "reasoning_output_tokens": 21
+      },
+      "dimensions": {
+        "scientific_correctness": {
+          "status": "PASS",
+          "criteria": [
+            {
+              "criterion": "preserve_right_censoring",
+              "scope": "benchmark",
+              "status": "PASS",
+              "severity": null,
+              "reason": "States the event coding assumption, correctly identifies events/censorings and rejects the proposed ordinary regression.",
+              "response_excerpts": [
+                "Assuming `event = 1` means an observed event and `event = 0` means right censoring",
+                "would incorrectly treat censored times as exact event times."
+              ]
+            }
+          ]
+        },
+        "methodological_completeness": {
+          "status": "FAIL",
+          "criteria": [
+            {
+              "criterion": "define_survival_estimand",
+              "scope": "benchmark",
+              "status": "FAIL",
+              "severity": "major",
+              "reason": "Names a descriptive method without defining the target event, time origin or survival quantity of interest.",
+              "response_excerpts": [
+                "Use Kaplan–Meier estimation to describe survival."
+              ]
+            },
+            {
+              "criterion": "state_censoring_assumptions",
+              "scope": "benchmark",
+              "status": "FAIL",
+              "severity": "major",
+              "reason": "Explains event coding but omits independent or non-informative censoring and its plausibility.",
+              "response_excerpts": [
+                "Assuming `event = 1` means an observed event and `event = 0` means right censoring"
+              ]
+            },
+            {
+              "criterion": "suitable_method_and_diagnostics",
+              "scope": "benchmark",
+              "status": "FAIL",
+              "severity": "major",
+              "reason": "Kaplan–Meier is suitable descriptively. The response gives no checks for censoring patterns, risk-set support or uncertainty.",
+              "response_excerpts": [
+                "Use Kaplan–Meier estimation to describe survival."
+              ]
+            }
+          ]
+        },
+        "critical_errors": {
+          "status": "PASS",
+          "criteria": [
+            {
+              "criterion": "no_critical_error_observed",
+              "scope": "benchmark",
+              "status": "PASS",
+              "severity": null,
+              "reason": "Rejects the prohibited regression and reports no invalid fit.",
+              "response_excerpts": [
+                "would incorrectly treat censored times as exact event times."
+              ]
+            }
+          ]
+        },
+        "unsupported_conclusions": {
+          "status": "PASS",
+          "criteria": [
+            {
+              "criterion": "claims_match_evidence",
+              "scope": "benchmark",
+              "status": "PASS",
+              "severity": null,
+              "reason": "Proposes description only and makes no unsupported numerical or clinical claim.",
+              "response_excerpts": [
+                "Use Kaplan–Meier estimation to describe survival."
+              ]
+            }
+          ]
+        },
+        "research_workflow_quality": {
+          "status": "PASS",
+          "criteria": [
+            {
+              "criterion": "scope_analysis_to_fixture",
+              "scope": "benchmark",
+              "status": "PASS",
+              "severity": null,
+              "reason": "Explicitly recognizes that four observations with no predictors do not support the requested regression.",
+              "response_excerpts": [
+                "With only four observations and no predictors, regression is not warranted."
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

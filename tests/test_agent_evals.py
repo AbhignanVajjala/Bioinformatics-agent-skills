@@ -200,7 +200,7 @@ def test_skill_output_is_only_a_read_proxy(tmp_path):
                 "item": {
                     "id": item_id,
                     "type": "command_execution",
-                    "command": f"read {tmp_path / skill}",
+                    "command": f"""powershell.exe -NoProfile -Command "Get-Content '{tmp_path / skill}'" """,
                     "exit_code": exit_code,
                     "aggregated_output": body,
                 },
@@ -210,8 +210,196 @@ def test_skill_output_is_only_a_read_proxy(tmp_path):
     final.write_text(f"I used {skill}", encoding="utf-8")
     parsed = runner.actions_in_stream(stream, final, tmp_path, {skill: b"test instructions"})
     assert "problem" not in parsed
-    assert parsed["observed_skill_reads"] == [{"skill": "example", "item_id": "read"}]
+    assert parsed["observed_skill_reads"] == [
+        {
+            "skill": "example",
+            "file": skill.as_posix(),
+            "item_id": "read",
+            "jsonl_line": 3,
+            "read_index": 1,
+            "output_encoding": "utf-8",
+        }
+    ]
+    assert parsed["skill_evidence"] == {
+        "trace_status": "VERIFIED",
+        "instruction_following_status": "NOT_ASSESSED",
+        "ambiguous_item_ids": ["just-a-filename"],
+        "by_skill": {"example": "SKILL_FILE_READ_OBSERVED"},
+    }
     assert parsed["activation_status"] == "UNOBSERVABLE"
+
+
+def command_item(command, output, *, exit_code=0, item_id="read"):
+    return {
+        "type": "item.completed",
+        "item": {
+            "type": "command_execution",
+            "id": item_id,
+            "status": "completed",
+            "exit_code": exit_code,
+            "command": command,
+            "aggregated_output": output,
+        },
+    }
+
+
+def test_replay_multiple_relative_powershell_reads(tmp_path):
+    a = Path(".agents/skills/first/SKILL.md")
+    b = Path(".agents/skills/second/SKILL.md")
+    stream, final = tmp_path / "events.jsonl", tmp_path / "response.txt"
+    script = (
+        f""""C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -NoProfile -Command """
+        f"""'Get-Content ./{a.as_posix()}; Get-Content {b.as_posix()}'"""
+    )
+    rows = events()
+    # The original trace's PowerShell reads UTF-8 without a BOM as Windows-1252.
+    rows.insert(2, command_item(script, "a\r\nb \u00e2\u20ac\u009d\r\n"))
+    write_events(stream, rows)
+    final.write_text("Synthetic response", encoding="utf-8")
+    parsed = runner.actions_in_stream(
+        stream,
+        final,
+        r"C:\scratch\workspace",
+        {
+            a: b"a\r\n",
+            b: "b ”\r\n".encode(),
+        },
+    )
+    assert "problem" not in parsed
+    reads = parsed["observed_skill_reads"]
+    assert [(r["file"], r["jsonl_line"], r["read_index"]) for r in reads] == [
+        (a.as_posix(), 3, 1),
+        (b.as_posix(), 3, 2),
+    ]
+    assert {r["output_encoding"] for r in reads} == {"windows-1252"}
+    assert parsed["activation_status"] == "UNOBSERVABLE"
+
+
+@pytest.mark.parametrize(
+    ("command", "output", "exit_code", "ambiguous"),
+    [
+        ("Write-Output '.agents/skills/example/SKILL.md'", "expected text", 0, True),
+        ("Get-Content ../.agents/skills/example/SKILL.md", "expected text", 0, True),
+        ("Get-Content .agents/skills/example/SKILL.md.bak", "expected text", 0, True),
+        (
+            "Get-Content .agents/skills/example/SKILL.md | Select-Object -First 1",
+            "expected text",
+            0,
+            True,
+        ),
+        ("Get-Content .agents/skills/example/SKILL.md", "partial output", 0, True),
+        ("Get-Content .agents/skills/example/SKILL.md", "", 1, False),
+        ("Get-ChildItem", ".agents/skills/example/SKILL.md", 0, False),
+    ],
+)
+def test_reads_require_literal_staged_path_and_matching_complete_output(
+    tmp_path, command, output, exit_code, ambiguous
+):
+    stream, final = tmp_path / "events.jsonl", tmp_path / "response.txt"
+    rows = events(response="I used the example skill.")
+    rows.insert(
+        2,
+        command_item(
+            f'powershell.exe -NoProfile -Command "{command}"', output, exit_code=exit_code
+        ),
+    )
+    write_events(stream, rows)
+    final.write_text("I used the example skill.", encoding="utf-8")
+    catalog = {Path(".agents/skills/example/SKILL.md"): b"expected text"}
+    parsed = runner.actions_in_stream(stream, final, tmp_path, catalog)
+    assert parsed["observed_skill_reads"] == []
+    assert parsed["skill_evidence"]["ambiguous_item_ids"] == (["read"] if ambiguous else [])
+    assert parsed["skill_evidence"]["by_skill"] == {"example": "AVAILABLE_NO_OBSERVED_READ"}
+    unavailable = runner.actions_in_stream(stream, final, tmp_path, catalog, skills_enabled=False)
+    assert unavailable["skill_evidence"]["by_skill"] == {"example": "UNAVAILABLE"}
+
+
+@pytest.mark.parametrize(
+    "malformation", ["duplicate", "missing-output", "boolean-exit", "broken-json"]
+)
+def test_invalid_trace_does_not_retain_an_earlier_read(tmp_path, malformation):
+    stream, final = tmp_path / "events.jsonl", tmp_path / "response.txt"
+    command = 'powershell.exe -NoProfile -Command "Get-Content .agents/skills/example/SKILL.md"'
+    rows = events()
+    rows.insert(2, command_item(command, "expected text"))
+    if malformation != "broken-json":
+        extra = command_item(command, "expected text", item_id="another")
+        if malformation == "duplicate":
+            extra["item"]["id"] = "read"
+        elif malformation == "missing-output":
+            del extra["item"]["aggregated_output"]
+        else:
+            extra["item"]["exit_code"] = False
+        rows.insert(3, extra)
+    write_events(stream, rows)
+    if malformation == "broken-json":
+        with stream.open("a", encoding="utf-8") as file:
+            file.write('{"type":\n')
+    final.write_text("Synthetic response", encoding="utf-8")
+    parsed = runner.actions_in_stream(
+        stream, final, tmp_path, {Path(".agents/skills/example/SKILL.md"): b"expected text"}
+    )
+    assert "problem" in parsed
+    assert parsed["observed_skill_reads"] == []
+    assert parsed["skill_evidence"]["trace_status"] == "INVALID"
+    assert parsed["skill_evidence"]["by_skill"] == {"example": "AVAILABLE_TRACE_UNVERIFIED"}
+
+
+@pytest.mark.parametrize("tampered", [False, True])
+def test_inspect_report_replays_offline_and_enforces_hashes(
+    tmp_path, monkeypatch, capsys, tampered
+):
+    def forbidden(*args, **kwargs):
+        pytest.fail("Evidence replay tried to start a subprocess")
+
+    monkeypatch.setattr(runner.subprocess, "run", forbidden)
+    _, skills, hashes = runner.load_inputs(ROOT)
+    evidence = tmp_path / "attempt-001"
+    evidence.mkdir()
+    (evidence / "prompt.txt").write_bytes(b"test prompt")
+    (evidence / "response.txt").write_bytes(b"Synthetic response")
+    write_events(evidence / "events.jsonl", events())
+    artifact_hashes = {path.name: runner.digest(path.read_bytes()) for path in evidence.iterdir()}
+    report = tmp_path / "report.json"
+    runner.save_json(
+        report,
+        {
+            "schema_version": 1,
+            "run_id": "synthetic",
+            "input_hashes": hashes,
+            "skill_hashes": {
+                path.as_posix(): runner.digest(contents) for path, contents in skills.items()
+            },
+            "results": [
+                {
+                    "id": "smoke",
+                    "mode": "baseline",
+                    "status": "COMPLETED",
+                    "thread_id": "test-thread",
+                    "artifact_dir": evidence.name,
+                    "artifacts": artifact_hashes,
+                    "prompt_sha256": artifact_hashes["prompt.txt"],
+                    "command": ["codex", "--cd", str(tmp_path)],
+                }
+            ],
+        },
+    )
+    original = report.read_bytes()
+    if tampered:
+        (evidence / "response.txt").write_bytes(b"Changed content")
+        with pytest.raises(SystemExit) as error:
+            runner.main(["--inspect-report", str(report)])
+        assert error.value.code == 2
+        assert "failed hash verification" in capsys.readouterr().err
+    else:
+        assert runner.main(["--inspect-report", str(report)]) == 0
+        result = json.loads(capsys.readouterr().out)
+        assert result["source_report_sha256"] == runner.digest(original)
+        turn = result["results"][0]
+        assert turn["skill_evidence"]["trace_status"] == "VERIFIED"
+        assert set(turn["skill_evidence"]["by_skill"].values()) == {"UNAVAILABLE"}
+        assert str(tmp_path) not in json.dumps(result)
+    assert report.read_bytes() == original
 
 
 def test_real_subprocess_receives_stdin_without_shell(tmp_path):

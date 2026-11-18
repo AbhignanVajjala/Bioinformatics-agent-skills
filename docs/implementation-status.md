@@ -1,5 +1,31 @@
 # Implementation status
 
+## Phase 2 milestone 3 — 2026-11-18
+
+Added deterministic extraction of staged skill-file reads from saved Codex JSONL.
+The offline `--inspect-report` command validates saved manifest, rubric, skill and
+attempt hashes and leaves archived execution evidence and judgments unchanged.
+The replay verified all ten traces and confirmed four file reads across attempts
+002, 004 and 008. The
+[provenance record](../evals/reports/agent-benchmark-provenance.md) links each turn
+to its prompt, response, expected behavior and criterion evidence. All 59 scored
+criteria and 75 verbatim excerpts were located in the ten score records and
+their saved responses.
+
+The existing `evals/reports/agent-benchmark-scores.json` is valid JSON, tracked
+in Git and unchanged. The pilot remains 0 PASS, 4 FAIL and 6 BLOCKED. Activation
+is unobservable in these traces, and behavioral judgments remain provisional
+pending independent human methodological review. No model session was started.
+
+`python -m pytest -q --junitxml artifacts/pilot-review/milestone3-pytest.xml`
+passed **111 tests, zero failures or skips** in the Python 3.12.10 environment.
+The JUnit XML SHA-256 is
+`00a0479c3b4da2000554a24c1ca2bf7ef31b4fe5a22f8d66dde3b0108bb50a9e`.
+Ruff lint and format checks, `python scripts/validate_skills.py` (13 skills,
+zero errors), and `python scripts/build_catalog.py --check` passed. A second
+offline replay produced identical output. The offline plan still enumerated
+114 turns as `NOT_RUN`.
+
 ## Phase 2 pilot review — 2026-11-18
 
 Reviewed the saved ten-turn pilot from Codex CLI `0.168.0`. All ten executions

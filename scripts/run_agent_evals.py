@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Plan agent evaluations or collect unscored evidence from isolated Codex CLI turns."""
+"""Plan, collect, or inspect unscored evidence from isolated Codex CLI turns."""
 
 from __future__ import annotations
 
@@ -31,6 +31,16 @@ PILOT_CASES = (
 )
 PROFILE = "agent-eval"
 FEATURES_OFF = ("apps", "hooks", "plugins", "memories", "skill_mcp_dependency_install")
+POWERSHELL_COMMAND = re.compile(
+    r"""(?is)(?:"(?:[^"\r\n]*[\\/])?(?:powershell|pwsh)\.exe"|(?:powershell|pwsh)(?:\.exe)?)"""
+    r"""\s+-NoProfile(?:\s+-NonInteractive)?\s+-Command\s+(?:"(.*)"|'(.*)')"""
+)
+LITERAL_READ = re.compile(
+    r"""(?i)Get-Content\s+(?:-LiteralPath\s+)?"""
+    r"""(?:"([^"\r\n]+)"|'([^'\r\n]+)'|([^\s'"]+))(?:\s+-Raw)?"""
+)
+# Windows-1252 maps its five undefined bytes to the corresponding C1 controls.
+WINDOWS_1252_CONTROLS = {0xDC00 + byte: byte for byte in (0x81, 0x8D, 0x8F, 0x90, 0x9D)}
 
 
 def now() -> str:
@@ -191,14 +201,83 @@ def invoke(
     return result
 
 
-def actions_in_stream(stream: Path, final: Path, workspace: Path, skills: dict) -> dict:
-    """Use runtime events for execution evidence. A skill file read is a proxy."""
+def skill_reads(item: dict, line_number: int, workspace: str, documents: dict) -> list | None:
+    """Return confirmed reads, no observation, or None for ambiguous path evidence."""
+    command, output, code = (item[field] for field in ("command", "aggregated_output", "exit_code"))
+    if (
+        not isinstance(command, str)
+        or not isinstance(output, str)
+        or (code is not None and type(code) is not int)
+    ):
+        raise ValueError("Malformed command execution item")
+    if code != 0 or item.get("status") not in (None, "completed"):
+        return []
+    if "skill.md" not in command.casefold():
+        return []
+    wrapper = POWERSHELL_COMMAND.fullmatch(command.strip())
+    if not wrapper:
+        return None
+    script = wrapper.group(1) or wrapper.group(2) or ""
+
+    workspace = workspace.replace("\\", "/").rstrip("/")
+    normalize = str.casefold if re.match(r"(?i)^(?:[a-z]:/|//)", workspace) else str
+    paths = {
+        normalize(spelling): name
+        for name in documents
+        for spelling in (name, f"{workspace}/{name}")
+    }
+    reads = []
+    for part in script.split(";"):
+        read = LITERAL_READ.fullmatch(part.strip())
+        if not read:
+            return None
+        token = next(value for value in read.groups() if value is not None)
+        if any(char in token for char in "`$*?[]|&<>"):
+            return None
+        name = paths.get(normalize(token.replace("\\", "/").removeprefix("./")))
+        if name is None:
+            return None
+        reads.append(name)
+
+    output = output.replace("\r\n", "\n").rstrip("\n")
+    for encoding in ("utf-8", "windows-1252"):
+        decoded = [
+            documents[name]
+            .decode(encoding, errors="surrogateescape")
+            .translate(WINDOWS_1252_CONTROLS if encoding == "windows-1252" else {})
+            for name in reads
+        ]
+        rendered = "\n".join(text.replace("\r\n", "\n").rstrip("\n") for text in decoded)
+        if output == rendered:
+            return [
+                {
+                    "skill": name.split("/")[-2],
+                    "file": name,
+                    "item_id": item["id"],
+                    "jsonl_line": line_number,
+                    "read_index": index,
+                    "output_encoding": encoding,
+                }
+                for index, name in enumerate(reads, start=1)
+            ]
+    return None
+
+
+def actions_in_stream(
+    stream: Path, final: Path, workspace: Path | str, skills: dict, *, skills_enabled: bool = True
+) -> dict:
+    """Validate one turn and describe file access separately from activation."""
     result = {"observed_skill_reads": [], "activation_status": "UNOBSERVABLE"}
+    documents = {p.as_posix(): body for p, body in skills.items() if p.name == "SKILL.md"}
+    staged = documents if skills_enabled else {}
+    observations = []
+    ambiguous_items = []
+    command_ids = set()
     markers = []
     last_message = None
     try:
         with stream.open(encoding="utf-8") as lines:
-            for line in lines:
+            for line_number, line in enumerate(lines, start=1):
                 if not line.strip():
                     continue
                 event = json.loads(line)
@@ -211,26 +290,24 @@ def actions_in_stream(stream: Path, final: Path, workspace: Path, skills: dict) 
                     result["thread_id"] = event["thread_id"]
                 if kind == "turn.completed":
                     result["usage"] = event.get("usage")
-                if kind == "item.completed":
+                if kind == "item.completed" and markers == ["thread.started", "turn.started"]:
                     item = event["item"]
-                    if item["type"] == "agent_message" and markers == [
-                        "thread.started",
-                        "turn.started",
-                    ]:
+                    if item["type"] == "agent_message":
                         last_message = item["text"]
-                    if item["type"] == "command_execution" and item.get("exit_code") == 0:
-                        for path, contents in skills.items():
-                            if path.name != "SKILL.md":
-                                continue
-                            output = item.get("aggregated_output", "").replace("\r\n", "\n")
-                            body = contents.decode("utf-8").replace("\r\n", "\n")
-                            if (
-                                str(workspace / path) in item.get("command", "")
-                                and output.strip() == body.strip()
-                            ):
-                                result["observed_skill_reads"].append(
-                                    {"skill": path.parent.name, "item_id": item["id"]}
-                                )
+                    if item["type"] == "command_execution":
+                        item_id = item["id"]
+                        if (
+                            not isinstance(item_id, str)
+                            or not item_id.strip()
+                            or item_id in command_ids
+                        ):
+                            raise ValueError("Invalid or duplicate command item ID")
+                        command_ids.add(item_id)
+                        reads = skill_reads(item, line_number, str(workspace), staged)
+                        if reads is None:
+                            ambiguous_items.append(item_id)
+                        else:
+                            observations.extend(reads)
         thread = result.get("thread_id")
         answer = final.read_text(encoding="utf-8") if final.is_file() else ""
         if (
@@ -244,6 +321,27 @@ def actions_in_stream(stream: Path, final: Path, workspace: Path, skills: dict) 
             raise ValueError("Missing or inconsistent thread, turn, or final-response evidence")
     except (ValueError, KeyError, TypeError, AttributeError, OSError):
         result["problem"] = "Codex JSONL and final output do not establish a completed fresh turn."
+    valid = "problem" not in result
+    if valid:
+        result["observed_skill_reads"] = observations
+    observed = {read["file"] for read in result["observed_skill_reads"]}
+    result["skill_evidence"] = {
+        "trace_status": "VERIFIED" if valid else "INVALID",
+        "instruction_following_status": "NOT_ASSESSED",
+        "ambiguous_item_ids": ambiguous_items if valid else [],
+        "by_skill": {
+            name.split("/")[-2]: (
+                "UNAVAILABLE"
+                if not skills_enabled
+                else "AVAILABLE_TRACE_UNVERIFIED"
+                if not valid
+                else "SKILL_FILE_READ_OBSERVED"
+                if name in observed
+                else "AVAILABLE_NO_OBSERVED_READ"
+            )
+            for name in documents
+        },
+    }
     return result
 
 
@@ -256,10 +354,12 @@ def execute_case(
     prompt: bytes,
     skills: dict,
     timeout: int,
+    *,
+    skills_enabled: bool,
 ) -> dict:
     env = isolated_env(scratch, codex_home)
     workspace = scratch / "workspace"
-    stage_workspace(workspace, skills)
+    stage_workspace(workspace, skills if skills_enabled else {})
     evidence.mkdir()
     stream, stderr, final = (
         evidence / name for name in ("events.jsonl", "stderr.txt", "response.txt")
@@ -286,7 +386,7 @@ def execute_case(
         "-",
     ]
     result = invoke(command, workspace, env, stream, stderr, timeout, prompt)
-    observed = actions_in_stream(stream, final, workspace, skills)
+    observed = actions_in_stream(stream, final, workspace, skills, skills_enabled=skills_enabled)
     stream_problem = observed.pop("problem", None)
     problem = result.get("problem") or stream_problem
     result.update(observed)
@@ -389,11 +489,69 @@ def preflight(
     return steps, None if logged_in else "Dedicated Codex home lacks a verified ChatGPT login."
 
 
+def inspect_report(report_path: Path, skills: dict, hashes: dict) -> dict:
+    """Replay verified saved artifacts without starting Codex or changing the report."""
+    raw = report_path.read_bytes()
+    report = json.loads(raw)
+    if report["schema_version"] != 1:
+        raise ValueError("Unsupported saved report schema")
+    if any(report["input_hashes"].get(name) != hashes[name] for name in (*MANIFESTS, RUBRIC)):
+        raise ValueError("Saved manifests or rubric do not match the checkout")
+    if report["skill_hashes"] != {path.as_posix(): digest(data) for path, data in skills.items()}:
+        raise ValueError("Saved skill hashes do not match the checkout")
+
+    results = []
+    seen = set()
+    for row in report["results"]:
+        attempt = row.get("artifact_dir")
+        if attempt is None:
+            continue
+        if not re.fullmatch(r"attempt-[0-9]+", attempt) or attempt in seen:
+            raise ValueError("Invalid or duplicate saved attempt directory")
+        seen.add(attempt)
+        directory = report_path.parent / attempt
+        if directory.resolve() != directory:
+            raise ValueError(f"Linked saved attempt directory: {attempt}")
+        for name in ("prompt.txt", "response.txt", "events.jsonl"):
+            path = directory / name
+            if path.resolve() != path or digest(path.read_bytes()) != row["artifacts"].get(name):
+                raise ValueError(f"Saved artifact failed hash verification: {attempt}/{name}")
+        if row["prompt_sha256"] != row["artifacts"]["prompt.txt"] or row["mode"] not in MODES:
+            raise ValueError(f"Inconsistent saved prompt or mode: {attempt}")
+        command = row["command"]
+        workspace = command[command.index("--cd") + 1]
+        parsed = actions_in_stream(
+            directory / "events.jsonl",
+            directory / "response.txt",
+            workspace,
+            skills,
+            skills_enabled=row["mode"] == "skills",
+        )
+        if row["status"] == "COMPLETED" and (
+            "problem" in parsed or parsed.get("thread_id") != row["thread_id"]
+        ):
+            raise ValueError(f"Saved completed turn did not verify: {attempt}")
+        results.append(
+            {
+                "attempt": attempt,
+                "id": row["id"],
+                "mode": row["mode"],
+                "observed_skill_reads": parsed["observed_skill_reads"],
+                "skill_evidence": parsed["skill_evidence"],
+                "activation_status": parsed["activation_status"],
+            }
+        )
+    return {"source_report_sha256": digest(raw), "run_id": report["run_id"], "results": results}
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     action = parser.add_mutually_exclusive_group()
     action.add_argument("--probe", action="store_true", help="test the installed CLI and isolation")
     action.add_argument("--execute", action="store_true", help="run using a ChatGPT subscription")
+    action.add_argument(
+        "--inspect-report", type=Path, help="replay saved evidence to stdout offline"
+    )
     select = parser.add_mutually_exclusive_group()
     select.add_argument("--case", action="append", help="select a case ID; repeat for multiple")
     select.add_argument("--all", action="store_true", help="explicitly select the full benchmark")
@@ -411,6 +569,18 @@ def main(argv: list[str] | None = None) -> int:
     )
     args = parser.parse_args(argv)
     cases, skills, hashes = load_inputs(ROOT)
+    if args.inspect_report is not None:
+        try:
+            evidence = inspect_report(args.inspect_report.resolve(), skills, hashes)
+        except (OSError, ValueError, KeyError, TypeError, IndexError, AttributeError) as exc:
+            # Raw parser or filesystem messages can expose machine-specific paths.
+            if isinstance(exc, ValueError) and not isinstance(exc, json.JSONDecodeError):
+                message = str(exc)
+            else:
+                message = "Saved report or artifact is missing or malformed"
+            parser.error(message)
+        print(json.dumps(evidence, indent=2))
+        return 0
     if args.timeout < 1:
         parser.error("--timeout must be positive")
     if args.execute and not (
@@ -537,8 +707,9 @@ def main(argv: list[str] | None = None) -> int:
                                     Path(scratch),
                                     evidence,
                                     cases[row["id"]][1],
-                                    skills if row["mode"] == "skills" else {},
+                                    skills,
                                     args.timeout,
+                                    skills_enabled=row["mode"] == "skills",
                                 )
                             )
                         row["artifact_dir"] = evidence.name

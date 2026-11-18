@@ -1,5 +1,25 @@
 # Development progress
 
+## Phase 2 milestone 3 — Evidence integrity and skill observability
+
+The runner now distinguishes staged availability, confirmed skill-file reads,
+and unverified traces. It records each confirmed read's path, JSONL line, item
+ID, output encoding and position in a multi-file command. Activation and
+instruction-following require separate evidence or review.
+
+`python scripts/run_agent_evals.py --inspect-report PATH_TO_REPORT_JSON`
+replays a saved report offline, verifies artifact and source-input hashes, and
+prints a new observation record. The original report stays intact. The
+[pilot evidence provenance](../evals/reports/agent-benchmark-provenance.md)
+maps all ten turns to the existing scores and original benchmark behavior.
+It records the four confirmed reads and why the earlier detector missed them.
+
+The extractor currently covers direct PowerShell `Get-Content` calls and
+complete, matching output. Implicit loads and other read commands can be
+invisible. A separate behavioral assessment is required to judge whether an
+answer followed a skill. The original pilot scores remain provisional pending
+independent human methodological review.
+
 ## Phase 2 milestone 2 — Controlled pilot `BLOCKED`
 
 The native Windows isolation probe passed from a normal host process on Windows
@@ -156,9 +176,9 @@ blocks the batch. A failed or timed-out turn stops the batch without retry.
 input and skill SHA-256 hashes, and per-turn timestamps, exit status and thread ID
 where available. Each attempted turn also stores the exact prompt, JSONL stream,
 stderr and final response with hashes. The CLI stream used here does not identify
-the resolved model version. A successful shell event that names a staged
-`SKILL.md` and returns its full contents is recorded as an observed read. There
-is no activation verdict for implicit, partial or unobserved reads.
+the resolved model version. The
+[skill evidence contract](../evals/reports/agent-benchmark-provenance.md#offline-replay-and-interpretation)
+describes which observed reads the current runner can verify.
 
 `COMPLETED` requires exit zero, a fresh thread, exactly one completed turn,
 and a nonempty final response consistent with the event stream. `FAILED` means

@@ -262,6 +262,7 @@ def test_batch_statuses_and_session_isolation(tmp_path, monkeypatch, scenario, e
         assert not (cwd / "evals").exists()
         assert not (cwd / "AGENTS.md").exists()
         assert "--ignore-user-config" in command and "--ephemeral" in command
+        assert "--strict-config" in command
         assert command[-1] == "-" and prompt.decode() not in command
         assert str(cwd) in command
         assert (cwd / ".agents").exists() == (len(calls) == 2)
@@ -332,14 +333,40 @@ def test_missing_cli_blocks_smoke(tmp_path, monkeypatch):
 
 
 @pytest.mark.skipif(sys.platform != "win32", reason="Windows-native preflight")
-@pytest.mark.parametrize("isolation_ok", [False, True])
+def test_windows_overrides_use_cli_compatible_mxc_selection(tmp_path):
+    args = runner.overrides(tmp_path)
+    assert args[::2] == ["-c"] * (len(args) // 2)
+    settings = dict(arg.split("=", 1) for arg in args[1::2])
+    # Codex CLI 0.168.0 rejects requirements-level keys in strict config overrides.
+    assert {key for key in settings if key.startswith("windows.")} == {"windows.sandbox"}
+    assert settings["windows.sandbox"] == '"mxc"'
+    assert settings["default_permissions"] == '"agent-eval"'
+    assert settings["permissions.agent-eval.filesystem"] == (
+        f'{{ ":minimal" = "read", {json.dumps(str(tmp_path), ensure_ascii=False)} = "read" }}'
+    )
+    assert settings["permissions.agent-eval.network.enabled"] == "false"
+    assert settings["approval_policy"] == '"never"'
+    assert "sandbox_mode" not in settings
+
+
+@pytest.mark.skipif(sys.platform != "win32", reason="Windows-native preflight")
+@pytest.mark.parametrize(
+    ("isolation_exit", "isolation_output", "isolation_ok"),
+    [
+        (1, b"ISOLATION_OK\n", False),
+        (0, b"unexpected output\n", False),
+        (0, b"ISOLATION_OK\n", True),
+    ],
+    ids=["mxc-rejected", "missing-canary", "isolated"],
+)
 def test_preflight_refuses_unsafe_runtime_without_persisting_login_output(
-    tmp_path, monkeypatch, isolation_ok
+    tmp_path, monkeypatch, isolation_exit, isolation_output, isolation_ok
 ):
     def fake_invoke(command, cwd, env, stdout, stderr, timeout):
-        result = b"codex-cli 0.169.0\n"
+        result = b"codex-cli 0.168.0\n"
+        exit_code = 0
         if command[1] == "sandbox":
-            assert "windows.require_mxc=true" in command
+            assert 'windows.sandbox="mxc"' in command
             assert 'shell_environment_policy.inherit="none"' in command
             system_root_arg = next(
                 arg for arg in command if arg.startswith("shell_environment_policy.set.SYSTEMROOT=")
@@ -348,10 +375,11 @@ def test_preflight_refuses_unsafe_runtime_without_persisting_login_output(
             assert "--include-managed-config" in command
             assert (cwd / "inside.txt").is_file()
             assert (cwd.parent / "outside.txt").is_file()
-            result = b"ISOLATION_OK\n" if isolation_ok else b"unexpected output\n"
+            result = isolation_output
+            exit_code = isolation_exit
         stdout.write_bytes(result)
         stderr.write_bytes(b"")
-        return {"command": command, "exit_status": 0}
+        return {"command": command, "exit_status": exit_code}
 
     def login(command, **kwargs):
         assert isolation_ok

@@ -1,5 +1,25 @@
 # Implementation status
 
+## Codex CLI 0.168.0 compatibility — 2026-11-18
+
+Removed the requirements-only `windows.require_mxc` CLI override. The runner
+selects MXC explicitly, keeps strict config for `exec`, and blocks execution
+when the read-only isolation probe fails. Codex documents that explicit MXC
+selection fails if MXC is unavailable or disallowed.
+[Windows sandbox configuration](https://learn.chatgpt.com/docs/windows/windows-sandbox).
+
+`python -m pytest -q --junitxml artifacts/codex-0168-compat/pytest.xml` passed
+**97 tests, zero failures or skips** with Python 3.12.10. Ruff lint and format
+checks, `python scripts/validate_skills.py` (13 skills, zero errors) and
+`python scripts/build_catalog.py --check` passed. The regression checks the
+0.168.0 argument contract offline and verifies that a rejected MXC probe blocks
+execution even if it prints the success marker. The installed CLI was
+`0.169.0-alpha.11.1`. Its no-model command
+`python scripts/run_agent_evals.py --probe --output-dir artifacts/codex-0168-compat/probe`
+returned `ISOLATION_OK` (report SHA-256
+`19cdc08aa718eea3a4afb32b24a0ad3d8cb92cbaff9b042a9c753f5b1f5e2d3e`).
+The 0.168.0 executable and model inference were untested in this checkpoint.
+
 ## Phase 2 milestone 2 — 2026-11-18
 
 **BLOCKED at ChatGPT sign-in.** The native Windows MXC isolation check passed

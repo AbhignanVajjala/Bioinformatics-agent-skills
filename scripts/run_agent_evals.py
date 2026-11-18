@@ -146,13 +146,13 @@ def overrides(workspace: Path) -> list[str]:
         *(f"features.{name}=false" for name in FEATURES_OFF),
     ]
     if os.name == "nt":
+        # Explicit MXC selection fails when MXC is unavailable or disallowed.
         # MXC launches the sandboxed command with this explicit environment.
         # Preserve Windows startup metadata without inheriting the CLI environment.
         system_root = json.dumps(os.environ["SystemRoot"], ensure_ascii=False)
         settings.extend(
             (
                 'windows.sandbox="mxc"',
-                "windows.require_mxc=true",
                 f"shell_environment_policy.set.SYSTEMROOT={system_root}",
             )
         )

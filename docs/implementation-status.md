@@ -1,5 +1,25 @@
 # Implementation status
 
+## Phase 2 pilot review — 2026-11-18
+
+Reviewed the saved ten-turn pilot from Codex CLI `0.168.0`. All ten executions
+completed. The provisional rubric review found four scientific failures and
+six trigger judgments blocked by unverified activation. Both enrichment
+responses omitted multiplicity control. Both survival responses omitted an
+explicit estimand, censoring assumptions and diagnostics. Four skill-file accesses
+across three turns were observable in the raw traces. Activation remains unverified.
+Independent human methodological review is pending.
+[Pilot review](../evals/reports/agent-benchmark-summary.md) and
+[criterion scores](../evals/reports/agent-benchmark-scores.json).
+
+No model sessions were started for this review. The source report, prompts,
+event streams and responses were checked in place. The review files include
+short excerpts, verified hashes and nonsensitive metadata.
+`python -m pytest -q --junitxml artifacts/pilot-review/pytest.xml` passed 97 tests
+with no failures or skips in the existing Python 3.12.10 virtual environment.
+Ruff lint and format checks, `python scripts/validate_skills.py` and
+`python scripts/build_catalog.py --check` passed.
+
 ## Codex CLI 0.168.0 compatibility — 2026-11-18
 
 Removed the requirements-only `windows.require_mxc` CLI override. The runner

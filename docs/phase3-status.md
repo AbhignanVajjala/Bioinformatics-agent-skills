@@ -69,6 +69,18 @@ or maintainer skills. Both archives contain every skill. The toolkit additionall
 contains Python sources, examples, R recipes, schemas, templates and a dependency
 manifest. Checksums are tracked in SHA256SUMS.
 
+| Archive | Bytes | SHA-256 |
+|---|---:|---|
+| Bioinformatics-Agent-Skills-Complete.zip | 154264 | `0295cce243a7b51a67352b27f151b831669e200aa38c95f0c984cd6589fd1dd5` |
+| Bioinformatics-Agent-Skills-Toolkit.zip | 277257 | `1d268e643a00e8ba27945bb11f761e6cc2da4ecff7d7db693231be31f03c417d` |
+
+The Python [validation at source 8125b9e](https://github.com/AbhignanVajjala/Bioinformatics-agent-skills/actions/runs/44550575238)
+also passed, including retained pseudobulk batch metadata. PR
+[2](https://github.com/AbhignanVajjala/Bioinformatics-agent-skills/pull/2) tracks
+the progressive milestone commits. Final-head checks must be green before merge.
+The source access record is `references/phase3-sources.json`. Unretrieved
+documentation and unexecuted methods are explicitly distinguished.
+
 The original Phase 2 pilot remains 10 completed turns with provisional 0 PASS,
 4 FAIL and 6 BLOCKED. New Phase 3 fixtures are 16 trigger prompts and ten
 scientific adversarial prompts, all NOT_RUN. The default evaluation harness

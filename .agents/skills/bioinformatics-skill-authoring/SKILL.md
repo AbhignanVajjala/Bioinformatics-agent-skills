@@ -7,6 +7,13 @@ metadata:
 
 # Bioinformatics skill authoring
 
+## Execution modes
+
+Use QUICK for bounded questions and FULL for explicitly requested reproducible
+work. Follow the [mode policy](references/modes.md). Named output lists below
+apply to FULL execution when relevant. Essential safeguards apply in both modes.
+
+
 ## Inputs and preflight
 Require a bounded scientific capability, intended users, required data/tool types, neighboring skills, authoritative sources and available test fixtures. Verify current Agent Skills metadata requirements before changing the format. Use original instructions; an uploaded or public file is not permission to redistribute its text.
 

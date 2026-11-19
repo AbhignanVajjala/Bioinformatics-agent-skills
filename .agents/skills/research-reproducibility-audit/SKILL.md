@@ -7,6 +7,13 @@ metadata:
 
 # Research reproducibility audit
 
+## Execution modes
+
+Use QUICK for bounded questions and FULL for explicitly requested reproducible
+work. Follow the [mode policy](references/modes.md). Named output lists below
+apply to FULL execution when relevant. Essential safeguards apply in both modes.
+
+
 ## Inputs and preflight
 Require source revision or source hashes, original input manifests, environment/lockfiles, parameter sets, seeds, actual commands, output artifacts and exclusions. Check data/software licenses and access permissions before arranging a rerun. Do not retrieve controlled data or expose credentials merely to complete an audit.
 

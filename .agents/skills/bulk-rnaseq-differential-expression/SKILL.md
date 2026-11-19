@@ -7,6 +7,13 @@ metadata:
 
 # Bulk RNA-seq differential expression
 
+## Execution modes
+
+Use QUICK for bounded questions and FULL for explicitly requested reproducible
+work. Follow the [mode policy](references/modes.md). Named output lists below
+apply to FULL execution when relevant. Essential safeguards apply in both modes.
+
+
 ## Required inputs and preflight
 Require organism/taxonomy, tissue/material, count-generation method, gene/reference annotation version, gene-by-sample matrix, sample-to-subject metadata, biological conditions, covariates/batches, independent replicate structure and intended contrast. Preserve raw inputs and pseudonymize identifiers before logs. Check local storage and R/Bioconductor availability before promising DE; the bundled Python demonstration performs readiness/QC, not DESeq2.
 

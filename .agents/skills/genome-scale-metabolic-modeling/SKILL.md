@@ -7,6 +7,13 @@ metadata:
 
 # Genome-scale metabolic modeling
 
+## Execution modes
+
+Use QUICK for bounded questions and FULL for explicitly requested reproducible
+work. Follow the [mode policy](references/modes.md). Named output lists below
+apply to FULL execution when relevant. Essential safeguards apply in both modes.
+
+
 ## Required inputs and preflight
 Require model file/version/license and organism/strain, compartments and identifiers, objective and direction, medium/exchange definitions, flux units, solver availability and the biological question. Preserve the original model and record every constraint change. SBML/FBC describes constraint information; syntactically readable SBML does not prove biochemical validity. Large FVA/knockout screens need bounded parallelism and runtime estimates; start with a tiny solver smoke test.
 

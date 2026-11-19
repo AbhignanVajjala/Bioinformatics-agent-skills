@@ -7,6 +7,13 @@ metadata:
 
 # Multi-omics integration
 
+## Execution modes
+
+Use QUICK for bounded questions and FULL for explicitly requested reproducible
+work. Follow the [mode policy](references/modes.md). Named output lists below
+apply to FULL execution when relevant. Essential safeguards apply in both modes.
+
+
 ## Required inputs and preflight
 Require each modality's feature-by-sample table, assay/units, organism, specimen/timepoint and subject mapping, reference/feature namespaces, QC/missingness information, batch/covariates and research objective. Identify which labels are outcomes, which are covariates, and whether repeated specimens belong to one subject. Verify access permits any planned transfer; keep patient data local unless authorized. Estimate matrix memory and sample-to-feature ratio before selecting a model.
 

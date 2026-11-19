@@ -7,6 +7,13 @@ metadata:
 
 # Scientific agent orchestration
 
+## Execution modes
+
+Use QUICK for bounded questions and FULL for explicitly requested reproducible
+work. Follow the [mode policy](references/modes.md). Named output lists below
+apply to FULL execution when relevant. Essential safeguards apply in both modes.
+
+
 ## Inputs and preflight
 Require the task graph, data permissions, available runtime capabilities, resource budget and reviewer requirements. Inventory whether real subagents exist; otherwise use sequential role passes and label them honestly. Never claim blinded human peer review from an agent conversation.
 

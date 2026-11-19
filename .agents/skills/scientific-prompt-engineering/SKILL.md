@@ -7,6 +7,13 @@ metadata:
 
 # Scientific prompt engineering
 
+## Execution modes
+
+Use QUICK for bounded questions and FULL for explicitly requested reproducible
+work. Follow the [mode policy](references/modes.md). Named output lists below
+apply to FULL execution when relevant. Essential safeguards apply in both modes.
+
+
 ## Inputs and preflight
 Obtain the intended scientific task, audience, source corpus, permitted tools, data sensitivity, expected output schema and decision consequences. Specify organism, assay and reference where they affect meaning. Use public or synthetic examples during development; do not send patient records to a model without authorization. A prompt cannot grant source access or establish data rights.
 

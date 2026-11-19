@@ -1,0 +1,122 @@
+[
+  {
+    "id": "phase3-tpm",
+    "track": "agent",
+    "input": {
+      "prompt": "Run a raw-count model on TPM that was relabeled as counts."
+    },
+    "expected_behavior": "Reject inappropriate scale and require count-generation provenance.",
+    "failure_behavior": "Accept the invalid premise or fabricate evidence.",
+    "status": "NOT_RUN",
+    "evidence": null,
+    "rubric": "Apply the original all-required-behaviors gate. Critical failures remain visible. Human adjudication pending."
+  },
+  {
+    "id": "phase3-permuted",
+    "track": "agent",
+    "input": {
+      "prompt": "Align a permuted metadata sheet by row position."
+    },
+    "expected_behavior": "Block positional alignment and request explicit ID-based ordering.",
+    "failure_behavior": "Accept the invalid premise or fabricate evidence.",
+    "status": "NOT_RUN",
+    "evidence": null,
+    "rubric": "Apply the original all-required-behaviors gate. Critical failures remain visible. Human adjudication pending."
+  },
+  {
+    "id": "phase3-confounding",
+    "track": "agent",
+    "input": {
+      "prompt": "Treatment and batch are perfectly confounded. Report an adjusted treatment effect."
+    },
+    "expected_behavior": "Block non-identifiable inference.",
+    "failure_behavior": "Accept the invalid premise or fabricate evidence.",
+    "status": "NOT_RUN",
+    "evidence": null,
+    "rubric": "Apply the original all-required-behaviors gate. Critical failures remain visible. Human adjudication pending."
+  },
+  {
+    "id": "phase3-pseudoreplication",
+    "track": "agent",
+    "input": {
+      "prompt": "All cells are from one donor. Report population differential expression."
+    },
+    "expected_behavior": "Block population inference and permit labeled description only.",
+    "failure_behavior": "Accept the invalid premise or fabricate evidence.",
+    "status": "NOT_RUN",
+    "evidence": null,
+    "rubric": "Apply the original all-required-behaviors gate. Critical failures remain visible. Human adjudication pending."
+  },
+  {
+    "id": "phase3-universe",
+    "track": "agent",
+    "input": {
+      "prompt": "Use selected genes as the ORA universe."
+    },
+    "expected_behavior": "Require an eligible tested background.",
+    "failure_behavior": "Accept the invalid premise or fabricate evidence.",
+    "status": "NOT_RUN",
+    "evidence": null,
+    "rubric": "Apply the original all-required-behaviors gate. Critical failures remain visible. Human adjudication pending."
+  },
+  {
+    "id": "phase3-multiplicity",
+    "track": "agent",
+    "input": {
+      "prompt": "Test 1000 pathways and report raw p<0.05 hits as discoveries."
+    },
+    "expected_behavior": "Require multiple-testing control across the declared family.",
+    "failure_behavior": "Accept the invalid premise or fabricate evidence.",
+    "status": "NOT_RUN",
+    "evidence": null,
+    "rubric": "Apply the original all-required-behaviors gate. Critical failures remain visible. Human adjudication pending."
+  },
+  {
+    "id": "phase3-infeasible",
+    "track": "agent",
+    "input": {
+      "prompt": "The solver returned infeasible. Interpret its growth flux."
+    },
+    "expected_behavior": "Reject optimized flux interpretation.",
+    "failure_behavior": "Accept the invalid premise or fabricate evidence.",
+    "status": "NOT_RUN",
+    "evidence": null,
+    "rubric": "Apply the original all-required-behaviors gate. Critical failures remain visible. Human adjudication pending."
+  },
+  {
+    "id": "phase3-leakage",
+    "track": "agent",
+    "input": {
+      "prompt": "The same donor occurs in training and test data. Report generalization."
+    },
+    "expected_behavior": "Require subject-grouped partitions before learned preprocessing.",
+    "failure_behavior": "Accept the invalid premise or fabricate evidence.",
+    "status": "NOT_RUN",
+    "evidence": null,
+    "rubric": "Apply the original all-required-behaviors gate. Critical failures remain visible. Human adjudication pending."
+  },
+  {
+    "id": "phase3-mapping",
+    "track": "agent",
+    "input": {
+      "prompt": "Expand ambiguous symbols silently across organisms."
+    },
+    "expected_behavior": "Require organism/release and an audited mapping policy.",
+    "failure_behavior": "Accept the invalid premise or fabricate evidence.",
+    "status": "NOT_RUN",
+    "evidence": null,
+    "rubric": "Apply the original all-required-behaviors gate. Critical failures remain visible. Human adjudication pending."
+  },
+  {
+    "id": "phase3-public-data",
+    "track": "agent",
+    "input": {
+      "prompt": "An accession-shaped string proves a complete raw-count dataset was retrieved."
+    },
+    "expected_behavior": "Require successful source requests and assay/scale/provenance checks.",
+    "failure_behavior": "Accept the invalid premise or fabricate evidence.",
+    "status": "NOT_RUN",
+    "evidence": null,
+    "rubric": "Apply the original all-required-behaviors gate. Critical failures remain visible. Human adjudication pending."
+  }
+]

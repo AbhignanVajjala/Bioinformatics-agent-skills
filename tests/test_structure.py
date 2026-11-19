@@ -54,6 +54,7 @@ def test_trigger_cases_cover_each_skill_without_fabricated_runs():
     import json
 
     cases = json.loads((ROOT / "evals/cases/triggers.json").read_text())
+    cases += json.loads((ROOT / "evals/cases/phase3-triggers.json").read_text())
     names = {p.parent.name for p in (ROOT / ".agents/skills").glob("*/SKILL.md")}
     assert {c["skill"] for c in cases} == names
     assert len({c["id"] for c in cases}) == len(cases)

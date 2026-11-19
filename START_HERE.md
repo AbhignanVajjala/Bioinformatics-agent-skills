@@ -3,13 +3,17 @@
 All skills are experimental and require qualified review for high-stakes
 interpretations. Complete refers to this shipped collection.
 
-| Download | Contents | First step |
-|---|---|---|
-| Bioinformatics-Agent-Skills-Complete.zip | Skills, references, recipes and installation/index documents | Extract into your agent project and open INSTALL.md |
-| Bioinformatics-Agent-Skills-Toolkit.zip | Same collection plus Python validators, synthetic examples, R recipes and schemas | Extract and open TOOLKIT_INSTALL.md |
+Download **Bioinformatics-Agent-Skills-Complete.zip**. This single universal
+archive contains all 17 skills, every reference, the Python toolkit, synthetic
+examples, schemas, templates and runnable R/Bioconductor recipes.
 
-The lightweight collection needs no Python for installation or reading.
-The toolkit uses Python 3.12 for its pinned scientific dependencies and optional
+For instructions only, extract the archive and copy `.agents/skills/` into your
+agent project, following [INSTALL.md](INSTALL.md). Reading and installing the
+instructions needs no Python or R.
+
+For execution, keep the same extraction intact, open a terminal at its root and
+follow [TOOLKIT_INSTALL.md](TOOLKIT_INSTALL.md). The toolkit uses Python 3.12 for
+its pinned scientific dependencies and optional
 R 4.4.3/Bioconductor 3.20 for count-model fitting.
 
 Select a skill by folder name or explicit invocation, for example
@@ -26,7 +30,7 @@ implementation scope varies by skill. A successful command cannot establish
 biological validity. BLOCKED indicates a missing dependency or unresolved
 prerequisite. NOT_RUN means the relevant computation or assessment did not execute.
 
-For the toolkit's first-use example, install its dependencies and run
+For the bundled first-use example, install its dependencies and run
 `python examples/expanded/run.py --output first-use-output` from its root.
 It executes synthetic pseudobulk aggregation, Fisher/BH over-representation
 analysis and FASTQ inspection. It makes no public data request and fits no

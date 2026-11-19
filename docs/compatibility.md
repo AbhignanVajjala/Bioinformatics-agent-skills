@@ -1,8 +1,9 @@
 # Compatibility boundaries
 
-Version 0.2.0 supplies a portable instruction ZIP and a separate Python/R
-toolkit. The lightweight archive retains `.agents/skills` paths and can be
-installed or read without Python. Host discovery and execution tools remain
+Version 0.2.1 supplies one universal `Bioinformatics-Agent-Skills-Complete.zip`
+containing the skills and Python/R toolkit. It retains `.agents/skills` paths;
+the instructions can be read or copied without Python or R. Scientific execution
+requires the documented dependencies from the same extraction. Host discovery and execution tools remain
 host-dependent. Use Python 3.12 for the pinned toolkit scientific wheels.
 R recipes enforce R 4.4.3, Bioconductor 3.20, DESeq2 1.46.0 and edgeR 4.4.2.
 The R CI job has executed synthetic fits. Windows libsbml is blocked by the
@@ -16,4 +17,7 @@ Current format/source verification and actual tested environments are recorded i
 
 Core utilities target Python 3.11+. Scientific examples use optional numerical dependencies; no GPU, private data, credentials or API is needed for the included fixtures. External literature lookup and optional R/Bioconductor or large workflow engines are separate capabilities. Their absence must be reported rather than emulated with inappropriate statistics.
 
-Linux is the development execution environment. Windows and macOS portability is an intention, not verified evidence, unless separately listed in the implementation log. Solver behavior, native wheels and path conventions require platform-specific validation. A CI configuration is not proof that a hosted CI run passed.
+Python tests execute locally on Windows and in Linux CI, with platform-specific
+skips recorded in the implementation log. macOS execution remains unverified.
+Solver behavior and native wheels require platform-specific validation. A CI
+configuration is not proof that a hosted CI run passed.

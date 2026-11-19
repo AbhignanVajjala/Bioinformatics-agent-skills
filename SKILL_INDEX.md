@@ -1,6 +1,8 @@
 # Skill selection index
 
-Collection 0.2.0. All skills are EXPERIMENTAL. Execution status is scoped to the capability, with independent human review pending.
+Collection 0.2.1. All skills are EXPERIMENTAL. Execution status is scoped to the capability, with independent human review pending.
+
+Every skill and its references ship with the executable toolkit in the single `Bioinformatics-Agent-Skills-Complete.zip`. Copy `.agents/skills/` for instructions only; keep the full extraction and follow [installation](TOOLKIT_INSTALL.md) for scientific execution.
 
 | Skill and task | Required inputs | Tools and runtime | Example invocation | Capability status and executable scope |
 |---|---|---|---|---|

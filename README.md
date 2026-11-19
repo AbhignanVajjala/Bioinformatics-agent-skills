@@ -1,26 +1,26 @@
-# Bioinformatics Agent Skills
-
-## Download All 17 Bioinformatics Agent Skills
+# Download the Complete Bioinformatics Agent Skills Collection
 
 **[Download Bioinformatics-Agent-Skills-Complete.zip](https://github.com/AbhignanVajjala/Bioinformatics-agent-skills/raw/refs/heads/main/Bioinformatics-Agent-Skills-Complete.zip)**
 
-**[Download the Executable Toolkit](https://github.com/AbhignanVajjala/Bioinformatics-agent-skills/raw/refs/heads/main/Bioinformatics-Agent-Skills-Toolkit.zip)**
+One ZIP includes all **17 experimental Agent Skills**, executable scientific
+validators, bioinformatics recipes and examples, the Python scientific toolkit,
+R/Bioconductor analysis recipes, and installation and selection guides.
+No Git clone is required.
 
-Download one ZIP and extract the collection without cloning the repository or
-installing Python merely to read or install the skills. Complete contains all
-17 experimental skills, their references and recipe instructions, the skill
-index, release information and MIT license. Extract into your
-Codex project to obtain `.agents/skills/<skill-name>/SKILL.md`, then select a
-skill by name. Other Agent Skills-compatible hosts may require different
-installation paths and invocation syntax.
+Users who only need Agent Skills can copy the `.agents/skills/` folder without
+installing scientific dependencies. Users who want to execute analyses can
+install the optional scientific toolkit dependencies from the same archive.
 
-The toolkit adds executable Python validators, synthetic scientific examples,
-R/Bioconductor recipes and schemas. It requires the documented scientific
-runtimes. Evaluation evidence and development tools are in the full repository.
-Complete refers to the shipped collection. All skills remain experimental and
-have no clinical validation. Start with [START_HERE.md](START_HERE.md),
+The ZIP includes Python sources and runnable R recipes, with their dependency
+manifests, schemas and MIT license. External scientific runtimes require explicit
+installation. Evaluation evidence and development tools remain in the full
+repository. Complete refers to the shipped collection, with no claim of complete
+bioinformatics coverage. All skills remain experimental and have no clinical
+validation. Start with [START_HERE.md](START_HERE.md),
 [SKILL_INDEX.md](SKILL_INDEX.md), [INSTALL.md](INSTALL.md) or
-[TOOLKIT_INSTALL.md](TOOLKIT_INSTALL.md). [Checksums](SHA256SUMS) cover both archives.
+[TOOLKIT_INSTALL.md](TOOLKIT_INSTALL.md). Verify the archive with [SHA256SUMS](SHA256SUMS).
+
+## Bioinformatics Agent Skills
 
 An experimental library of original, portable research instructions with executable
 scientific readiness gates. It helps agents choose methods, detect invalid inputs,

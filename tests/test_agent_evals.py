@@ -47,7 +47,9 @@ def test_plan_expands_paired_cases_without_invoking_codex(tmp_path, monkeypatch)
     assert report["summary"] == {"NOT_RUN": 114}
     assert len({row["id"] for row in report["results"] if row["track"] == "trigger"}) == 52
     assert len({row["id"] for row in report["results"] if row["track"] == "scientific"}) == 5
-    assert len(report["skill_hashes"]) == 16
+    assert set(report["skill_hashes"]) == {
+        path.relative_to(ROOT).as_posix() for path in (ROOT / ".agents/skills").rglob("*.md")
+    }
     for baseline, enabled in zip(report["results"][::2], report["results"][1::2], strict=True):
         assert [baseline["mode"], enabled["mode"]] == ["baseline", "skills"]
         assert baseline["prompt_sha256"] == enabled["prompt_sha256"]

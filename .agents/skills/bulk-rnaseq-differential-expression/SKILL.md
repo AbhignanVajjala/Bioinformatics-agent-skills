@@ -7,6 +7,13 @@ metadata:
 
 # Bulk RNA-seq differential expression
 
+## Execution modes
+
+Use QUICK for bounded questions and FULL for explicitly requested reproducible
+work. Follow the [mode policy](references/modes.md). Named output lists below
+apply to FULL execution when relevant. Essential safeguards apply in both modes.
+
+
 ## Required inputs and preflight
 Require organism/taxonomy, tissue/material, count-generation method, gene/reference annotation version, gene-by-sample matrix, sample-to-subject metadata, biological conditions, covariates/batches, independent replicate structure and intended contrast. Preserve raw inputs and pseudonymize identifiers before logs. Check local storage and R/Bioconductor availability before promising DE; the bundled Python demonstration performs readiness/QC, not DESeq2.
 
@@ -42,3 +49,7 @@ Block count-based inference for unsuitable input scale, unresolved sample mismat
 Positive: six independently sampled bulk libraries, three per condition, balanced batches and verified gene counts; audit design then run a justified count model. Negative: TPM labeled “counts,” a permuted sample sheet, or all treated samples in one sequencing batch. The negative cases must fail readiness before fitting. Done means gates were executed, the contrast is estimable, output provenance is available and claim strength matches the executed scope.
 
 Read [method notes](references/methods.md) for authoritative source targets and qualifications.
+For optional full-repository R execution, read [recipes](references/recipes.md),
+the [input contract](references/input-contract.md) and
+[troubleshooting](references/troubleshooting.md). Consult the development status
+for actual pinned DESeq2 and edgeR execution evidence.

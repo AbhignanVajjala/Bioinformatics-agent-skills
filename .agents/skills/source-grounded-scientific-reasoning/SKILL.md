@@ -7,6 +7,13 @@ metadata:
 
 # Source-grounded scientific reasoning
 
+## Execution modes
+
+Use QUICK for bounded questions and FULL for explicitly requested reproducible
+work. Follow the [mode policy](references/modes.md). Named output lists below
+apply to FULL execution when relevant. Essential safeguards apply in both modes.
+
+
 ## Inputs and preflight
 Require the exact claim, organism/population, assay/intervention, evidence requested, source access and time/version scope. Separate literature search from retrieval of controlled-access participant data. Do not assume a search snippet contains the paper's methods or supports causality.
 

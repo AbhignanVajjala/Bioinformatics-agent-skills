@@ -7,6 +7,13 @@ metadata:
 
 # Scientific debugging
 
+## Execution modes
+
+Use QUICK for bounded questions and FULL for explicitly requested reproducible
+work. Follow the [mode policy](references/modes.md). Named output lists below
+apply to FULL execution when relevant. Essential safeguards apply in both modes.
+
+
 ## Inputs and preflight
 Collect the exact failing command, exit status, input hashes, environment/solver versions, expected behavior and actual output. Redact sensitive identifiers from logs without destroying join information. Preserve inputs and failing artifacts; reproduce in a new output directory.
 

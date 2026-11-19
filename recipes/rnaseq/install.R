@@ -1,0 +1,10 @@
+# Install the declared historical release. Run explicitly, never during analysis.
+spec <- jsonlite::fromJSON("recipes/rnaseq/environment.json")
+stopifnot(as.character(getRversion()) == spec$R)
+if (!requireNamespace("BiocManager", quietly = TRUE)) stop("Install BiocManager from the declared CRAN archive first")
+stopifnot(as.character(packageVersion("BiocManager")) == spec$BiocManager)
+BiocManager::install(version = spec$Bioconductor, ask = FALSE, update = FALSE)
+BiocManager::install(c("DESeq2", "edgeR"), ask = FALSE, update = FALSE)
+stopifnot(as.character(packageVersion("DESeq2")) == spec$DESeq2)
+stopifnot(as.character(packageVersion("edgeR")) == spec$edgeR)
+writeLines(capture.output(sessionInfo()), "r-environment.txt")

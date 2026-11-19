@@ -7,6 +7,13 @@ metadata:
 
 # Research specification
 
+## Execution modes
+
+Use QUICK for bounded questions and FULL for explicitly requested reproducible
+work. Follow the [mode policy](references/modes.md). Named output lists below
+apply to FULL execution when relevant. Essential safeguards apply in both modes.
+
+
 ## Inputs and preflight
 Require the biological question, organism/material, assay and reference, available cohorts, independent experimental units, intervention/exposure, outcome, covariates and resource/access limits. Distinguish technical replicates from independent subjects. If these are unknown, produce a blocked specification with targeted missing-information requests, not invented values.
 

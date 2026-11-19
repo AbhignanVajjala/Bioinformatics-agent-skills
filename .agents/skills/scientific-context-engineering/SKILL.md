@@ -7,6 +7,13 @@ metadata:
 
 # Scientific context engineering
 
+## Execution modes
+
+Use QUICK for bounded questions and FULL for explicitly requested reproducible
+work. Follow the [mode policy](references/modes.md). Named output lists below
+apply to FULL execution when relevant. Essential safeguards apply in both modes.
+
+
 ## Inputs and preflight
 Collect the current research specification, local artifact paths, dataset versions, executed run records, unresolved decisions and access restrictions. Identify the organism, assay, reference build and experimental unit. Inventory files without printing sensitive identifiers or credential values. Do not treat an old narrative summary as execution evidence.
 

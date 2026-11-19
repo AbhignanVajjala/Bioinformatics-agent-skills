@@ -7,6 +7,13 @@ metadata:
 
 # Research task decomposition
 
+## Execution modes
+
+Use QUICK for bounded questions and FULL for explicitly requested reproducible
+work. Follow the [mode policy](references/modes.md). Named output lists below
+apply to FULL execution when relevant. Essential safeguards apply in both modes.
+
+
 ## Inputs and preflight
 Obtain the research specification, immutable input locations, access restrictions, environment, compute budget and intended deliverables. Identify missing design decisions before scheduling. A decomposition cannot repair an invalid estimand or establish dataset access rights.
 

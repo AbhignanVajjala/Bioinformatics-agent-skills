@@ -1,5 +1,17 @@
 # Development progress
 
+## Phase 3 executable-science development
+
+The current checkpoint implements the three existing domain recipes, a reusable
+validator CLI, shared Quick/Full mode contracts, four additional scoped domain
+skills and reproducible lightweight/toolkit distribution. The complete status,
+executed R evidence and unfinished Milestone 3.5 domains are recorded in
+[Phase 3 status](phase3-status.md).
+
+Begin with [START_HERE.md](../START_HERE.md) and
+[SKILL_INDEX.md](../SKILL_INDEX.md). The original Phase 2 pilot and its
+provisional scores retain their historical meaning.
+
 ## Phase 2 milestone 3 — Evidence integrity and skill observability
 
 The runner now distinguishes staged availability, confirmed skill-file reads,

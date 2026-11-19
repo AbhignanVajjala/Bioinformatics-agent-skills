@@ -26,3 +26,4 @@ evals/reports/**/cache/
 
 # Distribute the reviewed skills-only archive from the repository root.
 !/Bioinformatics-Agent-Skills-Complete.zip
+!/Bioinformatics-Agent-Skills-Toolkit.zip

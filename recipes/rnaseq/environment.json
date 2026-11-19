@@ -1,0 +1,8 @@
+{
+  "R": "4.4.3",
+  "Bioconductor": "3.20",
+  "DESeq2": "1.46.0",
+  "edgeR": "4.4.2",
+  "BiocManager": "1.30.25",
+  "jsonlite": "1.8.9"
+}

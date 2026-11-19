@@ -23,4 +23,4 @@ fixtures follow the project license. Mapping IDs are invented and never represen
 real accessions. This is an execution regression, not scientific evidence about an organism.
 
 See [the skill](../../.agents/skills/genome-scale-metabolic-modeling/SKILL.md). The tests in
-[tests/test_science.py](../../tests/test_science.py) include the invalid alternatives.
+[tests/test_science.py](https://github.com/AbhignanVajjala/Bioinformatics-agent-skills/blob/main/tests/test_science.py) include the invalid alternatives.

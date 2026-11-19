@@ -1,5 +1,21 @@
 # Roadmap and maturity gates
 
+## Phase 3 delivered scope and unfinished work
+
+The active scope includes executable domain recipes, validator interfaces,
+Quick/Full mode guidance, four additional domain skills and dual distribution.
+Execution evidence and exact limitations are in [Phase 3 status](phase3-status.md).
+The variant-calling/interpretation, epigenomics, proteomics and workflow-engine
+extensions from Milestone 3.5 remain NOT_IMPLEMENTED. Each needs a narrow
+established-tool workflow, valid and invalid inputs, and independently reviewable
+execution evidence before becoming a shipped skill.
+
+Live public metadata retrieval, full pseudobulk differential-state modeling,
+MOFA2/SNF, ranked enrichment and full binary format parsing remain NOT_RUN.
+Real biological benchmarking and independent human review remain required.
+The historical Phase 2 pilot remains provisional. New trigger/scientific cases
+are separate NOT_RUN fixtures and have not been used to reinterpret that pilot.
+
 The authoritative executed inventory is `implementation-status.md`. A file or a planned test below does not establish implementation. Current instructions and synthetic demonstrations are experimental.
 
 ## Next five priorities

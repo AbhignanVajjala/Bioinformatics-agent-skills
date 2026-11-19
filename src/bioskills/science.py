@@ -11,6 +11,7 @@ import importlib.metadata
 import json
 from pathlib import Path
 import platform
+import shutil
 import subprocess
 import sys
 from datetime import datetime, timezone
@@ -56,12 +57,10 @@ def validate_matrix(matrix):
     return values
 
 
-def validate_counts(counts, metadata, *, scale, organism, reference):
-    """Validate an independent-subject, two-group, optional categorical batch design.
-
-    Deliberately reject repeated subjects rather than silently apply an unpaired
-    model. A PASS is readiness for expert model selection, not DE validation.
-    """
+def check_counts(
+    counts, *, scale, organism, reference, count_generation=None, require_provenance=True
+):
+    """Count integrity shared by the legacy readiness gate and validator CLI."""
     values = validate_matrix(counts)
     require(
         scale == "raw_counts",
@@ -83,6 +82,29 @@ def validate_counts(counts, metadata, *, scale, organism, reference):
     )
     require(
         (values.sum(axis=0) > 0).all(), "empty_library", "A zero-depth library cannot be modeled."
+    )
+    if require_provenance:
+        require(
+            isinstance(count_generation, str) and bool(count_generation.strip()),
+            "provenance",
+            "Declare the upstream count-generation method.",
+        )
+    return {
+        "status": "PASS",
+        "samples": len(counts.columns),
+        "genes": len(counts),
+        "limitations": ["Integer appearance cannot verify declared raw-count provenance"],
+    }
+
+
+def validate_counts(counts, metadata, *, scale, organism, reference):
+    """Validate independent subjects with an optional categorical batch design.
+
+    The legacy call contract retains its original provenance fields and rejects
+    repeated subjects. New count-only callers require count-generation metadata.
+    """
+    check_counts(
+        counts, scale=scale, organism=organism, reference=reference, require_provenance=False
     )
     require(metadata.index.is_unique, "duplicate_samples", "Sample metadata must be unique.")
     require(
@@ -290,23 +312,34 @@ def begin_run():
 def finish_run(run, output, inputs, parameters):
     """Call only after assertions and report generation succeeded."""
     output = Path(output)
-    revision = subprocess.run(
-        ["git", "rev-parse", "HEAD"], capture_output=True, text=True, check=False
-    )
-    inputs = list(inputs) + [Path(__file__)]
-    dirty = subprocess.run(
-        ["git", "status", "--porcelain"], capture_output=True, text=True, check=False
-    )
+    revision = dirty = None
+    if shutil.which("git"):
+        source_root = Path(__file__).resolve().parents[2]
+        revision = subprocess.run(
+            ["git", "-C", str(source_root), "rev-parse", "HEAD"],
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        dirty = subprocess.run(
+            ["git", "-C", str(source_root), "status", "--porcelain"],
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+    inputs = list(dict.fromkeys([*inputs, *Path(__file__).parent.glob("*.py")]))
     parameters = {
         **parameters,
-        "git_unborn_or_unavailable": revision.returncode != 0,
-        "git_dirty": bool(dirty.stdout) if dirty.returncode == 0 else None,
+        "git_unborn_or_unavailable": revision is None or revision.returncode != 0,
+        "git_dirty": bool(dirty.stdout) if dirty is not None and dirty.returncode == 0 else None,
     }
     run.update(
         {
             "ended_at": datetime.now(timezone.utc).isoformat(),
             "exit_status": 0,
-            "git_revision": revision.stdout.strip() if revision.returncode == 0 else None,
+            "git_revision": revision.stdout.strip()
+            if revision is not None and revision.returncode == 0
+            else None,
             "parameters": parameters,
             "random_seed": parameters.get("seed"),
             "inputs": [{"path": str(p), "sha256": sha256(p)} for p in inputs],

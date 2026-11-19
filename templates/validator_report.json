@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "validator": "check_counts",
+  "status": "NOT_RUN",
+  "checks": [{"check": "check_counts", "status": "NOT_RUN"}],
+  "reason": "Template has no executed input checks.",
+  "inputs": {},
+  "input_hashes": {},
+  "software_versions": {},
+  "limitations": ["Template only"],
+  "recommended_action": "Supply actual inputs and run the documented validator."
+}

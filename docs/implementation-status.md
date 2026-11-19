@@ -1,5 +1,23 @@
 # Implementation status
 
+## Phase 3 domain execution checkpoint — 2026-11-19
+
+Development proceeds on `phase3-executable-science` from synchronized main
+`7aa0c1a`. See [Phase 3 capability and execution status](phase3-status.md).
+The initial checkpoint adds pinned R/Bioconductor recipes, richer synthetic
+SBML/GPR controls and an executed cross-view baseline. R execution and Linux
+metabolic execution initially awaited CI. R execution has since passed eighteen
+checks, with the verified status/result hashes in
+[R execution provenance](../references/phase3-r-execution.json). The latest local
+suite has 173 passed, 13 skipped and zero failures. The skips are blocked
+COBRA imports. Both extracted archives and the toolkit first-use recipe passed.
+Linux CI passed 182 tests with four Windows-only skips and ran the metabolic
+recipes and all seven validator fixture groups. Milestone 3.5 remains explicitly
+unfinished. The repository now ships 17 experimental skills, with all historical
+Phase 2 judgments preserved.
+See the Phase 3 status for final Linux execution and publication evidence.
+Historical Phase 2 evidence is preserved.
+
 ## Complete skills ZIP package — 2026-11-19
 
 Built `Bioinformatics-Agent-Skills-Complete.zip` on clean local `main` after

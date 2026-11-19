@@ -7,6 +7,13 @@ metadata:
 
 # Verification before scientific claims
 
+## Execution modes
+
+Use QUICK for bounded questions and FULL for explicitly requested reproducible
+work. Follow the [mode policy](references/modes.md). Named output lists below
+apply to FULL execution when relevant. Essential safeguards apply in both modes.
+
+
 ## Inputs and preflight
 Require the proposed claims, referenced artifacts, run records, methods, data access scope and reviewer provenance. Retrieve actual files, not only an earlier assistant's summary. Identify the unit, organism, assay and intended audience of each statement.
 

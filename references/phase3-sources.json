@@ -1,0 +1,76 @@
+{
+  "verified_on": "2026-11-19",
+  "records": [
+    {
+      "skill": "bulk-rnaseq-differential-expression",
+      "url": "https://new.bioconductor.org/packages/release/bioc/manuals/DESeq2/man/DESeq2.pdf",
+      "documentation_status": "RETRIEVED_SNAPSHOT",
+      "version": "1.46.0",
+      "api": "DESeqDataSetFromMatrix, DESeq, results, counts, dispersions",
+      "execution_evidence": "phase3-r-execution.json"
+    },
+    {
+      "skill": "bulk-rnaseq-differential-expression",
+      "url": "https://bioconductor.org/packages/release/bioc/vignettes/edgeR/inst/doc/intro.html",
+      "documentation_status": "RETRIEVED",
+      "version_executed": "4.4.2",
+      "note": "Current documentation is a source target. Pinned historical API behavior was executed in CI.",
+      "api": "DGEList, filterByExpr, calcNormFactors, estimateDisp, glmQLFit, glmQLFTest",
+      "execution_evidence": "phase3-r-execution.json"
+    },
+    {
+      "skill": "genome-scale-metabolic-modeling",
+      "url": "https://cobrapy.readthedocs.io/en/0.29.1/simulating.html",
+      "documentation_status": "UNAVAILABLE",
+      "version_executed": "0.29.1",
+      "note": "Installed API behavior was tested in Linux CI, including an OptimizationError for an unbounded model."
+    },
+    {
+      "skill": "multiomics-integration",
+      "url": "https://numpy.org/doc/stable/reference/generated/numpy.corrcoef.html",
+      "documentation_status": "SOURCE_TARGET_UNVERIFIED",
+      "version_executed": "2.2.6",
+      "note": "The implementation executes descriptive Pearson cross-view association. MOFA2 and SNF remain NOT_RUN."
+    },
+    {
+      "skill": "single-cell-rnaseq-pseudobulk",
+      "url": "https://bioconductor.org/packages/release/bioc/vignettes/muscat/inst/doc/analysis.html",
+      "documentation_status": "RETRIEVED",
+      "api": "aggregateData with raw-count sum by cluster and sample",
+      "note": "Python aggregation executes locally. muscat differential-state modeling is NOT_RUN."
+    },
+    {
+      "skill": "pathway-enrichment-and-identifier-mapping",
+      "url": "https://docs.scipy.org/doc/scipy-1.15.3/reference/generated/scipy.stats.fisher_exact.html",
+      "documentation_status": "RETRIEVED",
+      "version_executed": "1.15.3",
+      "api": "fisher_exact with alternative greater"
+    },
+    {
+      "skill": "pathway-enrichment-and-identifier-mapping",
+      "url": "https://docs.scipy.org/doc/scipy-1.15.3/reference/generated/scipy.stats.false_discovery_control.html",
+      "documentation_status": "RETRIEVED",
+      "version_executed": "1.15.3",
+      "api": "false_discovery_control with method bh",
+      "note": "BH assumptions require study-specific review."
+    },
+    {
+      "skill": "public-bioinformatics-data-retrieval",
+      "url": "https://www.ncbi.nlm.nih.gov/books/NBK25501/",
+      "documentation_status": "BROWSER_VERIFICATION_BLOCKED",
+      "note": "E-utilities search/summary procedures have offline mocks. Live metadata retrieval is NOT_RUN."
+    },
+    {
+      "skill": "public-bioinformatics-data-retrieval",
+      "url": "https://rest.ensembl.org/documentation/info/lookup",
+      "documentation_status": "HTTP_403",
+      "note": "Live lookup is a manual option. No data retrieval success is inferred from an accession."
+    },
+    {
+      "skill": "bioinformatics-file-formats",
+      "url": "https://samtools.github.io/hts-specs/",
+      "documentation_status": "SOURCE_TARGET_UNVERIFIED",
+      "note": "The baseline inspects small text records and signatures. Optional full binary parsers are NOT_RUN."
+    }
+  ]
+}

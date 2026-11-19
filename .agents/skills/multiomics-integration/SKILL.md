@@ -7,6 +7,13 @@ metadata:
 
 # Multi-omics integration
 
+## Execution modes
+
+Use QUICK for bounded questions and FULL for explicitly requested reproducible
+work. Follow the [mode policy](references/modes.md). Named output lists below
+apply to FULL execution when relevant. Essential safeguards apply in both modes.
+
+
 ## Required inputs and preflight
 Require each modality's feature-by-sample table, assay/units, organism, specimen/timepoint and subject mapping, reference/feature namespaces, QC/missingness information, batch/covariates and research objective. Identify which labels are outcomes, which are covariates, and whether repeated specimens belong to one subject. Verify access permits any planned transfer; keep patient data local unless authorized. Estimate matrix memory and sample-to-feature ratio before selecting a model.
 
@@ -39,3 +46,6 @@ Stop paired integration for unresolved specimen mismatches, duplicate mapping ke
 Positive: RNA/protein measurements from the same specimens with verified IDs and a descriptive shared-variation question. Negative: merge patients solely because row counts match, or place biopsies from one patient in both train and test. Test mismatched patient mappings and repeated-patient splits; both must block dependent analysis. Done means identity, modality preprocessing and evaluation choices are traceable, artifacts exist, and only the actually executed scope is claimed.
 
 Read [method notes](references/methods.md) when choosing an integration model.
+For an optional full-repository executable cross-view baseline, read
+[recipes](references/recipes.md), the [input contract](references/input-contract.md)
+and [troubleshooting](references/troubleshooting.md).

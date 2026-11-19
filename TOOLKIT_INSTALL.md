@@ -1,20 +1,37 @@
-# Executable toolkit installation
+# Run the scientific toolkit from the universal ZIP
 
-Extract the toolkit into a new directory and open a terminal at its root.
+Extract `Bioinformatics-Agent-Skills-Complete.zip` into a new directory and open
+a terminal at its root, alongside `pyproject.toml`. This is the same download
+used for instruction-only installation; there is no separate toolkit archive.
 Use Python 3.12 and an isolated environment. The following commands work with
-the environment's Python after activation.
+the environment's Python after activation. Environment activation must precede
+package installation.
 
-```text
+Windows PowerShell:
+
+```powershell
 python -m venv .venv
+.\.venv\Scripts\Activate.ps1
 python -m pip install -r requirements-toolkit.txt
 python -m pip install . --no-deps
 python examples/expanded/run.py --output first-use-output
 python -m bioskills --help
 ```
 
-Activate with `.venv\Scripts\Activate.ps1` in PowerShell or
-`. .venv/bin/activate` on Linux. Alternatively use that environment's Python
-executable directly for every command. Scientific dependencies are downloaded
+Linux/macOS:
+
+```sh
+python3.12 -m venv .venv
+. .venv/bin/activate
+python -m pip install -r requirements-toolkit.txt
+python -m pip install . --no-deps
+python examples/expanded/run.py --output first-use-output
+python -m bioskills --help
+```
+
+If PowerShell activation is unavailable, use `.\.venv\Scripts\python.exe`
+directly for every install and run command; no policy change is needed.
+Scientific dependencies are downloaded
 only by the explicit install command. The package vendors no scientific binaries
 or third-party libraries.
 
@@ -22,6 +39,24 @@ The first-use output contains actual synthetic pseudobulk counts, sample
 metadata, Fisher/BH ORA results, a FASTQ inspection report and hashed execution
 provenance. Choose a new output directory for each run.
 [Validator commands and exit codes](docs/validators.md).
+
+`python -m pip install .` installs the core Python package and validators.
+The full `requirements-toolkit.txt` also installs SciPy, Matplotlib and COBRApy
+for optional scientific workflows. Installing instructions alone needs none of
+these dependencies. A blocked COBRApy native runtime does not validate fluxes;
+record BLOCKED for metabolic execution and keep other supported workflows separate.
+
+Additional synthetic commands from the same extraction root:
+
+```text
+python examples/bulk-rnaseq/run.py --output bulk-readiness-output
+python examples/domain-recipes/run.py multiomics --output cross-view-output
+python examples/domain-recipes/run.py metabolic --output metabolic-output
+python examples/public-metadata/run.py geo GSE12345 --output metadata-plan.json
+```
+
+The metadata command is a dry run; consult its `--help` before an explicit live
+request. It downloads no scientific dataset. All output paths must be new.
 
 For the optional R recipes, install R 4.4.3 and the versions specified in
 `recipes/rnaseq/environment.json`. Install jsonlite 1.8.9 and BiocManager

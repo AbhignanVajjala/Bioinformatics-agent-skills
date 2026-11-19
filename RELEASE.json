@@ -1,7 +1,9 @@
 {
-  "version": "0.2.0",
+  "version": "0.2.1",
   "date": "2026-11-19",
   "maturity": "EXPERIMENTAL",
+  "distribution": "universal",
+  "archive": "Bioinformatics-Agent-Skills-Complete.zip",
   "clinical_validation": false,
   "complete_means": "The shipped collection, with no claim of complete bioinformatics coverage"
 }

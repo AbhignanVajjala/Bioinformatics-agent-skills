@@ -1,10 +1,19 @@
 # Development progress
 
+## Phase 3.11 universal distribution
+
+The current distribution is one `Bioinformatics-Agent-Skills-Complete.zip`
+containing all 17 skills and the complete executable toolkit. The separate
+Toolkit ZIP is superseded. Instruction-only users copy `.agents/skills/`;
+scientific users install dependencies and run from the same complete extraction.
+No scientific instructions, analysis methods or historical pilot judgments are
+changed. See [implementation status](implementation-status.md) for verification.
+
 ## Phase 3 executable-science development
 
 The current checkpoint implements the three existing domain recipes, a reusable
 validator CLI, shared Quick/Full mode contracts, four additional scoped domain
-skills and reproducible lightweight/toolkit distribution. The complete status,
+skills and reproducible distribution, now consolidated into one universal ZIP. The complete status,
 executed R evidence and unfinished Milestone 3.5 domains are recorded in
 [Phase 3 status](phase3-status.md).
 

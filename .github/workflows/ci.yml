@@ -18,8 +18,9 @@ jobs:
       - run: python scripts/build_catalog.py --check
       - run: python scripts/sync_modes.py --check
       - run: python scripts/package_skills.py --check
-      - run: git ls-files --error-unmatch Bioinformatics-Agent-Skills-Complete.zip
-      - run: git ls-files --error-unmatch Bioinformatics-Agent-Skills-Toolkit.zip SHA256SUMS
+      - run: git ls-files --error-unmatch Bioinformatics-Agent-Skills-Complete.zip SHA256SUMS
+      - name: Require exactly one published ZIP
+        run: python -c "import pathlib, subprocess; expected = ['Bioinformatics-Agent-Skills-Complete.zip']; assert sorted(p.name for p in pathlib.Path('.').glob('*.zip')) == expected; assert subprocess.check_output(['git', 'ls-files', '*.zip'], text=True).splitlines() == expected"
       - run: pytest -q --junitxml=artifacts/pytest.xml
       - run: python examples/bulk-rnaseq/run.py --output artifacts/bulk-rnaseq
       - run: python examples/multiomics/run.py --output artifacts/multiomics
@@ -32,3 +33,67 @@ jobs:
         with:
           name: validation-evidence
           path: artifacts/
+  standalone-distribution:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install and execute only the extracted universal package
+        shell: python {0}
+        run: |
+          import hashlib, json, os, pathlib, platform, subprocess, tempfile, venv, zipfile
+          archive = pathlib.Path('Bioinformatics-Agent-Skills-Complete.zip').resolve()
+          summary = {'archive': archive.name, 'sha256': hashlib.sha256(archive.read_bytes()).hexdigest(), 'platform': platform.system(), 'python': platform.python_version(), 'checks': {}}
+          with tempfile.TemporaryDirectory(prefix='bioskills-standalone-') as directory:
+              root = pathlib.Path(directory).resolve()
+              source = root / 'source'
+              with zipfile.ZipFile(archive) as package:
+                  package.extractall(source)
+              environment = root / 'venv'
+              venv.EnvBuilder(with_pip=True).create(environment)
+              python = environment / ('Scripts/python.exe' if os.name == 'nt' else 'bin/python')
+              env = {k: v for k, v in os.environ.items() if not k.startswith('PYTHON')}
+              env.update(PYTHONUTF8='1', XDG_CACHE_HOME=str(root / 'cache'), MPLCONFIGDIR=str(root / 'mpl'))
+              def run(*args):
+                  subprocess.run([str(python), '-I', *args], cwd=source, env=env, check=True)
+              run('-m', 'pip', 'install', '-r', 'requirements-toolkit.txt')
+              run('-m', 'pip', 'install', '.', '--no-deps')
+              run('-m', 'pip', 'check')
+              run('-c', 'import bioskills; from pathlib import Path; assert Path(bioskills.__file__).resolve().is_relative_to(Path(' + repr(str(environment)) + ').resolve())')
+              run('-m', 'bioskills', '--help')
+              for name in ('check_counts', 'check_sample_ids', 'check_design_rank', 'check_replication', 'check_fba_status', 'check_leakage', 'check_enrichment_background'):
+                  run('-m', 'bioskills', name, '--help')
+              run('examples/expanded/run.py', '--output', 'first-use')
+              run('examples/domain-recipes/run.py', 'multiomics', '--output', 'cross-view')
+              run('examples/public-metadata/run.py', 'geo', 'GSE12345', '--output', 'metadata-plan.json')
+              run('-c', 'import json, jsonschema; from pathlib import Path; jsonschema.validate(json.loads(Path("first-use/analysis_run.json").read_bytes()), json.loads(Path("schemas/analysis_run.schema.json").read_bytes())); assert Path("first-use/pseudobulk.csv").is_file(); assert Path("first-use/results.json").is_file()')
+              for check in ('isolated_installation', 'pip_check', 'installed_module_origin', 'seven_validator_help_commands', 'first_use', 'cross_view', 'metadata_dry_run', 'analysis_schema'):
+                  summary['checks'][check] = 'PASS'
+              probe = subprocess.run([str(python), '-I', '-c', 'import cobra'], cwd=source, env=env, capture_output=True)
+              if probe.returncode == 0:
+                  run('examples/metabolic-modeling/run.py', '--output', 'original-metabolic')
+                  run('examples/domain-recipes/run.py', 'metabolic', '--output', 'metabolic-recipe')
+                  summary['checks']['extracted_metabolic_workflows'] = 'PASS'
+              else:
+                  summary['checks']['extracted_metabolic_workflows'] = 'BLOCKED'
+                  summary['metabolic_reason'] = 'COBRApy import failed in the clean environment; see runtime validation limits'
+                  if os.name != 'nt':
+                      raise RuntimeError('Required Linux COBRApy import failed')
+              summary['checks']['extracted_r_execution'] = 'NOT_RUN'
+              summary['r_reason'] = 'Pinned R/Bioconductor execution is verified in the separate unchanged R CI job'
+              print('PASS: isolated universal installation, seven CLI commands and synthetic workflows')
+          output = pathlib.Path('artifacts') / ('standalone-' + platform.system() + '.json')
+          output.parent.mkdir(parents=True, exist_ok=True)
+          output.write_text(json.dumps(summary, indent=2) + '\n', encoding='utf-8')
+          print(json.dumps(summary))
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: standalone-evidence-${{ matrix.os }}
+          path: artifacts/standalone-*.json

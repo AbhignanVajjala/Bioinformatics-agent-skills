@@ -1,18 +1,20 @@
 # Install Bioinformatics Agent Skills
 
-This package contains the complete collection of Agent Skills, their bundled
-method references, tested recipe instructions, the [skill index](SKILL_INDEX.md),
-[first steps](START_HERE.md), release information and the MIT [LICENSE](LICENSE). Every skill is experimental
+The single universal `Bioinformatics-Agent-Skills-Complete.zip` contains all
+17 Agent Skills and their references, the executable Python toolkit, synthetic
+examples, R/Bioconductor recipes, schemas, templates, dependency manifests,
+the [skill index](SKILL_INDEX.md), [first steps](START_HERE.md), release information
+and the MIT [LICENSE](LICENSE). Every skill is experimental
 and has no clinical validation. Scientific and high-stakes interpretations
 require qualified human review.
 
 ## Install the collection in Codex
 
-1. Extract the ZIP into the root of your Codex project. The extracted
-   `.agents/skills/` folder should sit directly under the project root.
-2. If your extractor creates a folder named after the ZIP, copy its entire
-   `.agents` folder into your project root. Merge existing folders carefully,
-   reviewing any filename conflicts.
+1. Extract the ZIP into a new directory. No Python or R installation is needed
+   to read or install the instructions.
+2. Copy its `.agents/skills/` folder into your Codex project's `.agents/skills/`.
+   The result must be `.agents/skills/<skill-name>/SKILL.md` under the project
+   root. Merge existing folders carefully, reviewing any filename conflicts.
 3. Open that project in Codex. Check the available skills, then select a skill
    by name or request it explicitly in your prompt, for example:
 
@@ -39,19 +41,24 @@ Compatibility, available tools, explicit invocation syntax, and automatic
 discovery depend on the agent host. Inspect what your host loads and adapt
 installation paths as needed.
 
-## Scientific examples and full repository
+## Execute scientific workflows from the same ZIP
 
 Downloading and extracting these instruction files requires no Git clone or
 Python installation. The agent host and any scientific software used for a
 research task have their own requirements.
 
-Executable scientific examples and shared resources outside the skills directory,
-including schemas, templates, workflows, evaluation evidence, and development
-tools, are available in the
+Keep the extracted archive intact and open a terminal at its root, alongside
+`pyproject.toml`. Follow [TOOLKIT_INSTALL.md](TOOLKIT_INSTALL.md) to create an
+isolated environment, install dependencies and run the first-use demonstration
+or [validator CLI](docs/validators.md). All bundled scientific commands resolve
+from that root. Copying only the skill folders does not copy executable resources;
+use the complete extraction when running those commands.
+
+Python 3.12 is recommended for the pinned scientific dependencies. COBRApy needs
+working GLPK/libsbml native dependencies. DESeq2 and edgeR require the separately
+installed, pinned R/Bioconductor environment. No interpreter, binary library or
+external data is silently installed or downloaded by extraction.
+
+Development tests, evaluation reports, personas, staged workflow instructions and
+repository maintenance scripts remain in the
 [full repository](https://github.com/AbhignanVajjala/Bioinformatics-agent-skills).
-They are also available in the separately downloadable
-[executable toolkit](https://github.com/AbhignanVajjala/Bioinformatics-agent-skills/raw/refs/heads/main/Bioinformatics-Agent-Skills-Toolkit.zip).
-Commands in the skill
-instructions that refer to those resources require the full repository and its
-documented dependencies. The lightweight package contains Markdown recipes
-whose executable dependencies are supplied by the toolkit or full repository.

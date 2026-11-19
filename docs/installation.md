@@ -1,15 +1,18 @@
 # Installation and invocation
 
-The [executable toolkit](../TOOLKIT_INSTALL.md) installs the Python validators
-and synthetic examples in an isolated Python 3.12 environment. The optional
+The universal ZIP contains all skills, executable Python validators, synthetic
+examples and R recipes. [Toolkit installation](../TOOLKIT_INSTALL.md) uses an
+isolated Python 3.12 environment. The optional
 R/Bioconductor recipes have a separately pinned environment. Begin with
 [START_HERE.md](../START_HERE.md) and the [skill index](../SKILL_INDEX.md).
 
-For the complete instruction collection, download
+Download the complete collection once:
 [Bioinformatics-Agent-Skills-Complete.zip](https://github.com/AbhignanVajjala/Bioinformatics-agent-skills/raw/refs/heads/main/Bioinformatics-Agent-Skills-Complete.zip)
 and follow [INSTALL.md](../INSTALL.md), also included inside the ZIP.
-Extracting the package requires no Git clone or Python installation. The full
-repository setup below supplies the executable examples and shared resources.
+Extracting the package or copying `.agents/skills/` requires no Git clone,
+Python or R installation. Keep the extraction intact for scientific execution.
+The full repository setup below additionally supplies development tests and
+evaluation infrastructure, which are excluded from the ZIP.
 
 From the repository root, Python 3.11+ (tested: Linux x86_64, Python 3.12.14):
 
@@ -33,7 +36,8 @@ python scripts/run_evals.py --output evals/reports/latest.json
 
 Writable cache directories are needed when the platform home is read-only; COBRApy and
 Matplotlib use them. On Windows use .venv\Scripts\Activate.ps1 and PowerShell environment
-assignments. Windows/macOS commands have not been executed here. No GPU, credentials,
+assignments. Windows validation and native dependency limits are recorded in
+the implementation status; macOS execution remains unverified. No GPU, credentials,
 private data or external services are needed after dependencies are installed.
 
 `pip install -e '.[dev]'` installs core validators without the optional scientific examples.
@@ -59,5 +63,7 @@ skill folders. A copied single folder alone is not a tested full installation.
 Metadata follows the retrieved Agent Skills specification. Actual Codex discovery and
 model-driven trigger behavior remain NOT_TESTED in this execution session.
 
-R/Bioconductor differential expression and MOFA/SNF fitting are optional future integrations,
-not installed or executed by this quick start. Do not describe RNA-seq QC as DESeq2 results.
+The bundled R/Bioconductor differential-expression recipes use a separate pinned
+installation and have executed synthetic CI evidence. This Python quick start
+does not run them. MOFA/SNF fitting remains NOT_RUN. Do not describe RNA-seq QC
+as DESeq2 results.

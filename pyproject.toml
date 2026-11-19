@@ -4,14 +4,14 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "bioinformatics-agent-skills"
-version = "0.2.0"
+version = "0.2.1"
 description = "Experimental scientific agent skills and executable readiness gates"
 requires-python = ">=3.11"
 license = "MIT"
 dependencies = ["PyYAML==6.0.2", "jsonschema==4.23.0", "rfc3339-validator==0.1.4", "numpy==2.2.6", "pandas==2.2.3"]
 
 [project.optional-dependencies]
-dev = ["pytest==8.3.5", "ruff==0.11.13"]
+dev = ["pytest==8.3.5", "ruff==0.11.13", "setuptools==80.9.0"]
 examples = ["matplotlib==3.10.3", "scipy==1.15.3", "cobra==0.29.1"]
 
 [tool.setuptools.packages.find]

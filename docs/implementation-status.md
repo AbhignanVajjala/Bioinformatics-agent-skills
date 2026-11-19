@@ -1,5 +1,77 @@
 # Implementation status
 
+## Phase 3.11 universal distribution — 2026-11-19
+
+Started from clean synchronized local Windows main `1a05135` on branch
+`phase3-universal-distribution`. Version 0.2.1 consolidates the entire previous
+104-file toolkit inventory into `Bioinformatics-Agent-Skills-Complete.zip`,
+with the shared mode policy, scientific source record and explicit Python package
+initializer added. The 17 skills and their instructions, scientific method
+implementations, R recipes, evaluation criteria and historical verdicts are unchanged.
+
+The universal archive has **107 files, 285,194 bytes**, SHA-256
+`27220befd97d20d3d15f0c7d25ece424a722dd355d199dca2c8cf1dfc217a423`.
+It passed exact source/extracted inventory and normal installation/first-use
+checks before removal of the redundant Toolkit ZIP. The single checksum is
+tracked in SHA256SUMS. Packaging and CI reject extra root ZIPs, unsafe portable
+paths, symlinks, unreviewed file types and recognized credential patterns.
+Text newlines are normalized while binary resources retain exact bytes.
+Credential pattern checks are bounded safeguards, not a universal secret detector.
+
+Validation used Python 3.12.10, pytest 8.3.5, Ruff 0.11.13 and setuptools 80.9.0
+in the existing virtual environment. Set `PYTHONUTF8=1`, `PYTHONPATH=src`, and
+task-local `XDG_CACHE_HOME`/`MPLCONFIGDIR` before the repository checks.
+
+| Command | Observed result |
+|---|---|
+| `python -m pytest -q tests/test_package_skills.py --junitxml artifacts/phase3-universal/packaging.xml` | 56 passed, 1 skipped, zero failures |
+| `python -m pytest -q --junitxml artifacts/phase3-universal/pytest.xml` | 207 passed, 14 skipped, zero failures; 221 collected |
+| `ruff check .` / `ruff format --check .` | PASS; 30 Python files formatted |
+| `python scripts/validate_skills.py` | 17 skills, zero structural/link errors |
+| `python scripts/build_catalog.py --check` | PASS |
+| `python scripts/sync_modes.py --check` | PASS |
+| `python scripts/package_skills.py` / `python scripts/package_skills.py --check` | PASS; deterministic archive and single checksum |
+
+Thirteen local scientific skips retain the existing Windows Application Control
+block on libsbml. The symlink rejection fixture is skipped because this account
+cannot create symlinks; the implementation still rejects them. The new offline
+extraction test installs the packaged source normally into a temporary venv and
+reuses third-party dependency files only, without loading the development venv's
+editable-install hooks. Isolated `-I` subprocesses verify that every toolkit module
+loads from the installed package, discover all seven CLI commands, execute the
+first-use, bulk-readiness, multi-omics and metadata dry-run examples, check hashes
+and schemas, and reject a TPM scientific-invalid fixture with exit 2.
+
+An initial offline test setup failed because a fresh venv does not inherit a
+parent venv's build dependencies. Explicit offline third-party dependency reuse
+corrected that setup; final tests pass. Hosted CI additionally gates publication
+on fresh dependency installation from the extracted ZIP in clean Windows/Linux
+venvs, Linux scientific regression checks and the unchanged pinned R job.
+No model sessions or live public data requests were launched. Prior scientific
+limitations and independent human review requirements remain in force.
+
+The additional local standalone run created a fresh venv with no shared site
+packages, installed `requirements-toolkit.txt` and the extracted package, then
+ran `python -m pip check`, isolated CLI/module-origin checks, first-use,
+cross-view, metadata dry-run and schema checks. All eight checks passed.
+Metabolic execution remained BLOCKED at the native COBRApy import; R execution
+from the extraction was NOT_RUN. The record is
+`artifacts/standalone-Windows.json`; logs are in
+`artifacts/phase3-universal/standalone-local.log`, both excluded from Git.
+
+At source `a868e3b`, [Linux validation and standalone execution](https://github.com/AbhignanVajjala/Bioinformatics-agent-skills/actions/runs/44558732180)
+passed 217 tests with four Windows-only skips. The fresh Linux extraction also
+executed both original and domain metabolic recipes successfully.
+The [unchanged pinned R job](https://github.com/AbhignanVajjala/Bioinformatics-agent-skills/actions/runs/44558732357)
+passed all 18 checks (six model fits, twelve invalid-input rejections).
+The first hosted Windows standalone installation succeeded but its origin
+assertion compared a resolved long path with an unresolved `RUNNER~1` short
+path. Both expected and actual paths are now resolved; this preserves the
+installed-origin requirement. The packaging suite was rerun: 56 passed, one
+symlink-creation skip, zero failures. A native Windows short/long-path check
+also passed. Final-head CI must pass before merging
+[PR 3](https://github.com/AbhignanVajjala/Bioinformatics-agent-skills/pull/3).
+
 ## Phase 3 domain execution checkpoint — 2026-11-19
 
 Development proceeds on `phase3-executable-science` from synchronized main

@@ -39,3 +39,6 @@ Stop on missing objective, inconsistent bounds, infeasible/unbounded solver stat
 Positive: compare biomass-constrained product capacity across documented carbon uptake bounds and propose experimental follow-up. Negative: announce an experimentally increased yield from FBA alone or read fluxes from an infeasible solution. Test infeasible constraints, absent objective and invalid bounds. Done means valid solver evidence, physical/constraint checks and sensitivity support every reported prediction, with experimental validation clearly separate.
 
 Read [method notes](references/methods.md) for source targets and scope.
+For the optional full-repository SBML/GPR recipe, read
+[recipes](references/recipes.md), the [input contract](references/input-contract.md)
+and [troubleshooting](references/troubleshooting.md).

@@ -39,3 +39,6 @@ Stop paired integration for unresolved specimen mismatches, duplicate mapping ke
 Positive: RNA/protein measurements from the same specimens with verified IDs and a descriptive shared-variation question. Negative: merge patients solely because row counts match, or place biopsies from one patient in both train and test. Test mismatched patient mappings and repeated-patient splits; both must block dependent analysis. Done means identity, modality preprocessing and evaluation choices are traceable, artifacts exist, and only the actually executed scope is claimed.
 
 Read [method notes](references/methods.md) when choosing an integration model.
+For an optional full-repository executable cross-view baseline, read
+[recipes](references/recipes.md), the [input contract](references/input-contract.md)
+and [troubleshooting](references/troubleshooting.md).

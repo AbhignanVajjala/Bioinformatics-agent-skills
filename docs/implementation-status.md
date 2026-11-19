@@ -1,5 +1,13 @@
 # Implementation status
 
+## Phase 3 domain execution checkpoint — 2026-11-19
+
+Development proceeds on `phase3-executable-science` from synchronized main
+`7aa0c1a`. See [Phase 3 capability and execution status](phase3-status.md).
+The initial checkpoint adds pinned R/Bioconductor recipes, richer synthetic
+SBML/GPR controls and an executed cross-view baseline. R execution and Linux
+metabolic execution are still pending CI. Historical Phase 2 evidence is preserved.
+
 ## Complete skills ZIP package — 2026-11-19
 
 Built `Bioinformatics-Agent-Skills-Complete.zip` on clean local `main` after

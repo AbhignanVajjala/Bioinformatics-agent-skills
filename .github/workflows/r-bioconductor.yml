@@ -9,6 +9,10 @@ jobs:
         with:
           r-version: '4.4.3'
           use-public-rspm: true
+      - uses: actions/cache@v4
+        with:
+          path: ${{ env.R_LIBS_USER }}
+          key: r44-bioc320-${{ runner.os }}-${{ hashFiles('recipes/rnaseq/environment.json') }}
       - name: Install pinned release prerequisites
         run: |
           Rscript -e 'install.packages("https://cran.r-project.org/src/contrib/Archive/jsonlite/jsonlite_1.8.9.tar.gz", repos=NULL, type="source")'

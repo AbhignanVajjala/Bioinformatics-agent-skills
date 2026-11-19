@@ -195,10 +195,14 @@ def inspect_format(path: Path, *, reference=None, expected_reference=None):
         elif text.startswith(">"):
             for record in text.split(">")[1:]:
                 parts = record.splitlines()
-                require(len(parts) >= 2 and bool(parts[0].strip())
-                        and bool("".join(parts[1:]))
-                        and all(line.replace("-", "").isalpha() for line in parts[1:]),
-                        "fasta", "Missing header, sequence or invalid FASTA sequence text.")
+                require(
+                    len(parts) >= 2
+                    and bool(parts[0].strip())
+                    and bool("".join(parts[1:]))
+                    and all(line.replace("-", "").isalpha() for line in parts[1:]),
+                    "fasta",
+                    "Missing header, sequence or invalid FASTA sequence text.",
+                )
             format_, validation = "FASTA", "BASIC_TEXT_RECORDS"
         elif text.startswith("@"):
             require(len(lines) % 4 == 0, "fastq", "Incomplete four-line FASTQ.")
@@ -212,8 +216,11 @@ def inspect_format(path: Path, *, reference=None, expected_reference=None):
                     "fastq",
                     "Invalid FASTQ record.",
                 )
-                require(all(33 <= ord(char) <= 126 for char in quality),
-                        "fastq_quality", "FASTQ quality characters must be printable ASCII.")
+                require(
+                    all(33 <= ord(char) <= 126 for char in quality),
+                    "fastq_quality",
+                    "FASTQ quality characters must be printable ASCII.",
+                )
             format_, validation = "FASTQ", "FOUR_LINE_FASTQ"
         elif "<sbml" in text or "sbml:" in text:
             document = ET.fromstring(text)

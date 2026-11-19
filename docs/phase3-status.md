@@ -7,10 +7,16 @@ biological or clinical validation.
 | Capability | Implementation state | Reporting state | Evidence |
 |---|---|---|---|
 | Pinned DESeq2 and edgeR count-model recipes | IMPLEMENTED_AND_TESTED | PASS for synthetic model execution | R 4.4.3 / Bioconductor 3.20, DESeq2 1.46.0, edgeR 4.4.2; 18 positive/negative checks |
-| SBML/GPR metabolic recipe | IMPLEMENTED_NOT_EXECUTED | BLOCKED locally by libsbml import policy | Linux execution pending |
+| SBML/GPR metabolic recipe | IMPLEMENTED_NOT_EXECUTED | BLOCKED locally by libsbml import policy | Corrected Linux execution pending |
 | Cross-view multi-omics baseline | IMPLEMENTED_AND_TESTED | PASS for the synthetic descriptive baseline | Local recipe and nine Python checks executed |
-| Validator CLI, Quick/Full modes and expanded skills | NOT_IMPLEMENTED | NOT_RUN | Subsequent dependency-ordered milestones |
-| Dual distribution and first-use toolkit | NOT_IMPLEMENTED | NOT_RUN | Existing lightweight archive remains available |
+| Seven validator APIs and CLI commands | IMPLEMENTED_AND_TESTED for available local runtimes | PASS for non-metabolic controls; FBA pending Linux | Valid, scientifically invalid and malformed fixtures exercise API and CLI |
+| Quick/Full instructions | IMPLEMENTED_AND_TESTED as a structural policy | PASS for synchronized contracts; model adherence NOT_RUN | Every skill carries the portable policy |
+| Donor-aware pseudobulk | IMPLEMENTED_AND_TESTED | PASS for aggregation and invalid-unit checks | Full differential-state model NOT_RUN |
+| Fisher/BH ORA and gene mapping | IMPLEMENTED_AND_TESTED | PASS for known-result and multiplicity regression | Ranked enrichment NOT_RUN |
+| Public metadata client | IMPLEMENTED_AND_TESTED with mocks | PASS for offline requests; live retrieval NOT_RUN | Dry-run and bounded metadata-only API/CLI |
+| File inspection | IMPLEMENTED_AND_TESTED in scoped text formats | PASS for text checks; optional binary parsers NOT_RUN | Signature recognition is distinguished from full validation |
+| Dual distribution and first-use toolkit | IMPLEMENTED_AND_TESTED locally | PASS | Both archives extracted and first-use recipe executed from temporary extraction |
+| Variant, epigenomics, proteomics and workflow-engine skills | NOT_IMPLEMENTED | NOT_RUN | Milestone 3.5 remains unfinished and is excluded from the skill count |
 
 IMPLEMENTED_AND_TESTED maps to PASS only for the executed scope.
 IMPLEMENTED_NOT_EXECUTED maps to NOT_RUN. OPTIONAL_DEPENDENCY_MISSING maps to
@@ -41,3 +47,22 @@ results and session inventories in its execution artifact.
 The initial Linux Python run had 138 passes, four Windows-only skips and one
 failure because COBRApy raises on unbounded optimization. The recipe now records
 the actual solver status from that exception and rejects interpretation.
+
+## Current local validation and distribution
+
+The expanded local suite executed 173 tests successfully and skipped 13
+COBRA-dependent tests due to Windows Application Control. Zero tests failed.
+The 186-case JUnit report is `artifacts/phase3/final-local.xml`.
+Ruff lint/format, skill validation (17 skills), mode synchronization, catalog/index
+checks and both ZIP freshness checks passed. Linux CI must verify the final
+metabolic path before its capability state can be promoted.
+
+The collection has 17 skills, comprising seven domain skills and ten foundation
+or maintainer skills. Both archives contain every skill. The toolkit additionally
+contains Python sources, examples, R recipes, schemas, templates and a dependency
+manifest. Checksums are tracked in SHA256SUMS.
+
+The original Phase 2 pilot remains 10 completed turns with provisional 0 PASS,
+4 FAIL and 6 BLOCKED. New Phase 3 fixtures are 16 trigger prompts and ten
+scientific adversarial prompts, all NOT_RUN. The default evaluation harness
+retains its original Phase 2 cohort. No live agent sessions were launched.

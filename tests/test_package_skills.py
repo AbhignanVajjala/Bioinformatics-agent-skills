@@ -1,7 +1,11 @@
 """Check portable ZIP layout, deterministic builds, freshness and safe contents offline."""
 
 import io
+import os
 from pathlib import Path
+import re
+import subprocess
+import sys
 import zipfile
 
 import pytest
@@ -34,6 +38,23 @@ def collection(tmp_path):
         reference.write_text("# Methods\n\nA reference with Unicode →.\n", encoding="utf-8")
     (tmp_path / "INSTALL.md").write_text("Install the collection. [License](LICENSE).\n")
     (tmp_path / "LICENSE").write_text("Fixture license\n")
+    for name in (
+        "START_HERE.md",
+        "SKILL_INDEX.md",
+        "TOOLKIT_INSTALL.md",
+        "pyproject.toml",
+        "requirements-toolkit.txt",
+        "RELEASE.json",
+        "docs/validators.md",
+        "src/bioskills/example.py",
+        "examples/example.py",
+        "recipes/rnaseq/run.R",
+        "schemas/check.schema.json",
+        "templates/check.json",
+    ):
+        path = tmp_path / name
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text("Fixture resource\n")
     return tmp_path
 
 
@@ -44,8 +65,10 @@ def test_complete_repository_archive_and_extraction(packager):
         for path in (ROOT / ".agents/skills").rglob("*")
         if path.is_file()
     }
-    assert set(expected) == names | {"INSTALL.md", "LICENSE"}
-    assert sum(name.endswith("/SKILL.md") for name in names) == 13
+    assert set(expected) == names | set(packager.LIGHT_DOCUMENTS)
+    assert sum(name.endswith("/SKILL.md") for name in names) == len(
+        list((ROOT / ".agents/skills").glob("*/SKILL.md"))
+    )
     assert sum(name.endswith("/references/methods.md") for name in names) == 3
     archive = (ROOT / packager.ARCHIVE_NAME).read_bytes()
     packager.validate_archive(archive, expected)
@@ -129,7 +152,7 @@ def test_unrelated_repository_content_is_excluded(packager, collection):
         path = collection / name
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text("Excluded content.")
-    assert len(packager.package_files(collection)) == 6
+    assert len(packager.package_files(collection)) == len(packager.LIGHT_DOCUMENTS) + 4
 
 
 def test_invalid_skill_is_reported_instead_of_silently_omitted(packager, collection):
@@ -167,3 +190,32 @@ def test_archive_integrity_rejects_changes(packager, collection, tamper):
         data = buffer.getvalue()
     with pytest.raises((ValueError, zipfile.BadZipFile)):
         packager.validate_archive(data, expected)
+
+
+def test_toolkit_extracts_and_first_use_executes(packager, tmp_path):
+    files = packager.package_files(ROOT, toolkit=True)
+    archive = (ROOT / packager.TOOLKIT_NAME).read_bytes()
+    packager.validate_archive(archive, files)
+    assert not any(name.startswith(("tests/", "evals/", ".git/")) for name in files)
+    extracted = tmp_path / "toolkit"
+    with zipfile.ZipFile(io.BytesIO(archive)) as zip_file:
+        zip_file.extractall(extracted)
+    for name, content in files.items():
+        if name.endswith(".md"):
+            for script in re.findall(
+                r"(?:python|Rscript) ([\w/-]+\.(?:py|R))", content.decode("utf-8")
+            ):
+                assert (extracted / script).is_file(), (name, script)
+    env = {**os.environ, "PYTHONPATH": str(extracted / "src")}
+    result = subprocess.run(
+        [sys.executable, "examples/expanded/run.py", "--output", "first-use"],
+        cwd=extracted,
+        env=env,
+        capture_output=True,
+        text=True,
+        timeout=60,
+    )
+    assert result.returncode == 0, result.stderr
+    assert (extracted / "first-use/pseudobulk.csv").is_file()
+    assert (extracted / "first-use/results.json").is_file()
+    assert (extracted / "first-use/analysis_run.json").is_file()

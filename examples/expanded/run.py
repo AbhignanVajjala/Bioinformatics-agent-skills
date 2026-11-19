@@ -66,9 +66,18 @@ def main():
         out / "results.json",
         {"synthetic": True, "pseudobulk": audit, "ora": result, "format": formats},
     )
-    finish_run(run, out, [Path(__file__), path, out / "cell-counts.csv",
-                         out / "cell-metadata.csv", out / "enrichment-input.json"],
-               {"synthetic": True, "seed": 731})
+    finish_run(
+        run,
+        out,
+        [
+            Path(__file__),
+            path,
+            out / "cell-counts.csv",
+            out / "cell-metadata.csv",
+            out / "enrichment-input.json",
+        ],
+        {"synthetic": True, "seed": 731},
+    )
     print("PASS: pseudobulk aggregation, Fisher/BH ORA and FASTQ inspection executed")
 
 

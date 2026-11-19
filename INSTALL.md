@@ -1,7 +1,8 @@
 # Install Bioinformatics Agent Skills
 
 This package contains the complete collection of Agent Skills, their bundled
-method references, and the MIT [LICENSE](LICENSE). Every skill is experimental
+method references, tested recipe instructions, the [skill index](SKILL_INDEX.md),
+[first steps](START_HERE.md), release information and the MIT [LICENSE](LICENSE). Every skill is experimental
 and has no clinical validation. Scientific and high-stakes interpretations
 require qualified human review.
 
@@ -48,6 +49,9 @@ Executable scientific examples and shared resources outside the skills directory
 including schemas, templates, workflows, evaluation evidence, and development
 tools, are available in the
 [full repository](https://github.com/AbhignanVajjala/Bioinformatics-agent-skills).
-They are excluded from this lightweight skills package. Commands in the skill
+They are also available in the separately downloadable
+[executable toolkit](https://github.com/AbhignanVajjala/Bioinformatics-agent-skills/raw/refs/heads/main/Bioinformatics-Agent-Skills-Toolkit.zip).
+Commands in the skill
 instructions that refer to those resources require the full repository and its
-documented dependencies.
+documented dependencies. The lightweight package contains Markdown recipes
+whose executable dependencies are supplied by the toolkit or full repository.

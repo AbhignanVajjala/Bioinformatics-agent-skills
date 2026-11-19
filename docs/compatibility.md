@@ -1,5 +1,15 @@
 # Compatibility boundaries
 
+Version 0.2.0 supplies a portable instruction ZIP and a separate Python/R
+toolkit. The lightweight archive retains `.agents/skills` paths and can be
+installed or read without Python. Host discovery and execution tools remain
+host-dependent. Use Python 3.12 for the pinned toolkit scientific wheels.
+R recipes enforce R 4.4.3, Bioconductor 3.20, DESeq2 1.46.0 and edgeR 4.4.2.
+The R CI job has executed synthetic fits. Windows libsbml is blocked by the
+current Application Control policy, so metabolic execution is checked in Linux
+CI. Basic file signatures do not substitute for optional binary parsers.
+Consult [Phase 3 status](phase3-status.md) for each capability.
+
 Canonical discovery path: `.agents/skills/<name>/SKILL.md`. The portable core uses Agent Skills YAML frontmatter with `name`, `description` and optional string metadata. Repository-level `AGENTS.md` supplies durable conventions. There are no required Aava keys, hooks, model routing or vendor-specific tools.
 
 Current format/source verification and actual tested environments are recorded in `implementation-status.md` and `reference-analysis.md`. Do not infer live Codex discovery or agent execution from a passing local parser. A host must support repository skills; open the repository as its working directory and inspect available skills before relying on automatic invocation.

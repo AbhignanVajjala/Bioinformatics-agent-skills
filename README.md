@@ -1,20 +1,26 @@
 # Bioinformatics Agent Skills
 
-## Download All 13 Bioinformatics Agent Skills
+## Download All 17 Bioinformatics Agent Skills
 
 **[Download Bioinformatics-Agent-Skills-Complete.zip](https://github.com/AbhignanVajjala/Bioinformatics-agent-skills/raw/refs/heads/main/Bioinformatics-Agent-Skills-Complete.zip)**
 
+**[Download the Executable Toolkit](https://github.com/AbhignanVajjala/Bioinformatics-agent-skills/raw/refs/heads/main/Bioinformatics-Agent-Skills-Toolkit.zip)**
+
 Download one ZIP and extract the collection without cloning the repository or
-installing Python. It contains all 13 experimental skills, their three method
-references, installation instructions, and the MIT license. Extract into your
+installing Python merely to read or install the skills. Complete contains all
+17 experimental skills, their references and recipe instructions, the skill
+index, release information and MIT license. Extract into your
 Codex project to obtain `.agents/skills/<skill-name>/SKILL.md`, then select a
 skill by name. Other Agent Skills-compatible hosts may require different
 installation paths and invocation syntax.
 
-The skills-only download contains instruction files. Executable scientific
-examples, shared schemas and templates, evaluation evidence, and development
-tools are available in the full repository. All skills are experimental and
-have no clinical validation. See [INSTALL.md](INSTALL.md) for setup.
+The toolkit adds executable Python validators, synthetic scientific examples,
+R/Bioconductor recipes and schemas. It requires the documented scientific
+runtimes. Evaluation evidence and development tools are in the full repository.
+Complete refers to the shipped collection. All skills remain experimental and
+have no clinical validation. Start with [START_HERE.md](START_HERE.md),
+[SKILL_INDEX.md](SKILL_INDEX.md), [INSTALL.md](INSTALL.md) or
+[TOOLKIT_INSTALL.md](TOOLKIT_INSTALL.md). [Checksums](SHA256SUMS) cover both archives.
 
 An experimental library of original, portable research instructions with executable
 scientific readiness gates. It helps agents choose methods, detect invalid inputs,
@@ -23,15 +29,23 @@ replacement for scientific tools or expert review.
 
 ## What exists
 
-- **13 Agent Skills:** ten engineering/research foundations plus bulk RNA-seq,
-  multi-omics and genome-scale metabolic modeling guidance. [Generated catalog](docs/catalog.md).
+- **17 Agent Skills:** ten foundation/maintainer skills and seven domain skills
+  covering bulk RNA-seq, multi-omics, metabolic modeling, donor-aware pseudobulk,
+  public metadata retrieval, enrichment and file-format inspection.
+  [Generated catalog](docs/catalog.md).
 - **Three executable synthetic examples:** RNA-seq QC/design readiness, paired-assay
   reconciliation/descriptive concordance, and COBRApy/GLPK FBA/pFBA/FVA with sensitivity
   and infeasibility controls.
 - **Scientific gates and evaluation:** input identity, counts, independent replication,
   design rank, subject leakage, objective/bounds and solver checks. Seven deterministic
   scientific evaluation scenarios and five unexecuted agent-review scenarios.
-- **Seven artifact schemas/templates**, four operational [personas](personas/biostatistician.md)
+- **Executable additions:** pinned DESeq2/edgeR synthetic fits, SBML/GPR and
+  flux controls, descriptive cross-view association, pseudobulk aggregation,
+  Fisher/BH ORA and public metadata plans. The original demonstrations retain
+  their original scope.
+- **Scientific validator CLI:** run `python -m bioskills --help` after
+  installation. [Commands and reporting contracts](docs/validators.md).
+- **Eight artifact schemas/templates**, four operational [personas](personas/biostatistician.md)
   and three staged [workflows](workflows/README.md). Role instructions do not spawn reviewers.
 
 All skills have experimental maturity. See [implementation status](docs/implementation-status.md)
@@ -68,15 +82,17 @@ Open this repository in Codex and request, for example:
 
 > `$genome-scale-metabolic-modeling` inspect media, objective and feasibility before interpreting predicted flux.
 
-Canonical instructions are under `.agents/skills`. Metadata was checked against the
-retrieved official Agent Skills specification. Codex runtime discovery and the 52 supplied
-trigger prompts have not been evaluated with a configured agent runtime. Explicitly reading
-a skill's SKILL.md is the fallback; keep the complete checkout for shared references.
+Canonical instructions are under `.agents/skills`. QUICK answers bounded
+questions with essential checks. FULL supports explicitly requested reproducible
+execution and evidence. The historical pilot recorded ten executions with
+provisional 0 PASS, 4 FAIL and 6 BLOCKED. New Phase 3 behavioral cases are NOT_RUN.
+See [Phase 3 execution status](docs/phase3-status.md) for exact tested scope.
 
 ## Scientific limits
 
-RNA-seq demonstration output is **QC/readiness, not differential expression**: no R,
-DESeq2, edgeR or limma model was run. Multi-omics demonstration output is matched-sample
+The original RNA-seq demonstration remains **QC/readiness**. Separate pinned
+R recipes execute actual DESeq2 and edgeR fits on synthetic data. The original
+multi-omics demonstration output is matched-sample
 exploration, not a fitted MOFA/SNF model or validated predictor. Metabolic outputs are
 steady-state predictions in an intentionally tiny synthetic model, not measured biological
 flux or a real genome-scale organism model. Integer-looking values cannot prove raw-count

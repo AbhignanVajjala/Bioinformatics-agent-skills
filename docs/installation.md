@@ -1,5 +1,10 @@
 # Installation and invocation
 
+The [executable toolkit](../TOOLKIT_INSTALL.md) installs the Python validators
+and synthetic examples in an isolated Python 3.12 environment. The optional
+R/Bioconductor recipes have a separately pinned environment. Begin with
+[START_HERE.md](../START_HERE.md) and the [skill index](../SKILL_INDEX.md).
+
 For the complete instruction collection, download
 [Bioinformatics-Agent-Skills-Complete.zip](https://github.com/AbhignanVajjala/Bioinformatics-agent-skills/raw/refs/heads/main/Bioinformatics-Agent-Skills-Complete.zip)
 and follow [INSTALL.md](../INSTALL.md), also included inside the ZIP.

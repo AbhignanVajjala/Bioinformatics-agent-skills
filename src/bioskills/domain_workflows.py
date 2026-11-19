@@ -118,7 +118,12 @@ def metabolic_recipe(output: Path):
         model.reactions.BIOMASS.upper_bound = float("inf")
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
-            unbounded = model.optimize(raise_error=False)
+            try:
+                unbounded = model.optimize(raise_error=False)
+            except cobra.exceptions.OptimizationError:
+                # COBRApy refuses to construct a Solution for an unbounded LP.
+                unbounded = model.solver
+        unbounded_status = unbounded.status
         require(unbounded.status == "unbounded", "fixture", "Unbounded control not demonstrated.")
         try:
             check_fba_status(model, unbounded)
@@ -160,7 +165,7 @@ def metabolic_recipe(output: Path):
         "restricted_medium_growth": restricted,
         "tradeoff": tradeoff,
         "infeasible_control": infeasible.status,
-        "unbounded_control": unbounded.status,
+        "unbounded_control": unbounded_status,
         "restored_growth": restored,
         "limitations": [
             "Arbitrary toy flux units and synthetic GPRs",

@@ -6,7 +6,7 @@ biological or clinical validation.
 
 | Capability | Implementation state | Reporting state | Evidence |
 |---|---|---|---|
-| Pinned DESeq2 and edgeR count-model recipes | IMPLEMENTED_NOT_EXECUTED | NOT_RUN until CI results are verified | R 4.4.3 / Bioconductor 3.20 job and synthetic positive/negative checks |
+| Pinned DESeq2 and edgeR count-model recipes | IMPLEMENTED_AND_TESTED | PASS for synthetic model execution | R 4.4.3 / Bioconductor 3.20, DESeq2 1.46.0, edgeR 4.4.2; 18 positive/negative checks |
 | SBML/GPR metabolic recipe | IMPLEMENTED_NOT_EXECUTED | BLOCKED locally by libsbml import policy | Linux execution pending |
 | Cross-view multi-omics baseline | IMPLEMENTED_AND_TESTED | PASS for the synthetic descriptive baseline | Local recipe and nine Python checks executed |
 | Validator CLI, Quick/Full modes and expanded skills | NOT_IMPLEMENTED | NOT_RUN | Subsequent dependency-ordered milestones |
@@ -32,3 +32,12 @@ The skips include eight existing COBRA-dependent tests and two new ones because
 Windows Application Control blocks libsbml. The multi-omics recipe executed at
 `artifacts/phase3/multiomics`. Skill validation, catalog and package checks pass.
 Milestone 3.1 remains pending the R/Bioconductor and Linux metabolic CI evidence.
+
+The R job at [run 44545726195](https://github.com/AbhignanVajjala/Bioinformatics-agent-skills/actions/runs/44545726195)
+succeeded at source commit `b7d5c26`. It executed six model fits (both methods
+across unpaired, paired and batch designs) and twelve invalid-input rejections.
+The job installed and checked the pinned package versions and retained all
+results and session inventories in its execution artifact.
+The initial Linux Python run had 138 passes, four Windows-only skips and one
+failure because COBRApy raises on unbounded optimization. The recipe now records
+the actual solver status from that exception and rejects interpretation.

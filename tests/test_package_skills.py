@@ -207,6 +207,7 @@ def test_archive_integrity_rejects_changes(packager, collection, tamper):
 
 
 def test_universal_extracts_installs_and_first_use_executes(packager, tmp_path):
+    tmp_path = tmp_path.resolve()
     files = packager.package_files(ROOT)
     archive = (ROOT / packager.ARCHIVE_NAME).read_bytes()
     packager.validate_archive(archive, files)

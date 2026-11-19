@@ -51,7 +51,7 @@ jobs:
           archive = pathlib.Path('Bioinformatics-Agent-Skills-Complete.zip').resolve()
           summary = {'archive': archive.name, 'sha256': hashlib.sha256(archive.read_bytes()).hexdigest(), 'platform': platform.system(), 'python': platform.python_version(), 'checks': {}}
           with tempfile.TemporaryDirectory(prefix='bioskills-standalone-') as directory:
-              root = pathlib.Path(directory)
+              root = pathlib.Path(directory).resolve()
               source = root / 'source'
               with zipfile.ZipFile(archive) as package:
                   package.extractall(source)
@@ -65,7 +65,7 @@ jobs:
               run('-m', 'pip', 'install', '-r', 'requirements-toolkit.txt')
               run('-m', 'pip', 'install', '.', '--no-deps')
               run('-m', 'pip', 'check')
-              run('-c', 'import bioskills; from pathlib import Path; assert Path(bioskills.__file__).resolve().is_relative_to(Path(' + repr(str(environment)) + '))')
+              run('-c', 'import bioskills; from pathlib import Path; assert Path(bioskills.__file__).resolve().is_relative_to(Path(' + repr(str(environment)) + ').resolve())')
               run('-m', 'bioskills', '--help')
               for name in ('check_counts', 'check_sample_ids', 'check_design_rank', 'check_replication', 'check_fba_status', 'check_leakage', 'check_enrichment_background'):
                   run('-m', 'bioskills', name, '--help')

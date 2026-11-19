@@ -102,6 +102,13 @@ The extracted-package test performs normal installation, verifies installed
 module origins, discovers all seven validators, executes synthetic first-use and
 other non-metabolic examples, checks schemas/hashes and a scientific failure.
 Its offline dependency reuse is distinguished from clean dependency installation
-in the Windows/Linux standalone CI jobs. All original scientific regression
+in the Windows/Linux standalone CI jobs. A fresh local Windows dependency
+installation also passed eight installation/CLI/example checks, with native
+metabolic execution BLOCKED and extracted R execution NOT_RUN. Linux CI passed
+217 tests with four platform skips and executed the extracted metabolic recipes.
+The unchanged R job passed its 18 checks. The initial hosted Windows origin
+check exposed a short/long-path mismatch after successful installation; both
+paths are now resolved and the final-head Windows check gates merging PR 3.
+All original scientific regression
 tests and pinned R execution checks remain intact. Full commands and limitations
 are in [implementation status](implementation-status.md).

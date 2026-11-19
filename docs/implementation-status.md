@@ -50,6 +50,28 @@ venvs, Linux scientific regression checks and the unchanged pinned R job.
 No model sessions or live public data requests were launched. Prior scientific
 limitations and independent human review requirements remain in force.
 
+The additional local standalone run created a fresh venv with no shared site
+packages, installed `requirements-toolkit.txt` and the extracted package, then
+ran `python -m pip check`, isolated CLI/module-origin checks, first-use,
+cross-view, metadata dry-run and schema checks. All eight checks passed.
+Metabolic execution remained BLOCKED at the native COBRApy import; R execution
+from the extraction was NOT_RUN. The record is
+`artifacts/standalone-Windows.json`; logs are in
+`artifacts/phase3-universal/standalone-local.log`, both excluded from Git.
+
+At source `a868e3b`, [Linux validation and standalone execution](https://github.com/AbhignanVajjala/Bioinformatics-agent-skills/actions/runs/44558732180)
+passed 217 tests with four Windows-only skips. The fresh Linux extraction also
+executed both original and domain metabolic recipes successfully.
+The [unchanged pinned R job](https://github.com/AbhignanVajjala/Bioinformatics-agent-skills/actions/runs/44558732357)
+passed all 18 checks (six model fits, twelve invalid-input rejections).
+The first hosted Windows standalone installation succeeded but its origin
+assertion compared a resolved long path with an unresolved `RUNNER~1` short
+path. Both expected and actual paths are now resolved; this preserves the
+installed-origin requirement. The packaging suite was rerun: 56 passed, one
+symlink-creation skip, zero failures. A native Windows short/long-path check
+also passed. Final-head CI must pass before merging
+[PR 3](https://github.com/AbhignanVajjala/Bioinformatics-agent-skills/pull/3).
+
 ## Phase 3 domain execution checkpoint — 2026-11-19
 
 Development proceeds on `phase3-executable-science` from synchronized main

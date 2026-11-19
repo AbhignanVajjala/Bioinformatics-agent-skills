@@ -21,7 +21,7 @@ def pseudobulk(counts, cells, *, organism, reference, count_generation, paired=F
         reference=reference,
         count_generation=count_generation,
     )
-    fields = ["subject_id", "specimen_id", "condition", "timepoint", "cell_type"]
+    fields = ["subject_id", "specimen_id", "condition", "timepoint", "cell_type", "batch"]
     require(
         cells.index.is_unique and list(cells.index) == list(counts.columns),
         "sample_alignment",
@@ -36,7 +36,7 @@ def pseudobulk(counts, cells, *, organism, reference, count_generation, paired=F
     )
     require(cells.condition.nunique() == 2, "contrast", "Specify two conditions for this baseline.")
     specimen_context = cells.groupby("specimen_id")[
-        ["subject_id", "condition", "timepoint"]
+        ["subject_id", "condition", "timepoint", "batch"]
     ].nunique()
     require((specimen_context == 1).all().all(), "identity_mismatch", "Specimen context conflicts.")
     columns, samples, totals = {}, [], []
@@ -54,6 +54,7 @@ def pseudobulk(counts, cells, *, organism, reference, count_generation, paired=F
                 "subject_id": context.subject_id,
                 "condition": context.condition,
                 "timepoint": context.timepoint,
+                "batch": context.batch,
             }
         )
         totals.append({"sample_id": name, "cells": len(group)})
@@ -84,6 +85,7 @@ def pseudobulk(counts, cells, *, organism, reference, count_generation, paired=F
             "method": "raw-count sum by specimen and cell population",
             "cells_per_sample": totals,
             "missing_donor_condition": missing,
+            "missingness_interpretation": "Both conditions per donor are expected only for paired designs",
             "population_status": population_status,
             "differential_state": "NOT_RUN",
             "limitations": [

@@ -13,7 +13,7 @@ The API is `bioskills.expanded.pseudobulk(counts, cells, organism=...,
 reference=..., count_generation=..., paired=False)`. Counts are a pandas
 gene-by-cell DataFrame. Cell metadata has exactly aligned cell IDs as its index
 and nonblank `subject_id`, `specimen_id`, `condition`, `timepoint` and
-`cell_type` columns. Preserve batch separately for downstream design review.
+`cell_type` and `batch` columns. Batch is retained for downstream design review.
 Specimen context must be consistent. Two conditions are required by this
 baseline. The returned count matrix and metadata use generated pseudobulk
 sample IDs, with original specimen/donor/population relationships retained.

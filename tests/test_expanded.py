@@ -20,6 +20,7 @@ def test_pseudobulk_sums_and_replication():
             "specimen_id": np.repeat(list("abcd"), 2),
             "condition": ["c"] * 4 + ["t"] * 4,
             "timepoint": ["t0"] * 8,
+            "batch": ["synthetic_batch"] * 8,
             "cell_type": ["x"] * 8,
         },
         index=counts.columns,
@@ -29,6 +30,7 @@ def test_pseudobulk_sums_and_replication():
     )
     assert bulk.iloc[0].tolist() == [3, 7, 11, 15]
     assert len(meta) == 4 and audit["differential_state"] == "NOT_RUN"
+    assert set(meta.batch) == {"synthetic_batch"}
     assert audit["population_status"]["x"] == "READY_FOR_DESIGN_REVIEW"
     cells.subject_id = ["one"] * 8
     _, _, audit = pseudobulk(

@@ -7,9 +7,9 @@ biological or clinical validation.
 | Capability | Implementation state | Reporting state | Evidence |
 |---|---|---|---|
 | Pinned DESeq2 and edgeR count-model recipes | IMPLEMENTED_AND_TESTED | PASS for synthetic model execution | R 4.4.3 / Bioconductor 3.20, DESeq2 1.46.0, edgeR 4.4.2; 18 positive/negative checks |
-| SBML/GPR metabolic recipe | IMPLEMENTED_NOT_EXECUTED | BLOCKED locally by libsbml import policy | Corrected Linux execution pending |
+| SBML/GPR metabolic recipe | IMPLEMENTED_AND_TESTED | PASS in Linux CI; BLOCKED locally by libsbml policy | SBML, GPR, FBA/pFBA/FVA, trade-off, unbounded and infeasible controls executed |
 | Cross-view multi-omics baseline | IMPLEMENTED_AND_TESTED | PASS for the synthetic descriptive baseline | Local recipe and nine Python checks executed |
-| Seven validator APIs and CLI commands | IMPLEMENTED_AND_TESTED for available local runtimes | PASS for non-metabolic controls; FBA pending Linux | Valid, scientifically invalid and malformed fixtures exercise API and CLI |
+| Seven validator APIs and CLI commands | IMPLEMENTED_AND_TESTED | PASS in Linux CI | Valid, scientifically invalid and malformed fixtures exercise API and CLI |
 | Quick/Full instructions | IMPLEMENTED_AND_TESTED as a structural policy | PASS for synchronized contracts; model adherence NOT_RUN | Every skill carries the portable policy |
 | Donor-aware pseudobulk | IMPLEMENTED_AND_TESTED | PASS for aggregation and invalid-unit checks | Full differential-state model NOT_RUN |
 | Fisher/BH ORA and gene mapping | IMPLEMENTED_AND_TESTED | PASS for known-result and multiplicity regression | Ranked enrichment NOT_RUN |
@@ -37,7 +37,7 @@ Local checkpoint commands used the existing Python 3.12.10 environment:
 The skips include eight existing COBRA-dependent tests and two new ones because
 Windows Application Control blocks libsbml. The multi-omics recipe executed at
 `artifacts/phase3/multiomics`. Skill validation, catalog and package checks pass.
-Milestone 3.1 remains pending the R/Bioconductor and Linux metabolic CI evidence.
+At that checkpoint, Milestone 3.1 awaited R/Bioconductor and Linux metabolic CI evidence.
 
 The R job at [run 44545726195](https://github.com/AbhignanVajjala/Bioinformatics-agent-skills/actions/runs/44545726195)
 succeeded at source commit `b7d5c26`. It executed six model fits (both methods
@@ -54,8 +54,15 @@ The expanded local suite executed 173 tests successfully and skipped 13
 COBRA-dependent tests due to Windows Application Control. Zero tests failed.
 The 186-case JUnit report is `artifacts/phase3/final-local.xml`.
 Ruff lint/format, skill validation (17 skills), mode synchronization, catalog/index
-checks and both ZIP freshness checks passed. Linux CI must verify the final
-metabolic path before its capability state can be promoted.
+checks and both ZIP freshness checks passed.
+
+The Linux [offline validation run 44549729576](https://github.com/AbhignanVajjala/Bioinformatics-agent-skills/actions/runs/44549729576)
+passed 182 tests and skipped four Windows-only tests at source `05e6d39`.
+It executed all seven validator API/CLI fixture groups, both domain recipes,
+the original three demonstrations, the extracted-toolkit first-use test and
+seven deterministic tool scenarios. The corrected unbounded metabolic control
+passed. The R validation and six result tables were independently verified from
+the downloaded CI artifact against its SHA-256.
 
 The collection has 17 skills, comprising seven domain skills and ten foundation
 or maintainer skills. Both archives contain every skill. The toolkit additionally

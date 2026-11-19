@@ -27,6 +27,7 @@ def main():
             "condition": ["control"] * 8 + ["treated"] * 8,
             "cell_type": ["synthetic_cell"] * 16,
             "timepoint": ["baseline"] * 16,
+            "batch": ["synthetic_batch"] * 16,
         },
         index=[f"cell{i}" for i in range(16)],
     )

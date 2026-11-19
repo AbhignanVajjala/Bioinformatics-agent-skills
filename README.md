@@ -1,5 +1,21 @@
 # Bioinformatics Agent Skills
 
+## Download All 13 Bioinformatics Agent Skills
+
+**[Download Bioinformatics-Agent-Skills-Complete.zip](https://github.com/AbhignanVajjala/Bioinformatics-agent-skills/raw/refs/heads/main/Bioinformatics-Agent-Skills-Complete.zip)**
+
+Download one ZIP and extract the collection without cloning the repository or
+installing Python. It contains all 13 experimental skills, their three method
+references, installation instructions, and the MIT license. Extract into your
+Codex project to obtain `.agents/skills/<skill-name>/SKILL.md`, then select a
+skill by name. Other Agent Skills-compatible hosts may require different
+installation paths and invocation syntax.
+
+The skills-only download contains instruction files. Executable scientific
+examples, shared schemas and templates, evaluation evidence, and development
+tools are available in the full repository. All skills are experimental and
+have no clinical validation. See [INSTALL.md](INSTALL.md) for setup.
+
 An experimental library of original, portable research instructions with executable
 scientific readiness gates. It helps agents choose methods, detect invalid inputs,
 record evidence and limit conclusions. It is not clinical software or a validated

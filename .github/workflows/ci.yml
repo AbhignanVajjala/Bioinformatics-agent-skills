@@ -16,6 +16,8 @@ jobs:
       - run: ruff format --check .
       - run: python scripts/validate_skills.py
       - run: python scripts/build_catalog.py --check
+      - run: python scripts/package_skills.py --check
+      - run: git ls-files --error-unmatch Bioinformatics-Agent-Skills-Complete.zip
       - run: pytest -q --junitxml=artifacts/pytest.xml
       - run: python examples/bulk-rnaseq/run.py --output artifacts/bulk-rnaseq
       - run: python examples/multiomics/run.py --output artifacts/multiomics

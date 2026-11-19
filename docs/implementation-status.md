@@ -1,5 +1,48 @@
 # Implementation status
 
+## Complete skills ZIP package — 2026-11-19
+
+Built `Bioinformatics-Agent-Skills-Complete.zip` on clean local `main` after
+fast-forwarding it to `origin/main` at
+`5f5df871eb390c96b5f0bdcb41daeff3f4fc1e23`. The archive contains 13 canonical
+`SKILL.md` files, the RNA-seq, multi-omics and metabolic-modeling
+`references/methods.md` files, `INSTALL.md`, and the MIT `LICENSE`.
+Its 18 files total **63,534 archive bytes**. SHA-256 is
+`434329c62a46f7b94aeb4e496cc8a898f114a71eeb3cb42184f03624f53a93eb`.
+The scientific instruction sources, benchmark scores and evaluation evidence
+have no changes.
+
+`python scripts/package_skills.py` discovers and validates the skill folders,
+packages their Markdown reference files, normalizes text newlines, and fixes ZIP
+ordering, timestamps and file modes. ZIP stored entries avoid compression-library
+differences. Unsupported files under a skill fail the build for review. The build
+checks bundled Markdown references, validates exact member contents and metadata,
+and extracts into a temporary directory to check all files and skill metadata.
+`python scripts/package_skills.py --check` detects stale archive bytes without
+rewriting the ZIP. GitHub Actions runs this check and verifies Git tracks the
+root archive. README provides its direct GitHub download link, and
+[INSTALL.md](../INSTALL.md) explains host-dependent installation and invocation.
+
+Validation used the existing Python 3.12.10 virtual environment and Ruff
+0.11.13 on Windows, with UTF-8 mode, `PYTHONPATH=src`, and repository-local
+cache paths. The relevant commands and results follow.
+
+| Command | Observed result |
+|---|---|
+| `python -m pytest -q tests/test_package_skills.py --junitxml artifacts/skills-package/packaging.xml` | 21 passed |
+| `python -m pytest -q --junitxml artifacts/skills-package/pytest.xml` | **124 passed, 8 skipped, 0 failures**, 132 collected |
+| `ruff check .` and `ruff format --check .` | Both exit 0; 16 Python files formatted |
+| `python scripts/validate_skills.py` | 13 skills, 0 structural or link errors |
+| `python scripts/build_catalog.py --check` | Exit 0 |
+| `python scripts/package_skills.py --check` | Exit 0; exact archive and extracted inventory verified |
+
+The eight skipped existing tests require COBRApy, whose `libsbml` DLL import was
+blocked by Windows Application Control. Those scientific checks remain unverified
+in this run. The packaging tests all executed. The full-suite JUnit XML SHA-256 is
+`2949b843d648f838d4710bdd789b6489f3c1dcd90fe207636710ea09d018501c`.
+The local commit requires a later push to make the README's GitHub download
+available. No push or GitHub Release was performed for this task.
+
 ## Phase 2 milestone 3 — 2026-11-18
 
 Added deterministic extraction of staged skill-file reads from saved Codex JSONL.

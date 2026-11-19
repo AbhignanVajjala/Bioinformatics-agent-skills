@@ -1,5 +1,11 @@
 # Installation and invocation
 
+For the complete instruction collection, download
+[Bioinformatics-Agent-Skills-Complete.zip](https://github.com/AbhignanVajjala/Bioinformatics-agent-skills/raw/refs/heads/main/Bioinformatics-Agent-Skills-Complete.zip)
+and follow [INSTALL.md](../INSTALL.md), also included inside the ZIP.
+Extracting the package requires no Git clone or Python installation. The full
+repository setup below supplies the executable examples and shared resources.
+
 From the repository root, Python 3.11+ (tested: Linux x86_64, Python 3.12.14):
 
 ```bash

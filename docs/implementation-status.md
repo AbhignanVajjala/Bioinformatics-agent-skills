@@ -70,6 +70,16 @@ publication gates. No agent/model sessions or live scientific data retrieval
 were launched. Independent methodological/biological review and broader host
 behavioral validation remain incomplete.
 
+At Phase 4 source `1b5c7d2`, [hosted Python/distribution validation](https://github.com/AbhignanVajjala/Bioinformatics-agent-skills/actions/runs/44726146764)
+passed 217 tests with four Windows-only skips and zero failures. Both fresh
+Windows/Linux extraction jobs passed isolated dependency/package installation,
+module-origin and pip checks, all seven command help interfaces, first-use,
+cross-view, metadata dry-run, schema validation and both metabolic examples.
+Extracted R execution remained NOT_RUN in these Python jobs and is checked by
+the separate pinned R workflow. Their reported ZIP hash matches the value above.
+The README labels the original publication inventory as historical; its source
+file and all historical records are preserved.
+
 ## Phase 3.11 universal distribution — 2026-11-19
 
 Started from clean synchronized local Windows main `1a05135` on branch

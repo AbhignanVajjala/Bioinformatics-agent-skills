@@ -170,5 +170,5 @@ synthetic fixtures. Dependencies retain their own licenses. Historical
 [reference-analysis and redistribution limits](docs/reference-analysis.md) remain
 documented; no third-party reference-archive bodies or assets are redistributed.
 Project attribution conveys no affiliation with external software providers,
-nf-core or GA4GH. [Repository layout](docs/repository-tree.md) and
+nf-core or GA4GH. [Historical publication inventory](docs/repository-tree.md) and
 [development progress](docs/development-progress.md) provide further context.

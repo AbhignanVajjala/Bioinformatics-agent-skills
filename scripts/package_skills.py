@@ -32,6 +32,12 @@ DOCUMENTS = (
     "docs/validators.md",
     "docs/execution-modes.md",
     "references/phase3-sources.json",
+    "CITATION.cff",
+    "docs/agent-host-compatibility.md",
+    "docs/development-and-ai-assistance.md",
+    "docs/maintainer-technical-walkthrough.md",
+    "docs/scientific-evidence.md",
+    "docs/scientific-integrity.md",
 )
 BINARY_EXTENSIONS = {".png", ".jpg", ".jpeg", ".gif", ".pdf", ".npy", ".npz"}
 RESOURCE_EXTENSIONS = {

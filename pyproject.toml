@@ -4,7 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "bioinformatics-agent-skills"
-version = "0.2.1"
+version = "0.2.2"
+maintainers = [{name = "Abhignan Vajjala"}]
 description = "Experimental scientific agent skills and executable readiness gates"
 requires-python = ">=3.11"
 license = "MIT"

@@ -8,7 +8,21 @@ and the MIT [LICENSE](LICENSE). Every skill is experimental
 and has no clinical validation. Scientific and high-stakes interpretations
 require qualified human review.
 
-## Install the collection in Codex
+## Agent Skills format and host installation
+
+Each skill is a `SKILL.md` file with YAML metadata, instructions and relative
+references, following the [Agent Skills format](https://agentskills.io/specification).
+The archive preserves `.agents/skills/<skill-name>/SKILL.md`. An agent host's
+installation paths, permissions, selection syntax and discovery behavior must
+be checked separately. See the [host matrix](docs/agent-host-compatibility.md)
+for documented Codex, Claude Code, Cursor and Gemini CLI locations and explicit
+NOT_TESTED states. Documented syntax alone is not verified host support.
+
+Extract once, choose your host's documented location and copy complete skill
+folders, including references. No scientific dependency is needed for reading
+or instruction installation. Keep the full extraction for executable workflows.
+
+## Codex installation example
 
 1. Extract the ZIP into a new directory. No Python or R installation is needed
    to read or install the instructions.
@@ -27,6 +41,8 @@ identify the other skills. If skills do not appear, restart Codex and check
 that your file manager copied the hidden `.agents` folder. You may explicitly
 ask the agent to read the relevant `SKILL.md` and its linked references.
 [Codex skill discovery](https://learn.chatgpt.com/docs/build-skills).
+This is a platform-specific example. Historical CLI evidence does not guarantee
+discovery, invocation or scientific success in every Codex session/version.
 
 ## Use individual skills with other tools
 
@@ -40,6 +56,15 @@ for enabling and selecting a skill.
 Compatibility, available tools, explicit invocation syntax, and automatic
 discovery depend on the agent host. Inspect what your host loads and adapt
 installation paths as needed.
+
+## Scope, attribution and evidence
+
+Read [scientific evidence](docs/scientific-evidence.md) before interpreting
+results. Abhignan Vajjala initiated and maintains the project; substantial
+AI-assisted development, including OpenAI Codex, is acknowledged in
+[development transparency](docs/development-and-ai-assistance.md).
+Use [CITATION.cff](CITATION.cff) for project citation and record the exact source
+commit. These credits do not establish independent scientific review.
 
 ## Execute scientific workflows from the same ZIP
 

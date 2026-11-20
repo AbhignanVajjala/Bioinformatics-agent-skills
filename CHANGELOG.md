@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.2.2 — research transparency and presentation (Phase 4)
+
+Reorganizes the README around scientific scope, implemented methods, executed
+evidence and limitations, with one prominent universal download. Retains all
+17 skills and seven validators. Documents Abhignan Vajjala as project initiator
+and maintainer and substantial AI-assisted development, including OpenAI Codex,
+without claiming sole human implementation or independent review.
+
+Adds a host-compatibility matrix, scientific-evidence guide, three-workflow
+maintainer walkthrough with NOT_REVIEWED human fields, development disclosure
+and a presentation/claim audit. Preserves technical platform instructions,
+historical CLI evidence, scientific implementations, benchmark criteria and
+judgments. Updates CFF citation credit, contributor expectations and installation
+guidance. The same universal ZIP includes essential scientific/attribution
+documentation and citation metadata; SHA256SUMS records its regenerated checksum.
+
 ## 0.2.1 — universal distribution (Phase 3.11)
 
 Supersedes the two-ZIP distribution with one

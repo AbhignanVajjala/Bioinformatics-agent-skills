@@ -1,5 +1,9 @@
 # Start here
 
+Bioinformatics Agent Skills combines experimental scientific instructions with
+an executable computational biology toolkit. It was initiated and is maintained
+by Abhignan Vajjala, with substantial disclosed AI-assisted development.
+
 All skills are experimental and require qualified review for high-stakes
 interpretations. Complete refers to this shipped collection.
 
@@ -17,8 +21,10 @@ its pinned scientific dependencies and optional
 R 4.4.3/Bioconductor 3.20 for count-model fitting.
 
 Select a skill by folder name or explicit invocation, for example
-`$bulk-rnaseq-differential-expression`. See the [skill index](SKILL_INDEX.md).
-Discovery and invocation depend on the agent host.
+`bulk-rnaseq-differential-expression` through your host's selector. Codex's
+`$bulk-rnaseq-differential-expression` syntax is one host-specific example.
+See the [skill index](SKILL_INDEX.md) and [host matrix](docs/agent-host-compatibility.md).
+Discovery and invocation remain separate from format compatibility.
 
 Use QUICK for a bounded question or inspection. It keeps essential checks in
 the response and creates no mandatory artifacts. Request FULL for reproducible
@@ -40,3 +46,11 @@ Bulk RNA-seq fitting uses the pinned R packages. Metabolic analysis needs
 COBRApy/GLPK. Cross-view analysis uses NumPy/pandas. ORA needs SciPy. Binary
 genomics and H5AD parsing require optional external parsers. Consult each skill's
 input contract and recipes before execution.
+
+Read [scientific evidence](docs/scientific-evidence.md) for the boundary between
+implemented functionality, executed checks, methodological validity and agent
+effectiveness. The [technical walkthrough](docs/maintainer-technical-walkthrough.md)
+supports reproduction; its human-review checklist is NOT_REVIEWED.
+[Development and AI assistance](docs/development-and-ai-assistance.md) and
+[citation metadata](CITATION.cff) explain attribution without claiming sole human
+implementation or independent review.

@@ -1,0 +1,1202 @@
+{
+  "baseline_commit": "afd14e927e49a06df3ad7268532769c6e93002fb",
+  "audit_date": "2026-11-20",
+  "scope": "Every Git-tracked baseline Markdown, CFF, JSON, workflow YAML and TOML file, including historical evaluation records; matched platform names/OS/shell terms only, with no copied runtime details",
+  "classification": {
+    "1": "Necessary platform/runtime instructions or technical compatibility/source context; preserve and contextualize",
+    "2": "Historical development, execution, evaluation or provenance; preserve",
+    "3": "Unnecessary single-host framing of general presentation; neutralize without changing evidence"
+  },
+  "occurrences": [
+    {
+      "path": ".github/workflows/ci.yml",
+      "occurrences": [
+        {
+          "line": 40,
+          "terms": [
+            "windows"
+          ],
+          "category": 1
+        },
+        {
+          "line": 87,
+          "terms": [
+            "Linux"
+          ],
+          "category": 1
+        }
+      ]
+    },
+    {
+      "path": "INSTALL.md",
+      "occurrences": [
+        {
+          "line": 11,
+          "terms": [
+            "Codex"
+          ],
+          "category": 1
+        },
+        {
+          "line": 15,
+          "terms": [
+            "Codex"
+          ],
+          "category": 1
+        },
+        {
+          "line": 18,
+          "terms": [
+            "Codex"
+          ],
+          "category": 1
+        },
+        {
+          "line": 26,
+          "terms": [
+            "Codex"
+          ],
+          "category": 1
+        },
+        {
+          "line": 29,
+          "terms": [
+            "Codex",
+            "chatgpt"
+          ],
+          "category": 1
+        }
+      ]
+    },
+    {
+      "path": "README.md",
+      "occurrences": [
+        {
+          "line": 79,
+          "terms": [
+            "Codex"
+          ],
+          "category": 3
+        },
+        {
+          "line": 128,
+          "terms": [
+            "Aava"
+          ],
+          "category": 1
+        }
+      ]
+    },
+    {
+      "path": "TOOLKIT_INSTALL.md",
+      "occurrences": [
+        {
+          "line": 10,
+          "terms": [
+            "PowerShell",
+            "Windows"
+          ],
+          "category": 1
+        },
+        {
+          "line": 12,
+          "terms": [
+            "powershell"
+          ],
+          "category": 1
+        },
+        {
+          "line": 21,
+          "terms": [
+            "Linux",
+            "macOS"
+          ],
+          "category": 1
+        },
+        {
+          "line": 32,
+          "terms": [
+            "PowerShell"
+          ],
+          "category": 1
+        }
+      ]
+    },
+    {
+      "path": "docs/compatibility.md",
+      "occurrences": [
+        {
+          "line": 9,
+          "terms": [
+            "Windows"
+          ],
+          "category": 1
+        },
+        {
+          "line": 10,
+          "terms": [
+            "Linux"
+          ],
+          "category": 1
+        },
+        {
+          "line": 14,
+          "terms": [
+            "Aava"
+          ],
+          "category": 1
+        },
+        {
+          "line": 16,
+          "terms": [
+            "Codex"
+          ],
+          "category": 3
+        },
+        {
+          "line": 20,
+          "terms": [
+            "Linux",
+            "Windows"
+          ],
+          "category": 1
+        },
+        {
+          "line": 21,
+          "terms": [
+            "macOS"
+          ],
+          "category": 1
+        }
+      ]
+    },
+    {
+      "path": "docs/development-progress.md",
+      "occurrences": [
+        {
+          "line": 38,
+          "terms": [
+            "PowerShell"
+          ],
+          "category": 2
+        },
+        {
+          "line": 46,
+          "terms": [
+            "Windows"
+          ],
+          "category": 2
+        },
+        {
+          "line": 47,
+          "terms": [
+            "codex"
+          ],
+          "category": 2
+        },
+        {
+          "line": 48,
+          "terms": [
+            "Codex"
+          ],
+          "category": 2
+        },
+        {
+          "line": 49,
+          "terms": [
+            "Codex"
+          ],
+          "category": 2
+        },
+        {
+          "line": 55,
+          "terms": [
+            "ChatGPT"
+          ],
+          "category": 2
+        },
+        {
+          "line": 61,
+          "terms": [
+            "PowerShell"
+          ],
+          "category": 2
+        },
+        {
+          "line": 63,
+          "terms": [
+            "PowerShell",
+            "Windows"
+          ],
+          "category": 2
+        },
+        {
+          "line": 65,
+          "terms": [
+            "ChatGPT"
+          ],
+          "category": 2
+        },
+        {
+          "line": 66,
+          "terms": [
+            "Codex",
+            "chatgpt"
+          ],
+          "category": 2
+        },
+        {
+          "line": 68,
+          "terms": [
+            "powershell"
+          ],
+          "category": 2
+        },
+        {
+          "line": 71,
+          "terms": [
+            "codex"
+          ],
+          "category": 2
+        },
+        {
+          "line": 72,
+          "terms": [
+            "codex"
+          ],
+          "category": 2
+        },
+        {
+          "line": 75,
+          "terms": [
+            "codex"
+          ],
+          "category": 2
+        },
+        {
+          "line": 82,
+          "terms": [
+            "chatgpt"
+          ],
+          "category": 2
+        },
+        {
+          "line": 83,
+          "terms": [
+            "ChatGPT"
+          ],
+          "category": 2
+        },
+        {
+          "line": 89,
+          "terms": [
+            "ChatGPT"
+          ],
+          "category": 2
+        },
+        {
+          "line": 93,
+          "terms": [
+            "powershell"
+          ],
+          "category": 2
+        },
+        {
+          "line": 94,
+          "terms": [
+            "Codex"
+          ],
+          "category": 2
+        },
+        {
+          "line": 95,
+          "terms": [
+            "codex"
+          ],
+          "category": 2
+        },
+        {
+          "line": 96,
+          "terms": [
+            "codex"
+          ],
+          "category": 2
+        },
+        {
+          "line": 107,
+          "terms": [
+            "codex"
+          ],
+          "category": 2
+        },
+        {
+          "line": 108,
+          "terms": [
+            "codex"
+          ],
+          "category": 2
+        },
+        {
+          "line": 129,
+          "terms": [
+            "chatgpt"
+          ],
+          "category": 2
+        },
+        {
+          "line": 132,
+          "terms": [
+            "WSL2"
+          ],
+          "category": 2
+        },
+        {
+          "line": 134,
+          "terms": [
+            "WSL2"
+          ],
+          "category": 2
+        },
+        {
+          "line": 135,
+          "terms": [
+            "Windows",
+            "codex"
+          ],
+          "category": 2
+        },
+        {
+          "line": 136,
+          "terms": [
+            "Linux"
+          ],
+          "category": 2
+        },
+        {
+          "line": 137,
+          "terms": [
+            "Codex",
+            "Linux",
+            "OpenAI",
+            "WSL2"
+          ],
+          "category": 2
+        },
+        {
+          "line": 139,
+          "terms": [
+            "Windows"
+          ],
+          "category": 2
+        },
+        {
+          "line": 141,
+          "terms": [
+            "WSL2",
+            "chatgpt",
+            "windows",
+            "wsl"
+          ],
+          "category": 2
+        },
+        {
+          "line": 142,
+          "terms": [
+            "Windows",
+            "chatgpt",
+            "windows"
+          ],
+          "category": 2
+        },
+        {
+          "line": 146,
+          "terms": [
+            "Windows"
+          ],
+          "category": 2
+        },
+        {
+          "line": 153,
+          "terms": [
+            "PowerShell"
+          ],
+          "category": 2
+        },
+        {
+          "line": 155,
+          "terms": [
+            "powershell"
+          ],
+          "category": 2
+        },
+        {
+          "line": 167,
+          "terms": [
+            "ChatGPT",
+            "codex"
+          ],
+          "category": 2
+        },
+        {
+          "line": 170,
+          "terms": [
+            "ChatGPT"
+          ],
+          "category": 2
+        },
+        {
+          "line": 174,
+          "terms": [
+            "codex"
+          ],
+          "category": 2
+        },
+        {
+          "line": 181,
+          "terms": [
+            "Codex",
+            "chatgpt"
+          ],
+          "category": 2
+        },
+        {
+          "line": 182,
+          "terms": [
+            "chatgpt",
+            "codex"
+          ],
+          "category": 2
+        },
+        {
+          "line": 184,
+          "terms": [
+            "Windows"
+          ],
+          "category": 2
+        },
+        {
+          "line": 191,
+          "terms": [
+            "Codex",
+            "chatgpt"
+          ],
+          "category": 2
+        },
+        {
+          "line": 192,
+          "terms": [
+            "Windows",
+            "chatgpt",
+            "windows"
+          ],
+          "category": 2
+        }
+      ]
+    },
+    {
+      "path": "docs/implementation-status.md",
+      "occurrences": [
+        {
+          "line": 5,
+          "terms": [
+            "Windows"
+          ],
+          "category": 2
+        },
+        {
+          "line": 35,
+          "terms": [
+            "Windows"
+          ],
+          "category": 2
+        },
+        {
+          "line": 48,
+          "terms": [
+            "Linux",
+            "Windows"
+          ],
+          "category": 2
+        },
+        {
+          "line": 49,
+          "terms": [
+            "Linux"
+          ],
+          "category": 2
+        },
+        {
+          "line": 59,
+          "terms": [
+            "Windows"
+          ],
+          "category": 2
+        },
+        {
+          "line": 62,
+          "terms": [
+            "Linux"
+          ],
+          "category": 2
+        },
+        {
+          "line": 63,
+          "terms": [
+            "Linux",
+            "Windows"
+          ],
+          "category": 2
+        },
+        {
+          "line": 67,
+          "terms": [
+            "Windows"
+          ],
+          "category": 2
+        },
+        {
+          "line": 71,
+          "terms": [
+            "Windows"
+          ],
+          "category": 2
+        },
+        {
+          "line": 80,
+          "terms": [
+            "Linux"
+          ],
+          "category": 2
+        },
+        {
+          "line": 86,
+          "terms": [
+            "Linux",
+            "Windows"
+          ],
+          "category": 2
+        },
+        {
+          "line": 90,
+          "terms": [
+            "Linux"
+          ],
+          "category": 2
+        },
+        {
+          "line": 117,
+          "terms": [
+            "Windows"
+          ],
+          "category": 2
+        },
+        {
+          "line": 130,
+          "terms": [
+            "Windows"
+          ],
+          "category": 2
+        },
+        {
+          "line": 138,
+          "terms": [
+            "Codex"
+          ],
+          "category": 2
+        },
+        {
+          "line": 164,
+          "terms": [
+            "Codex"
+          ],
+          "category": 2
+        },
+        {
+          "line": 182,
+          "terms": [
+            "Codex"
+          ],
+          "category": 2
+        },
+        {
+          "line": 184,
+          "terms": [
+            "windows"
+          ],
+          "category": 2
+        },
+        {
+          "line": 186,
+          "terms": [
+            "Codex"
+          ],
+          "category": 2
+        },
+        {
+          "line": 188,
+          "terms": [
+            "Windows",
+            "chatgpt",
+            "windows"
+          ],
+          "category": 2
+        },
+        {
+          "line": 190,
+          "terms": [
+            "codex"
+          ],
+          "category": 2
+        },
+        {
+          "line": 197,
+          "terms": [
+            "codex"
+          ],
+          "category": 2
+        },
+        {
+          "line": 204,
+          "terms": [
+            "ChatGPT",
+            "Windows"
+          ],
+          "category": 2
+        },
+        {
+          "line": 209,
+          "terms": [
+            "PowerShell",
+            "Windows"
+          ],
+          "category": 2
+        },
+        {
+          "line": 210,
+          "terms": [
+            "Windows",
+            "codex"
+          ],
+          "category": 2
+        },
+        {
+          "line": 216,
+          "terms": [
+            "Codex"
+          ],
+          "category": 2
+        },
+        {
+          "line": 220,
+          "terms": [
+            "codex"
+          ],
+          "category": 2
+        },
+        {
+          "line": 223,
+          "terms": [
+            "Windows"
+          ],
+          "category": 2
+        },
+        {
+          "line": 226,
+          "terms": [
+            "windows"
+          ],
+          "category": 2
+        },
+        {
+          "line": 231,
+          "terms": [
+            "Wsl",
+            "wsl"
+          ],
+          "category": 2
+        },
+        {
+          "line": 232,
+          "terms": [
+            "WSL"
+          ],
+          "category": 2
+        },
+        {
+          "line": 233,
+          "terms": [
+            "Windows",
+            "codex"
+          ],
+          "category": 2
+        },
+        {
+          "line": 234,
+          "terms": [
+            "Linux",
+            "Windows"
+          ],
+          "category": 2
+        },
+        {
+          "line": 235,
+          "terms": [
+            "Codex"
+          ],
+          "category": 2
+        },
+        {
+          "line": 258,
+          "terms": [
+            "Windows"
+          ],
+          "category": 2
+        },
+        {
+          "line": 261,
+          "terms": [
+            "Codex"
+          ],
+          "category": 2
+        },
+        {
+          "line": 266,
+          "terms": [
+            "PowerShell",
+            "Windows"
+          ],
+          "category": 2
+        },
+        {
+          "line": 272,
+          "terms": [
+            "Windows"
+          ],
+          "category": 2
+        },
+        {
+          "line": 293,
+          "terms": [
+            "Windows"
+          ],
+          "category": 2
+        },
+        {
+          "line": 296,
+          "terms": [
+            "Windows"
+          ],
+          "category": 2
+        },
+        {
+          "line": 331,
+          "terms": [
+            "Codex"
+          ],
+          "category": 2
+        },
+        {
+          "line": 332,
+          "terms": [
+            "Codex"
+          ],
+          "category": 2
+        },
+        {
+          "line": 333,
+          "terms": [
+            "Codex"
+          ],
+          "category": 2
+        },
+        {
+          "line": 355,
+          "terms": [
+            "Linux"
+          ],
+          "category": 2
+        },
+        {
+          "line": 413,
+          "terms": [
+            "Windows",
+            "macOS"
+          ],
+          "category": 2
+        },
+        {
+          "line": 414,
+          "terms": [
+            "Codex"
+          ],
+          "category": 2
+        },
+        {
+          "line": 425,
+          "terms": [
+            "Codex"
+          ],
+          "category": 2
+        }
+      ]
+    },
+    {
+      "path": "docs/installation.md",
+      "occurrences": [
+        {
+          "line": 17,
+          "terms": [
+            "Linux"
+          ],
+          "category": 1
+        },
+        {
+          "line": 38,
+          "terms": [
+            "PowerShell",
+            "Windows"
+          ],
+          "category": 1
+        },
+        {
+          "line": 39,
+          "terms": [
+            "Windows"
+          ],
+          "category": 1
+        },
+        {
+          "line": 40,
+          "terms": [
+            "macOS"
+          ],
+          "category": 1
+        },
+        {
+          "line": 50,
+          "terms": [
+            "Codex"
+          ],
+          "category": 1
+        },
+        {
+          "line": 63,
+          "terms": [
+            "Codex"
+          ],
+          "category": 1
+        }
+      ]
+    },
+    {
+      "path": "docs/phase3-status.md",
+      "occurrences": [
+        {
+          "line": 16,
+          "terms": [
+            "Linux"
+          ],
+          "category": 2
+        },
+        {
+          "line": 18,
+          "terms": [
+            "Linux"
+          ],
+          "category": 2
+        },
+        {
+          "line": 44,
+          "terms": [
+            "Windows"
+          ],
+          "category": 2
+        },
+        {
+          "line": 46,
+          "terms": [
+            "Linux"
+          ],
+          "category": 2
+        },
+        {
+          "line": 53,
+          "terms": [
+            "Linux",
+            "Windows"
+          ],
+          "category": 2
+        },
+        {
+          "line": 60,
+          "terms": [
+            "Windows"
+          ],
+          "category": 2
+        },
+        {
+          "line": 66,
+          "terms": [
+            "Linux"
+          ],
+          "category": 2
+        },
+        {
+          "line": 67,
+          "terms": [
+            "Windows"
+          ],
+          "category": 2
+        },
+        {
+          "line": 96,
+          "terms": [
+            "Windows"
+          ],
+          "category": 2
+        },
+        {
+          "line": 105,
+          "terms": [
+            "Linux",
+            "Windows"
+          ],
+          "category": 2
+        },
+        {
+          "line": 107,
+          "terms": [
+            "Linux"
+          ],
+          "category": 2
+        },
+        {
+          "line": 109,
+          "terms": [
+            "Windows"
+          ],
+          "category": 2
+        },
+        {
+          "line": 111,
+          "terms": [
+            "Windows"
+          ],
+          "category": 2
+        }
+      ]
+    },
+    {
+      "path": "docs/publication-audit.md",
+      "occurrences": [
+        {
+          "line": 43,
+          "terms": [
+            "Linux"
+          ],
+          "category": 2
+        }
+      ]
+    },
+    {
+      "path": "docs/reference-analysis.md",
+      "occurrences": [
+        {
+          "line": 26,
+          "terms": [
+            "Aava"
+          ],
+          "category": 2
+        },
+        {
+          "line": 39,
+          "terms": [
+            "Aava"
+          ],
+          "category": 2
+        },
+        {
+          "line": 49,
+          "terms": [
+            "chatgpt"
+          ],
+          "category": 2
+        },
+        {
+          "line": 50,
+          "terms": [
+            "codex",
+            "openai"
+          ],
+          "category": 2
+        },
+        {
+          "line": 51,
+          "terms": [
+            "codex",
+            "openai"
+          ],
+          "category": 2
+        },
+        {
+          "line": 52,
+          "terms": [
+            "Codex"
+          ],
+          "category": 2
+        }
+      ]
+    },
+    {
+      "path": "docs/roadmap.md",
+      "occurrences": [
+        {
+          "line": 23,
+          "terms": [
+            "Codex"
+          ],
+          "category": 3
+        }
+      ]
+    },
+    {
+      "path": "evals/reports/agent-benchmark-provenance.md",
+      "occurrences": [
+        {
+          "line": 53,
+          "terms": [
+            "Windows"
+          ],
+          "category": 2
+        },
+        {
+          "line": 56,
+          "terms": [
+            "PowerShell"
+          ],
+          "category": 2
+        },
+        {
+          "line": 58,
+          "terms": [
+            "Codex",
+            "chatgpt"
+          ],
+          "category": 2
+        },
+        {
+          "line": 62,
+          "terms": [
+            "Windows"
+          ],
+          "category": 2
+        },
+        {
+          "line": 64,
+          "terms": [
+            "powershell"
+          ],
+          "category": 2
+        },
+        {
+          "line": 81,
+          "terms": [
+            "PowerShell"
+          ],
+          "category": 2
+        },
+        {
+          "line": 90,
+          "terms": [
+            "PowerShell"
+          ],
+          "category": 2
+        },
+        {
+          "line": 91,
+          "terms": [
+            "Windows"
+          ],
+          "category": 2
+        }
+      ]
+    },
+    {
+      "path": "evals/reports/agent-benchmark-scores.json",
+      "occurrences": [
+        {
+          "line": 5,
+          "terms": [
+            "Codex"
+          ],
+          "category": 2
+        },
+        {
+          "line": 18,
+          "terms": [
+            "ChatGPT"
+          ],
+          "category": 2
+        },
+        {
+          "line": 21,
+          "terms": [
+            "codex"
+          ],
+          "category": 2
+        },
+        {
+          "line": 645,
+          "terms": [
+            "PowerShell"
+          ],
+          "category": 2
+        },
+        {
+          "line": 692,
+          "terms": [
+            "PowerShell"
+          ],
+          "category": 2
+        }
+      ]
+    },
+    {
+      "path": "evals/reports/agent-benchmark-summary.md",
+      "occurrences": [
+        {
+          "line": 22,
+          "terms": [
+            "ChatGPT",
+            "Codex"
+          ],
+          "category": 2
+        },
+        {
+          "line": 120,
+          "terms": [
+            "PowerShell"
+          ],
+          "category": 2
+        }
+      ]
+    },
+    {
+      "path": "references/phase3-sources.json",
+      "occurrences": [
+        {
+          "line": 26,
+          "terms": [
+            "Linux"
+          ],
+          "category": 1
+        }
+      ]
+    }
+  ],
+  "claim_audit": "docs/phase4-presentation-audit.md",
+  "limitations": [
+    "A lexical census does not certify every capability claim; scientific claims are separately audited against source and evidence",
+    "Category 3 is narrowly assigned to general framing; named examples and paths remain category 1"
+  ]
+}

@@ -3,7 +3,7 @@
 ## Phase 3 delivered scope and unfinished work
 
 The active scope includes executable domain recipes, validator interfaces,
-Quick/Full mode guidance, four additional domain skills and dual distribution.
+Quick/Full mode guidance, four additional domain skills and one universal distribution.
 Execution evidence and exact limitations are in [Phase 3 status](phase3-status.md).
 The variant-calling/interpretation, epigenomics, proteomics and workflow-engine
 extensions from Milestone 3.5 remain NOT_IMPLEMENTED. Each needs a narrow
@@ -20,11 +20,19 @@ The authoritative executed inventory is `implementation-status.md`. A file or a 
 
 ## Next five priorities
 
-1. Test live Agent Skills discovery in Codex: record host/version, discovered names, explicit invocation and near-neighbor selection evidence. Keep all skills experimental until behavior is evaluated.
-2. Add an actual agent evaluation adapter with stored prompts/responses, runtime/model settings and a fixed rubric. Execute the existing 52 trigger prompts and five unrun scientific scenarios before expanding the skill count.
-3. Run a pinned Bioconductor differential-expression example with independent biological replicates, diagnostics, contrasts and adjusted p-values; compare established package outputs.
-4. Expand established multi-omics integration and curated licensed SBML/FBC modeling with grouped validation, biological consistency and negative regression cases.
-5. Obtain named independent human methodological reviews and test fresh cross-platform installation before promoting maturity.
+1. Verify installation, discovery and invocation in named agent hosts and versions,
+   with Codex as one example. Record actual evidence separately from vendor docs.
+2. Use the existing evaluation harness under a fixed, reviewed protocol, preserving
+   the provisional pilot judgments. The original 52 trigger/five scientific cases
+   and new Phase 3 fixtures require genuine executions before effectiveness claims.
+3. Obtain human reproduction and methodological review of the already executed
+   pinned DESeq2/edgeR recipes. Review power, count provenance, contrasts, filtering
+   and multiplicity before applying them to real studies.
+4. Extend multi-omics and licensed organism SBML/FBC analyses only with explicit
+   method scope, grouped validation, biological checks and negative controls.
+5. Obtain independent biological validation and broader platform/native-runtime
+   evidence. Existing Windows/Linux Python installs are distinct from agent-host
+   discovery or scientific validation; macOS execution remains unverified.
 
 Publication does not itself establish discovery, scientific validity or agent behavior.
 Library expansion follows demonstrated reliability of the existing skills.

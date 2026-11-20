@@ -1,5 +1,85 @@
 # Implementation status
 
+## Phase 4 research credibility and transparency — 2026-11-20
+
+Baseline: clean synchronized local Windows main
+`afd14e927e49a06df3ad7268532769c6e93002fb`. Branch:
+`phase4-research-credibility`. Documentation release 0.2.2 presents scientific
+scope before distribution, credits Abhignan Vajjala as initiator/maintainer,
+retains contributors credit and discloses substantial AI assistance including
+OpenAI Codex. It makes no sole-code-authorship or independent-review claim.
+
+Added the host matrix, three-workflow maintainer guide, scientific-evidence
+guide, development disclosure, presentation audit and source/claim records.
+Human completion fields remain blank/NOT_REVIEWED. The baseline platform census
+classifies 152 matched lines in 16 documents: 24 necessary technical references,
+125 historical references and three unnecessary single-host framing references.
+Historical evidence and technically necessary Codex examples remain intact.
+
+The source-preservation check covers 126 baseline files: all skills, scientific
+modules, recipes, examples, tests, schemas, evaluations, AGENTS.md, LICENSE,
+scientific requirements and the R workflow. They are unchanged. The original
+pilot score file is still tracked, with SHA-256
+`fcdfd5c63f98d35a3845678d49dd1725c3f8a41866f245a756fe8702106de916`.
+All 17 skills and seven validators retain their original scientific behavior.
+
+Validation used the existing Python 3.12.10 venv, pytest 8.3.5, Ruff 0.11.13,
+PyYAML 6.0.2 and jsonschema 4.23.0. Repository tests used `PYTHONUTF8=1`,
+`PYTHONPATH=src`, and task-local XDG/Matplotlib cache directories.
+
+| Check / command | Observed result |
+|---|---|
+| `python -m pytest -q --junitxml artifacts/phase4/pytest.xml` | 219 passed, two skipped, zero failures; 221 collected |
+| Packaging/extraction/installed-CLI tests within that suite | 56 passed, one skipped; 57 cases, with actual temporary installation/first-use and schema checks |
+| `ruff check .` / `ruff format --check .` | PASS; 30 Python files formatted |
+| `python scripts/validate_skills.py` | 17 skills; zero structural/link errors |
+| `python scripts/build_catalog.py --check` | PASS |
+| `python scripts/sync_modes.py --check` | PASS |
+| `python scripts/package_skills.py` / `python scripts/package_skills.py --check` | PASS; one deterministic, extractable universal ZIP |
+| Official CFF 1.2.0 JSON Schema validation of parsed CITATION.cff | PASS using existing PyYAML/jsonschema; cffconvert was not installed |
+| Claim-ledger JSON Schema validation | Ten scoped records PASS structural validation; automated reviewer non-independent, human approval pending |
+| README order/single-download, blank human fields and source-preservation checks | PASS |
+
+The two local skips are `test_metabolic_recipe_executes` (first native
+libsbml import blocked by Windows Application Control) and
+`test_symlink_resources_rejected` (account cannot create symlinks). Other
+executed fixtures passed in this invocation. Fewer skips than the historical
+Phase 3 run do not add tests or establish general native-runtime compatibility;
+the full SBML recipe remains unexecuted locally in this run. Two warnings were
+recorded: the importorskip deprecation warning and expected infeasible solver
+warning. No security policies or scientific assertions were changed.
+
+Citation validation retrieved the versioned official schema listed in
+`references/phase4-documentation-sources.json`, checked it with
+`jsonschema.validators.validator_for(schema).check_schema(schema)`, and
+validated the PyYAML-parsed CFF. Schema SHA-256:
+`0b8d22140da702d766df318dcff3a91af2f39521298dcf36d76315fd99cc169b`.
+No new citation-validation dependency or external schema is vendored.
+
+The regenerated universal ZIP contains **17 skills, 113 files, 324,602 bytes**,
+SHA-256 `79bea163748f66e8aa1d710b207c7e7a423ff05fa017839549bfb1be91a7189b`.
+It retains the complete scientific inventory and adds six essential citation,
+compatibility, disclosure, walkthrough, evidence and integrity documents.
+Development audit/history records stay outside the ZIP. One early README write
+was interrupted by Windows stdin encoding; the file was restored using UTF-8
+file editing, and subsequent decoding, structure and link checks passed.
+
+Existing historical log bodies below are preserved. Hosted Python regression,
+fresh Windows/Linux extracted installs and the unchanged pinned R CI remain
+publication gates. No agent/model sessions or live scientific data retrieval
+were launched. Independent methodological/biological review and broader host
+behavioral validation remain incomplete.
+
+At Phase 4 source `1b5c7d2`, [hosted Python/distribution validation](https://github.com/AbhignanVajjala/Bioinformatics-agent-skills/actions/runs/44726146764)
+passed 217 tests with four Windows-only skips and zero failures. Both fresh
+Windows/Linux extraction jobs passed isolated dependency/package installation,
+module-origin and pip checks, all seven command help interfaces, first-use,
+cross-view, metadata dry-run, schema validation and both metabolic examples.
+Extracted R execution remained NOT_RUN in these Python jobs and is checked by
+the separate pinned R workflow. Their reported ZIP hash matches the value above.
+The README labels the original publication inventory as historical; its source
+file and all historical records are preserved.
+
 ## Phase 3.11 universal distribution — 2026-11-19
 
 Started from clean synchronized local Windows main `1a05135` on branch

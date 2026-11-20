@@ -1,0 +1,237 @@
+{
+  "claims": [
+    {
+      "claim": "The collection contains 17 experimental skills: seven domain and ten foundation/maintainer instruction workflows.",
+      "claim_type": "observed",
+      "source_or_artifact": [
+        ".agents/skills/",
+        "SKILL_INDEX.md"
+      ],
+      "analysis_run_id": null,
+      "verification_method": "Count canonical SKILL.md paths and inspect the generated domain/foundation classification",
+      "status": "PASS",
+      "limitations": [
+        "Scoped automated documentation review; not biological or clinical validation"
+      ],
+      "uncertainties": [
+        "Independent human methodological review remains incomplete"
+      ],
+      "approval_status": "pending",
+      "reviewer": {
+        "identity": "OpenAI Codex documentation audit",
+        "kind": "agent",
+        "independent": false
+      }
+    },
+    {
+      "claim": "Seven named validator APIs/CLI commands exist with scoped scientific gates.",
+      "claim_type": "observed",
+      "source_or_artifact": [
+        "src/bioskills/validators.py",
+        "tests/test_validators.py"
+      ],
+      "analysis_run_id": null,
+      "verification_method": "Inspect NAMES, dispatch, numerical/metadata gates and API/CLI fixtures",
+      "status": "PASS",
+      "limitations": [
+        "Scoped automated documentation review; not biological or clinical validation"
+      ],
+      "uncertainties": [
+        "Independent human methodological review remains incomplete"
+      ],
+      "approval_status": "pending",
+      "reviewer": {
+        "identity": "OpenAI Codex documentation audit",
+        "kind": "agent",
+        "independent": false
+      }
+    },
+    {
+      "claim": "Pinned R CI executed six synthetic DESeq2/edgeR fits and twelve expected invalid-input rejections.",
+      "claim_type": "computed",
+      "source_or_artifact": [
+        "recipes/rnaseq/test.R",
+        "references/phase3-r-execution.json",
+        "https://github.com/AbhignanVajjala/Bioinformatics-agent-skills/actions/runs/44559842600"
+      ],
+      "analysis_run_id": "github-actions-44559842600",
+      "verification_method": "Read actual preserved CI/evidence records and the test driver; do not treat a Python pass as R execution",
+      "status": "PASS",
+      "limitations": [
+        "Scoped automated documentation review; not biological or clinical validation"
+      ],
+      "uncertainties": [
+        "Independent human methodological review remains incomplete"
+      ],
+      "approval_status": "pending",
+      "reviewer": {
+        "identity": "OpenAI Codex documentation audit",
+        "kind": "agent",
+        "independent": false
+      }
+    },
+    {
+      "claim": "Metabolic recipes execute toy SBML/FBA/pFBA/FVA and feasibility/restoration controls.",
+      "claim_type": "predicted",
+      "source_or_artifact": [
+        "src/bioskills/domain_workflows.py",
+        "tests/test_domain_recipes.py",
+        "https://github.com/AbhignanVajjala/Bioinformatics-agent-skills/actions/runs/44559842977"
+      ],
+      "analysis_run_id": "github-actions-44559842977",
+      "verification_method": "Compare code and fixture invariants with preserved extracted-package execution evidence",
+      "status": "PASS",
+      "limitations": [
+        "Toy flux units, synthetic GPR and fixed steady-state assumptions; no measured flux or experimental intervention"
+      ],
+      "uncertainties": [
+        "Independent human methodological review remains incomplete"
+      ],
+      "approval_status": "pending",
+      "reviewer": {
+        "identity": "OpenAI Codex documentation audit",
+        "kind": "agent",
+        "independent": false
+      }
+    },
+    {
+      "claim": "The implemented cross-view baseline computes descriptive mapped-feature Pearson correlations across two matched assays.",
+      "claim_type": "association",
+      "source_or_artifact": [
+        "src/bioskills/domain_workflows.py",
+        "examples/domain-recipes/run.py",
+        "tests/test_domain_recipes.py"
+      ],
+      "analysis_run_id": null,
+      "verification_method": "Inspect reconciliation, declared transformations, one-to-one mapping and np.corrcoef call",
+      "status": "PASS",
+      "limitations": [
+        "No causal, predictive, MOFA2 or SNF result is established"
+      ],
+      "uncertainties": [
+        "Independent human methodological review remains incomplete"
+      ],
+      "approval_status": "pending",
+      "reviewer": {
+        "identity": "OpenAI Codex documentation audit",
+        "kind": "agent",
+        "independent": false
+      }
+    },
+    {
+      "claim": "The historical ten-turn pilot retains provisional 0 PASS, 4 FAIL and 6 BLOCKED verdicts.",
+      "claim_type": "observed",
+      "source_or_artifact": [
+        "evals/reports/agent-benchmark-scores.json",
+        "evals/reports/agent-benchmark-summary.md"
+      ],
+      "analysis_run_id": "agent-eval-7e2fa2331d71450a8dd5020640971e6d",
+      "verification_method": "Read original score/review and preserve the baseline files byte-for-byte",
+      "status": "PASS",
+      "limitations": [
+        "Provisional automated judgments; one sample per condition; no rescoring or effectiveness inference"
+      ],
+      "uncertainties": [
+        "Independent human methodological review remains incomplete"
+      ],
+      "approval_status": "pending",
+      "reviewer": {
+        "identity": "OpenAI Codex documentation audit",
+        "kind": "agent",
+        "independent": false
+      }
+    },
+    {
+      "claim": "Four staged skill-file reads were recorded across three pilot turns; instruction-following remains unverified by access alone.",
+      "claim_type": "observed",
+      "source_or_artifact": [
+        "evals/reports/agent-benchmark-provenance.md"
+      ],
+      "analysis_run_id": "agent-eval-7e2fa2331d71450a8dd5020640971e6d",
+      "verification_method": "Read the preserved access locators and distinguish access from semantic activation",
+      "status": "PASS",
+      "limitations": [
+        "This is a review of preserved provenance, not a new model execution or independent raw-trace replication"
+      ],
+      "uncertainties": [
+        "Independent human methodological review remains incomplete"
+      ],
+      "approval_status": "pending",
+      "reviewer": {
+        "identity": "OpenAI Codex documentation audit",
+        "kind": "agent",
+        "independent": false
+      }
+    },
+    {
+      "claim": "Independent human methodological and biological review is incomplete.",
+      "claim_type": "observed",
+      "source_or_artifact": [
+        "docs/scientific-evidence.md",
+        "docs/maintainer-technical-walkthrough.md"
+      ],
+      "analysis_run_id": null,
+      "verification_method": "Check that human-review rows remain NOT_REVIEWED and completion fields are blank",
+      "status": "NOT_RUN",
+      "limitations": [
+        "Scoped automated documentation review; not biological or clinical validation"
+      ],
+      "uncertainties": [
+        "Independent human methodological review remains incomplete"
+      ],
+      "approval_status": "pending",
+      "reviewer": {
+        "identity": "OpenAI Codex documentation audit",
+        "kind": "agent",
+        "independent": false
+      }
+    },
+    {
+      "claim": "Host documentation records installation paths; collection-specific cross-host installation/discovery/invocation remains unverified.",
+      "claim_type": "observed",
+      "source_or_artifact": [
+        "docs/agent-host-compatibility.md",
+        "references/phase4-documentation-sources.json"
+      ],
+      "analysis_run_id": null,
+      "verification_method": "Consult official documentation and retain NOT_TESTED states without new host sessions",
+      "status": "NOT_RUN",
+      "limitations": [
+        "Scoped automated documentation review; not biological or clinical validation"
+      ],
+      "uncertainties": [
+        "Independent human methodological review remains incomplete"
+      ],
+      "approval_status": "pending",
+      "reviewer": {
+        "identity": "OpenAI Codex documentation audit",
+        "kind": "agent",
+        "independent": false
+      }
+    },
+    {
+      "claim": "Abhignan Vajjala is credited as project initiator/maintainer and substantial AI-assisted development is disclosed.",
+      "claim_type": "observed",
+      "source_or_artifact": [
+        "CITATION.cff",
+        "docs/development-and-ai-assistance.md",
+        "https://github.com/AbhignanVajjala/Bioinformatics-agent-skills"
+      ],
+      "analysis_run_id": null,
+      "verification_method": "Apply the user-provided maintainer role; preserve Git attribution and generic contributors credit; validate CFF fields",
+      "status": "WARN",
+      "limitations": [
+        "Project credit does not establish who personally wrote/reviewed every line or identify distinct people from Git display names"
+      ],
+      "uncertainties": [
+        "Independent human methodological review remains incomplete"
+      ],
+      "approval_status": "pending",
+      "reviewer": {
+        "identity": "OpenAI Codex documentation audit",
+        "kind": "agent",
+        "independent": false
+      }
+    }
+  ]
+}

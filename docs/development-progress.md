@@ -1,5 +1,23 @@
 # Development progress
 
+## Phase 4 research credibility and authorship transparency
+
+Version 0.2.2 introduces a scientific project overview, explicit implementation
+and evidence boundaries, project-level maintainer/citation credit, substantial
+AI-assistance disclosure, a documented-versus-tested host matrix, contributor
+expectations and a three-workflow technical guide. Human-review completion
+fields remain NOT_REVIEWED. The collection remains experimental.
+
+The same universal ZIP retains all 17 skills and the scientific toolkit, with
+essential scientific/attribution guides added. Original skill instructions,
+scientific implementations, test assertions and historical evaluation records
+are unchanged. The local suite collected the same 221 cases: 219 passed and two
+skipped. These software results do not establish biological validity or agent
+effectiveness. Read [implementation status](implementation-status.md),
+[scientific evidence](scientific-evidence.md) and the
+[presentation audit](phase4-presentation-audit.md). Historical entries below
+retain their original dates, outcomes and meaning.
+
 ## Phase 3.11 universal distribution
 
 The current distribution is one `Bioinformatics-Agent-Skills-Complete.zip`

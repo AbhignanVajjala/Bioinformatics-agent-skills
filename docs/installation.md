@@ -1,5 +1,11 @@
 # Installation and invocation
 
+The collection follows the Agent Skills format: `SKILL.md` metadata/instructions
+with relative references. Canonical sources remain in `.agents/skills/`.
+Choose an agent host using the [compatibility matrix](agent-host-compatibility.md),
+which records documented paths and unverified behaviors separately. The toolkit
+also runs directly from a terminal without an agent host.
+
 The universal ZIP contains all skills, executable Python validators, synthetic
 examples and R recipes. [Toolkit installation](../TOOLKIT_INSTALL.md) uses an
 isolated Python 3.12 environment. The optional
@@ -47,7 +53,14 @@ transitive environment. To reproduce it, install with
 `python -m pip install -r requirements-tested.txt` then `python -m pip install -e . --no-deps`.
 This is a tested environment snapshot, not a cross-platform or hashed artifact lock.
 
-## Codex
+## Agent-host setup
+
+Use [INSTALL.md](../INSTALL.md) for instruction-only copying. Other hosts may
+require a different directory or selector; preserve the complete skill folder
+and references. Format compatibility alone does not establish discovery or
+scientific instruction-following. Consult the [host matrix](agent-host-compatibility.md).
+
+### Codex example
 
 Open this repository as the working directory. Canonical instruction folders are in
 `.agents/skills/<name>/SKILL.md`. Ask, for example:

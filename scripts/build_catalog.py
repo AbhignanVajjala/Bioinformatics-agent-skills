@@ -35,6 +35,13 @@ def render_index():
         "only; keep the full extraction and follow [installation](TOOLKIT_INSTALL.md) "
         "for scientific execution.",
         "",
+        "Invocation examples below use Codex's `$skill-name` notation. Other hosts "
+        "use their own selectors; documented format compatibility does not establish "
+        "installation, discovery or instruction-following. See the "
+        "[host matrix](docs/agent-host-compatibility.md) and "
+        "[scientific evidence](docs/scientific-evidence.md). Ten foundation/maintainer "
+        "skills are instruction workflows, not additional biological methods.",
+        "",
         "| Skill and task | Required inputs | Tools and runtime | Example invocation | Capability status and executable scope |",
         "|---|---|---|---|---|",
     ]

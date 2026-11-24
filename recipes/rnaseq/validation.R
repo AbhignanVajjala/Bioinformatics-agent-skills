@@ -78,7 +78,38 @@ count_matrix <- function(tab) {
     tokens <- as.matrix(tab[-1])
     pattern <- r"(^[+-]?(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)(?:[eE][+-]?[0-9]+)?$)"
     if (any(!grepl(pattern, tokens, perl = TRUE))) stop("Invalid numeric count token; Boolean counts are unsupported")
-    counts <- matrix(as.numeric(tokens), nrow = nrow(tokens), dimnames = list(tab[[1]], names(tab)[-1]))
+    parse_integer <- function(token) {
+        negative <- startsWith(token, "-")
+        token <- sub("^[+-]", "", token)
+        parts <- strsplit(token, "[eE]")[[1]]
+        coefficient <- parts[1]
+        digits <- sub("^0+", "", gsub(".", "", coefficient, fixed = TRUE))
+        if (!nzchar(digits)) return(0)
+        if (negative) stop("Counts must be nonnegative")
+        exponent <- if (length(parts) == 2L) parts[2] else "0"
+        if (nchar(exponent) > 6L) stop("Count exponent is outside supported integer scope")
+        fraction <- if (grepl(".", coefficient, fixed = TRUE)) sub("^[^.]*\\.", "", coefficient) else ""
+        shift <- as.integer(exponent) - nchar(fraction)
+        if (shift < 0L) {
+            if (-shift >= nchar(digits) || grepl("[1-9]", substr(digits, nchar(digits) + shift + 1L, nchar(digits))))
+                stop("Count token is fractional before floating conversion")
+            digits <- substr(digits, 1L, nchar(digits) + shift)
+        } else {
+            if (nchar(digits) + shift > 10L) stop("Count exceeds the supported R integer range")
+            digits <- paste0(digits, paste(rep("0", shift), collapse = ""))
+        }
+        if (nchar(digits) > 10L) stop("Count exceeds the supported R integer range")
+        as.numeric(digits)
+    }
+    # Fast exact path for ordinary integer text; general decimal/exponent tokens
+    # are checked lexically so sub-ulp fractions/underflow cannot become integers.
+    if (all(grepl("^[+]?[0-9]+$", tokens))) {
+        digits <- sub("^0+", "", sub("^\\+", "", tokens))
+        if (any(nchar(digits) > 10L)) stop("Count exceeds the supported R integer range")
+        digits[digits == ""] <- "0"
+        numeric_values <- as.numeric(digits)
+    } else numeric_values <- vapply(as.vector(tokens), parse_integer, numeric(1))
+    counts <- matrix(numeric_values, nrow = nrow(tokens), dimnames = list(tab[[1]], names(tab)[-1]))
     if (any(!is.finite(counts)) || any(counts < 0) || any(counts != floor(counts)) || any(counts > .Machine$integer.max))
         stop("Invalid integer counts; each count must be between zero and 2147483647")
     counts

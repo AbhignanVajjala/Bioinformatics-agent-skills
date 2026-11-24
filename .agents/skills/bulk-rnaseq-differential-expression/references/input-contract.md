@@ -37,6 +37,8 @@ literal NA identifiers and distinct labels such as 01/1. Missingness is an empty
 field, not an automatic conversion of the literal identifier NA.
 
 Counts must be nonnegative finite integers <=2147483647 for the R recipes.
+Text integrality is checked before floating conversion can hide fractional
+digits or underflow. Exact integral decimal/exponent notation is supported.
 Library totals before and after filtering must be finite, positive and within
 the exact binary64 integer scope <=2^53-1. Generic Python check_counts retains
 that wider scope; validate_counts additionally gates R readiness. Boolean counts,

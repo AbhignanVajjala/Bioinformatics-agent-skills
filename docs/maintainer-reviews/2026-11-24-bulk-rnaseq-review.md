@@ -119,6 +119,13 @@ current release documentation alone is not execution evidence for older versions
 
 ## New execution evidence and limitations
 
+An additional source-inspection finding concerns numeric text: a sub-ulp fraction
+such as 1.00000000000000001, or 1e-9999, could round to an integer/zero during
+floating conversion. Exact Decimal checks in Python and lexical decimal/exponent
+integrality checks in R now reject these before a successful count gate. Valid
+integral notation such as 1.0, 1e3 and 10e-1 remains supported. This is a new
+inspection/regression finding, not an extra historical maintainer observation.
+
 New Python and R regression drivers are separate from maintainer observations.
 The original R driver remains 18 checks; the new driver records its actual count,
 criterion-level reasons, new synthetic observations, source hashes and session

@@ -11,6 +11,7 @@ import importlib.metadata
 import json
 from collections.abc import Mapping
 from numbers import Real
+from decimal import Decimal, InvalidOperation
 from pathlib import Path
 import platform
 import shutil
@@ -97,7 +98,7 @@ def check_counts(
 ):
     """Count integrity shared by the legacy readiness gate and validator CLI."""
     values = validate_matrix(counts)
-    reject_boolean_counts(counts)
+    validate_count_representation(counts)
     require(
         scale == "raw_counts",
         "count_scale",
@@ -159,6 +160,30 @@ def reject_boolean_counts(counts):
         "count_values",
         "Boolean observations are not raw integer counts.",
     )
+
+
+def validate_count_representation(counts):
+    """Check exact text/Decimal count integrality before binary64 can hide fractions."""
+    reject_boolean_counts(counts)
+    values = counts.to_numpy()
+    if values.dtype.kind in {"O", "U", "S"}:
+        for value in values.flat:
+            if not isinstance(value, (str, Decimal)):
+                continue
+            try:
+                number = Decimal(value)
+            except InvalidOperation as error:
+                raise ScientificValidationError(
+                    "count_values: Invalid numeric count token."
+                ) from error
+            require(
+                number.is_finite()
+                and number >= 0
+                and number <= 2**53 - 1
+                and number == number.to_integral_value(),
+                "count_values",
+                "Count text must represent an exact nonnegative integer within binary64 scope.",
+            )
 
 
 def validate_metadata(metadata, fields):

@@ -160,3 +160,14 @@ def test_cross_view_boolean_count_gate_is_consistent():
     matrices["rna"] = matrices["rna"].astype(bool)
     with pytest.raises(ScientificValidationError, match="count_values"):
         cross_view_analysis(matrices, maps, declarations, pairs)
+
+
+@pytest.mark.parametrize("value", ["1.00000000000000001", "1e-9999"])
+def test_text_integrality_is_not_lost_to_float(inputs, value):
+    counts, metadata = inputs
+    counts = counts.astype(str)
+    counts.iloc[0, 0] = value
+    with pytest.raises(ScientificValidationError, match="count_values"):
+        generic(counts)
+    with pytest.raises(ScientificValidationError, match="count_values"):
+        ready(counts, metadata)

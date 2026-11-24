@@ -55,9 +55,13 @@ check("exact-TSV-identities", {
     stopifnot(identical(parsed[[1]], c("0001", "1")), identical(names(parsed)[-1], c("0001", "1")))
     stopifnot(identical(rownames(count_matrix(parsed)), c("0001", "1")))
 })
-for (token in c("TRUE", "FALSE", "1.5", "-1", "NaN", "Inf", "2147483648", "1e308", "")) check("invalid-count-token", {
+for (token in c("TRUE", "FALSE", "1.5", "1.00000000000000001", "1e-9999", "-1", "NaN", "Inf", "2147483648", "1e308", "")) check("invalid-count-token", {
     writeLines(paste0("gene_id\ta\tb\ng\t", token, "\t20"), tsv)
     reject(count_matrix(read_tsv_exact(tsv)))
+})
+check("exact-decimal-and-exponent-integers", {
+    writeLines("gene_id\ta\tb\ng\t1e3\t10e-1\nh\t1.0\t1.00", tsv)
+    stopifnot(identical(unname(count_matrix(read_tsv_exact(tsv))), matrix(c(1000, 1, 1, 1), nrow = 2)))
 })
 check("R-count-boundary-and-library-sum", {
     writeLines("gene_id\ta\tb\ng\t2147483647\t20\nh\t2147483647\t30", tsv)

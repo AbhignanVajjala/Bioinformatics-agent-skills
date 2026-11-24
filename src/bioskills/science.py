@@ -247,19 +247,24 @@ def reconcile_omics(matrices, mappings):
 
 
 def toy_model():
-    """One substrate uptake and one biomass drain; arbitrary toy flux units."""
+    """Explicit extracellular uptake, transport and cytoplasmic toy drain."""
     import cobra
 
     model = cobra.Model("synthetic_one_substrate")
     model.solver = "glpk"
     substrate = cobra.Metabolite("a_c", formula="C", compartment="c", charge=0)
+    external = cobra.Metabolite("a_e", formula="C", compartment="e", charge=0)
     exchange = cobra.Reaction("EX_a")
     exchange.bounds = (-10, 0)
-    exchange.add_metabolites({substrate: -1})
+    exchange.add_metabolites({external: -1})
+    transport = cobra.Reaction("TRANSPORT")
+    transport.bounds = (0, 1000)
+    transport.add_metabolites({external: -1, substrate: 1})
     biomass = cobra.Reaction("BIOMASS")
     biomass.bounds = (0, 1000)
     biomass.add_metabolites({substrate: -1})
-    model.add_reactions([exchange, biomass])
+    model.add_reactions([exchange, transport, biomass])
+    model.compartments = {"e": "extracellular", "c": "cytoplasm"}
     model.objective = biomass
     return model
 

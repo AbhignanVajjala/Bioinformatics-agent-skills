@@ -61,7 +61,7 @@ Descriptive association is not causality; optimized flux is not a measurement.
 
 Independent human methodological review is **NOT_REVIEWED**. Biological and
 clinical validation are **NOT_ESTABLISHED**. The walkthrough's human checklist
-contains no completed reviews or signatures. Computational role passes are not
+now records a scoped maintainer self-review; no independent external review or signature is recorded. Computational role passes are not
 independent peer review.
 
 ## AI agent effectiveness
@@ -85,3 +85,7 @@ The complete agent benchmark has not run, and improved agent effectiveness has
 not been demonstrated. A fixed protocol, adequate repeated comparisons, observable
 activation where possible and independent methodological assessment are needed
 before making stronger claims. No new agent sessions were run for Phase 4.
+
+## Phase 5 maintainer self-review and structural correction
+
+[Abhignan Vajjala's dated reproduction](maintainer-reviews/2026-11-24-metabolic-model-review.md) records human-directed, AI-assisted investigation of the single-compartment defect. The original artifacts are in Codespaces and are unavailable here; manual results are supplied observations, not reconstructed original evidence. The permanent fixture uses extracellular uptake, transport and cytoplasmic drains. New automated assertions cover structure, pFBA30, FVA90, knockouts, warning capture and solver rejection. This scoped self-review does not complete independent methodological or biological review. Original Phase 1–4 outputs and agent judgments remain historical and unchanged.

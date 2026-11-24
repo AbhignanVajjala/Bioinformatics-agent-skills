@@ -1,5 +1,42 @@
 # Implementation status
 
+## Phase 5 metabolic structure correction — 2026-11-24
+
+Branch `phase5-metabolic-structure-correction`, baseline `98a9456`. The shared
+fixture now separates a_e/e extracellular and a_c/c cytoplasm via TRANSPORT.
+The base has three reactions/two metabolites; the domain adds PRODUCT and OR
+GPR for four reactions/two genes. Numerical checks remain separate from the
+new fixture-only structure gate; public validator interfaces are unchanged.
+Normal finite-bound checks remain strict. Only the unbounded negative control
+opens uptake, transport and biomass. Scoped Python warnings and cobra logging
+retain stage/control labels without global logger changes. A supplementary
+knockout CSV records actual optimal zero-growth states separately from failure.
+
+The [maintainer review](maintainer-reviews/2026-11-24-metabolic-model-review.md)
+records supplied Codespaces observations, not locally recovered artifacts.
+Abhignan Vajjala's human-directed self-review used AI-assisted diagnosis;
+independent external/biological review remains incomplete. RNA-seq/multi-omics
+review states and historical evidence are unchanged. No Poetry lockfile is included.
+
+Local Python 3.12.10/COBRApy 0.29.1 validation encountered native policy blocks:
+targeted run 51 passed, nine failed, one skipped; full initial run 208 passed,
+14 failed, 14 errors, one skipped. Failures include unavailable GLPK interface
+after blocked native imports and two stale-archive checks before regeneration.
+These are recorded attempts, not passing scientific evidence. Generated archived
+README evidence also exposed the link validator traversing ignored artifacts;
+it now excludes generated trees, with a regression ensuring real broken links
+still fail. Preserved evidence files were not deleted or edited.
+
+Ruff, catalog, modes, 17-skill link validation and regenerated ZIP checks pass.
+New solver/structure tests must execute successfully in hosted supported
+environments before merge. Commands and JUnit/log evidence are under ignored
+`artifacts/phase5/`. No policy bypass or alternative solver workaround is used.
+The scientific assertions cover compartment balances, FBA, pFBA30, FVA90,
+uptake-seven/growth-four, SBML/GPR/classification, warning state, knockouts,
+invalid status/bounds and restoration. The AND-GPR test is new automated work,
+not a claimed maintainer manual observation. Original output hashes and agent
+judgments remain historical. Release 0.2.3 keeps the single universal ZIP.
+
 ## Phase 4 research credibility and transparency — 2026-11-20
 
 Baseline: clean synchronized local Windows main

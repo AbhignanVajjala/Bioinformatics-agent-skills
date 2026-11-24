@@ -50,6 +50,15 @@ def test_repo_structure():
     assert errors == []
 
 
+def test_generated_evidence_is_not_repository_documentation(tmp_path):
+    folder = tmp_path / "artifacts" / "preserved"
+    folder.mkdir(parents=True)
+    (folder / "README.md").write_text("[relative link](original-location.md)")
+    assert not any("original-location" in error for error in v.validate(tmp_path)[1])
+    (tmp_path / "README.md").write_text("[broken](actually-missing.md)")
+    assert any("actually-missing" in error for error in v.validate(tmp_path)[1])
+
+
 def test_trigger_cases_cover_each_skill_without_fabricated_runs():
     import json
 

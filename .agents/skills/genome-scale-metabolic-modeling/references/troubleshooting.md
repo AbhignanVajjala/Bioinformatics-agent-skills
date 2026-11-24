@@ -17,3 +17,5 @@ Use version-matched official
 and [deletion documentation](https://cobrapy.readthedocs.io/en/latest/deletions.html).
 Version-specific 0.29.1 documentation retrieval was unavailable on 2026-11-19.
 Record the installed version and actual execution evidence separately.
+
+A PASS solve with compartment-identification logs is not a structure certificate. Inspect exchange versus transport/demand classification. The synthetic e/c structure gate fails mismatches instead of silencing warnings. Expected infeasible-control warnings are labeled separately. Scoped handlers are removed after execution; logging policy is not globally reconfigured.

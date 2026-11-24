@@ -89,6 +89,11 @@ def validate(root=ROOT):
         except (ValueError, yaml.YAMLError) as exc:
             errors.append(f"{path}: {exc}")
     for path in root.rglob("*.md"):
+        if any(
+            part in {"artifacts", "build", "dist", "__pycache__"}
+            for part in path.relative_to(root).parts
+        ):
+            continue  # Generated evidence/extractions are not repository documentation.
         if not any(
             part.startswith(".") and part != ".agents" and part != ".github"
             for part in path.relative_to(root).parts

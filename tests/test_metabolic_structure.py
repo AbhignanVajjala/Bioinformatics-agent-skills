@@ -59,13 +59,16 @@ def test_old_defect_and_logging_capture(model):
     from cobra.medium.boundary_types import find_external_compartment
 
     old = cobra.Model("original_defect")
-    old.add_reactions([cobra.Reaction("EX_a"), cobra.Reaction("BIOMASS")])
+    old.add_reactions(
+        [cobra.Reaction("EX_a"), cobra.Reaction("BIOMASS"), cobra.Reaction("PRODUCT")]
+    )
     a = cobra.Metabolite("a_c", compartment="c")
     for r in old.reactions:
         r.add_metabolites({a: -1})
     with metabolic_evidence() as evidence, evidence.at("boundary-classification"):
         assert find_external_compartment(old) == "c"
-        assert {r.id for r in old.exchanges} == {"EX_a", "BIOMASS"}
+        assert {r.id for r in old.exchanges} == {"EX_a", "BIOMASS", "PRODUCT"}
+        assert not old.demands
         with pytest.raises(ScientificValidationError, match="toy_structure"):
             validate_toy_structure(old)
     assert any(
@@ -77,12 +80,14 @@ def test_old_defect_and_logging_capture(model):
 def test_capture_stages_and_cleanup():
     logger = logging.getLogger("cobra")
     before = (list(logger.handlers), logger.level, logger.propagate, logger.disabled)
+    warning_filters = list(warnings.filters)
     with pytest.raises(RuntimeError), metabolic_evidence() as evidence:
         with evidence.at("negative-control-test"):
             warnings.warn("expected negative", UserWarning)
             logger.warning("library evidence")
         raise RuntimeError("fixture")
     assert (list(logger.handlers), logger.level, logger.propagate, logger.disabled) == before
+    assert warnings.filters == warning_filters
     assert {e["channel"] for e in evidence.events} == {"logging", "python_warning"}
     assert all(
         e["expected_negative_control"] and e["stage"] == "negative-control-test"

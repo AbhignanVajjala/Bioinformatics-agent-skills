@@ -2,6 +2,30 @@
 
 ## Phase 5 metabolic structure correction — 2026-11-24
 
+Hosted supported execution at source `40a7d3b`:
+[Python/standalone CI](https://github.com/AbhignanVajjala/Bioinformatics-agent-skills/actions/runs/45347740557)
+passed 234 tests with four platform-specific skips, zero failures; the separate
+targeted metabolic run passed all 16 tests. Both corrected examples ran and
+the deterministic evaluator reported seven PASS/five NOT_RUN. No agent inference
+was performed. These new solver assertions verify pFBA30, FVA90, two-compartment
+balances and supplied trade-offs; they are not recovered maintainer artifacts.
+Fresh Linux extraction passed. Final-head Windows/Linux and pinned R checks
+must be green before merge. A follow-up assertion verifies warning filters are
+restored, and the old-defect fixture reproduces all three misclassified drains.
+
+After regeneration, the local full attempt reported 212 passed, 11 failed,
+14 errors and one skipped; native GLPK remained unavailable. Both local example
+attempts exited one, and the local evaluator reported six PASS, one FAIL,
+five NOT_RUN. This environmental failure is retained, not reclassified as a
+passing scientific execution. Supported hosted execution supplies the actual
+successful optimization evidence above. Local logs/JUnit retain exact diagnostics.
+
+Universal ZIP: 115 files, 17 skills, 342,597 bytes; SHA-256
+`9f5e0864d3f0cf1e71cc4061d2a5d8bb61fe833bc739f37f8d32afb0f96568da`.
+The archive includes the new helper and dated review. Citation metadata and
+release version are 0.2.3. Historical test outputs and all agent verdicts remain
+unchanged. The normal finite-bound gate and seven validator names are preserved.
+
 Branch `phase5-metabolic-structure-correction`, baseline `98a9456`. The shared
 fixture now separates a_e/e extracellular and a_c/c cytoplasm via TRANSPORT.
 The base has three reactions/two metabolites; the domain adds PRODUCT and OR

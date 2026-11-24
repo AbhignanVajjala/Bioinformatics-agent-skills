@@ -107,8 +107,8 @@ def test_prespecified_family_and_no_testable_status():
 def test_independent_exact_hypergeometric_and_bh():
     data = enrichment_fixture()
     baseline = run(data, {"hit": data["selected"], "null": data["tested"][10:]})
-    assert baseline["results"][0]["pvalue"] == pytest.approx(1 / math.comb(20, 5), abs=2e-16)
-    assert baseline["results"][0]["padj"] == pytest.approx(2 / math.comb(20, 5), abs=2e-16)
+    assert baseline["results"][0]["pvalue"] == pytest.approx(1 / math.comb(20, 5), rel=0, abs=2e-16)
+    assert baseline["results"][0]["padj"] == pytest.approx(2 / math.comb(20, 5), rel=0, abs=2e-16)
     rng = np.random.default_rng(845)
     sets = {
         f"set{i:02}": rng.choice(data["tested"], size=i + 1, replace=False).tolist()
@@ -134,8 +134,8 @@ def test_independent_exact_hypergeometric_and_bh():
         i = order[rank - 1]
         current = min(current, expected[i] * 20 / rank)
         adjusted[i] = current
-    assert [x["pvalue"] for x in result["results"]] == pytest.approx(expected, abs=2e-15)
-    assert [x["padj"] for x in result["results"]] == pytest.approx(adjusted, abs=2e-15)
+    assert [x["pvalue"] for x in result["results"]] == pytest.approx(expected, rel=0, abs=2e-15)
+    assert [x["padj"] for x in result["results"]] == pytest.approx(adjusted, rel=0, abs=2e-15)
 
 
 def test_identifier_chain_and_duplicate_serialized_keys():

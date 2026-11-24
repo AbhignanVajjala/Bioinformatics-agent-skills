@@ -9,7 +9,7 @@ authors:
 contact:
   - family-names: Vajjala
     given-names: Abhignan
-version: 0.2.4
+version: 0.2.5
 date-released: "2026-11-24"
 abstract: "Experimental Agent Skills and executable scientific utilities for reproducible bioinformatics and computational biology. Developed with substantial disclosed AI assistance; independent biological validation and human methodological review remain incomplete."
 keywords:

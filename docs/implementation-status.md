@@ -1,5 +1,99 @@
 # Implementation status
 
+## Phase 7 bulk RNA-seq validation and identifier correction — 2026-11-24
+
+Hosted canonical implementation at **4450e6d** passed the original **18 R checks**
+and all **125 new native checks**, zero failures:
+[R/Bioconductor run](https://github.com/AbhignanVajjala/Bioinformatics-agent-skills/actions/runs/45411668477).
+The [Python/installation run](https://github.com/AbhignanVajjala/Bioinformatics-agent-skills/actions/runs/45411668422)
+passed **390 tests/four Windows-only preflight skips**, targeted RNA readiness
+**30**, multi-omics **133**, and metabolic **16**. Native negative metabolic
+controls emitted two expected full-suite warnings and one targeted warning;
+there were no multi-omics overflow warnings. Deterministic cases: **7 PASS /
+5 NOT_RUN**, with no agent inference. Fresh Windows/Linux archive installations
+executed successfully. These hosted successes do not erase local native failures.
+
+Downloaded native artifact hash:
+`5bf3a58984be7fcd41b1f1f33d0ea13a7f77ba7f340d7b2894c9d1fe9a499cc3`.
+All six contrasts now reverse with zero observed effect/p discrepancies.
+All planted true positives (50) and historical false-positive counts (DESeq2
+7/7/6; edgeR 2/2/2) were recovered in this synthetic run. Actual DESeq2 trend
+fitting was local for all three requested parametric fits. Final follow-up adds
+an independent manual BH reference, full-precision JSON and explicit command/time/
+source provenance. Final-head checks remain gated; final results and merge/public
+archive verification are recorded in
+[PR #7](https://github.com/AbhignanVajjala/Bioinformatics-agent-skills/pull/7).
+
+Latest local full Python suite (exact-token checks included): **368 passed,
+11 failed, 14 errors, one symlink skip**, 394 collected. All failures/errors
+remain confined to unavailable native metabolic runtime paths. Current targeted
+RNA readiness + Phase 6 cross-view checks: **163 passed/two deselected**.
+No local R execution is claimed.
+
+First hosted R run [45410406637](https://github.com/AbhignanVajjala/Bioinformatics-agent-skills/actions/runs/45410406637)
+passed the preserved 18 checks, then the new driver reported **119 PASS/3 FAIL
+of 122**. The three failures were DESeq2 reversal comparisons, with maximum
+log2FC differences 1.25–1.78e-6 and p-value differences up to 2.94e-6. Recorded
+size factors and dispersion methods matched. The implementation now uses one
+canonical fitting orientation and a separate named signed contrast, preserving
+native safeguards and the original 1e-6 assertion. No tolerance was loosened.
+Failed-run evidence is retained, separately from subsequent validations.
+Exact-token follow-up checks reject sub-ulp fractions/underflow before conversion;
+valid integral decimal/exponent representations remain supported.
+
+Baseline: merged Phase 6 `19ae86864c6e331554f7ff66b9c17ea4b14610a7`.
+Branch phase7-rnaseq-validation-correction, release 0.2.5. The R recipe now checks
+configuration grammar/duplicate keys/types, strict TSV widths/headers and exact
+categorical identities before fitting. Model-only factor mappings are explicit;
+contrast selection uses the condition term/name. Post-filter library gates,
+requested/actual dispersion, normalization factors, native diagnostic capture,
+ignored-covariate risks and failure stages are recorded. Native methods and NA
+semantics are retained; no alternative normalization is silently substituted.
+
+Python rejects Boolean raw counts and duplicate/malformed metadata predictably,
+preserves file identities and rejects ragged records. Generic Phase 6 count
+limits remain <=2^53-1; only bulk R readiness adds the per-count 2147483647 limit.
+All seven validator names, 17 skills, original R assertions, historical agent
+judgments and Phases 5–6 scientific corrections are preserved.
+
+The [dated review](maintainer-reviews/2026-11-24-bulk-rnaseq-review.md) distinguishes
+Abhignan Vajjala's supplied human-directed, AI-assisted observations at 98a9456
+from new source inspection and automated checks. The 32 failed adversarial
+checks are not represented as 32 distinct defects. Original Codespaces artifacts
+and hashes are unavailable here; historical numerical results remain unchanged.
+
+Local environment: existing Python 3.12.10 virtual environment, NumPy 2.2.6,
+pandas 2.2.3, pytest 8.3.5, Ruff 0.11.13. Rscript is unavailable on PATH: local
+native R execution is NOT_RUN. No runtime download, policy bypass or model session
+was attempted. Pinned hosted R/Bioconductor validation gates merge, including the
+unchanged 18-case test.R and the new criterion-level test-validation.R driver.
+The new driver records genuine counts, failure reasons, source MD5s, session
+information and new synthetic outcomes separately under artifacts/rnaseq-phase7.
+The original driver adds unexpected-exit stderr reporting; its original 18
+assertions and synthetic fixtures are unchanged.
+
+Targeted final readiness checks: 28 passed. Three final Python examples executed;
+three analysis-run schemas, 66 actual input/output hashes and the CFF 1.2.0
+contract passed. Lint/format, 17-skill structural validation, catalog and mode
+checks pass. Archive generation/extraction/integrity/freshness checks pass.
+
+Initial targeted Python validation: 167 passed/seven deselected, including new
+readiness and Phase 6/science regression controls. Initial full suite: 362 passed,
+11 failed, 14 errors, one unavailable-symlink skip; all failures/errors involve
+the existing unavailable native COBRA/GLPK interface. Deterministic evaluations
+locally returned six PASS/one metabolic runtime FAIL/five NOT_RUN. The bulk
+readiness, original multi-omics and expanded cross-view examples executed in
+fresh artifacts/phase7 output directories. All generated local evidence is
+ignored; sensitive runtime paths and unrelated lock/environment files are not
+committed. Final counts and hosted evidence are recorded as validation completes.
+
+Remaining limitations: independent external review, real-data calibration,
+power/causal identification, upstream provenance authentication and biological
+validation remain incomplete. Successful readiness/fitting does not validate
+biology or demonstrate improved agent effectiveness. Only fully validated final
+checks permit the explicitly authorized push/PR merge; no force-push or branch
+protection bypass is permitted.
+
 ## Phase 6 multi-omics validation correction — 2026-11-24
 
 Supported hosted evidence at implementation commit

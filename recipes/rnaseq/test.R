@@ -20,6 +20,7 @@ run <- function(method, label, m = md, x = tab, config = cfg, expected = 0L) {
     code <- system2(file.path(R.home("bin"), "Rscript"), c("recipes/rnaseq/run.R", method,
         file.path(folder, "counts.tsv"), file.path(folder, "samples.tsv"), file.path(folder, "config.json"),
         file.path(folder, "output")), stdout = file.path(folder, "stdout.log"), stderr = file.path(folder, "stderr.log"))
+    if (code != expected) cat(readLines(file.path(folder, "stderr.log"), warn = FALSE), sep = "\n")
     stopifnot(code == expected)
     status <- jsonlite::fromJSON(file.path(folder, "output/analysis-status.json"))
     if (expected == 0L) {

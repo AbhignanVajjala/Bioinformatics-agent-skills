@@ -11,6 +11,7 @@ import pandas as pd
 from bioskills.science import (
     ScientificValidationError,
     exact_count_totals,
+    validate_count_representation,
     reconcile_omics,
     require,
     validate_labels,
@@ -118,6 +119,7 @@ def cross_view_analysis(matrices, mappings, declarations, feature_map):
         for field in ("namespace", "reference", "modality", "scale"):
             _text(declaration.get(field), field)
         if declaration["scale"] == "raw_counts":
+            validate_count_representation(matrices[name])
             require(declaration["modality"] == "rna", "modality_scale", "Raw counts require RNA.")
             _text(declaration.get("count_generation"), "count_provenance")
             _text(declaration.get("count_universe"), "count_universe")

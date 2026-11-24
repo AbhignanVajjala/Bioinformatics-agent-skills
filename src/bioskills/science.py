@@ -11,6 +11,7 @@ import importlib.metadata
 import json
 from collections.abc import Mapping
 from numbers import Real
+from decimal import Decimal, InvalidOperation
 from pathlib import Path
 import platform
 import shutil
@@ -97,6 +98,7 @@ def check_counts(
 ):
     """Count integrity shared by the legacy readiness gate and validator CLI."""
     values = validate_matrix(counts)
+    validate_count_representation(counts)
     require(
         scale == "raw_counts",
         "count_scale",
@@ -145,6 +147,55 @@ def exact_count_totals(values):
     return totals
 
 
+def reject_boolean_counts(counts):
+    values = counts.to_numpy()
+    require(
+        not (
+            values.dtype.kind == "b"
+            or (
+                values.dtype.kind == "O"
+                and any(isinstance(x, (bool, np.bool_)) for x in values.flat)
+            )
+        ),
+        "count_values",
+        "Boolean observations are not raw integer counts.",
+    )
+
+
+def validate_count_representation(counts):
+    """Check exact text/Decimal count integrality before binary64 can hide fractions."""
+    reject_boolean_counts(counts)
+    values = counts.to_numpy()
+    if values.dtype.kind in {"O", "U", "S"}:
+        for value in values.flat:
+            if not isinstance(value, (str, Decimal)):
+                continue
+            try:
+                number = Decimal(value)
+            except InvalidOperation as error:
+                raise ScientificValidationError(
+                    "count_values: Invalid numeric count token."
+                ) from error
+            require(
+                number.is_finite()
+                and number >= 0
+                and number <= 2**53 - 1
+                and number == number.to_integral_value(),
+                "count_values",
+                "Count text must represent an exact nonnegative integer within binary64 scope.",
+            )
+
+
+def validate_metadata(metadata, fields):
+    require(isinstance(metadata, pd.DataFrame), "metadata_type", "Metadata must be a DataFrame.")
+    require(metadata.columns.is_unique, "metadata_columns", "Duplicate metadata columns.")
+    require(set(fields) <= set(metadata), "metadata_fields", f"Required fields: {fields}.")
+    validate_labels(metadata.index, "metadata_ids")
+    require(metadata.index.is_unique, "duplicate_samples", "Duplicate metadata sample IDs.")
+    for field in fields:
+        validate_labels(metadata[field], "metadata_missing")
+
+
 def validate_counts(counts, metadata, *, scale, organism, reference):
     """Validate independent subjects with an optional categorical batch design.
 
@@ -153,6 +204,15 @@ def validate_counts(counts, metadata, *, scale, organism, reference):
     """
     check_counts(
         counts, scale=scale, organism=organism, reference=reference, require_provenance=False
+    )
+    require(
+        (counts.to_numpy(dtype=float) <= 2**31 - 1).all(),
+        "r_integer_range",
+        "Supported R recipes require each count <=2147483647; generic count validation has a wider scope.",
+    )
+    require(isinstance(metadata, pd.DataFrame), "metadata_type", "Metadata must be a DataFrame.")
+    validate_metadata(
+        metadata, ["condition", "subject_id"] + (["batch"] if "batch" in metadata else [])
     )
     require(metadata.index.is_unique, "duplicate_samples", "Sample metadata must be unique.")
     require(
@@ -198,6 +258,7 @@ def validate_counts(counts, metadata, *, scale, organism, reference):
     require(design.shape[0] > rank, "residual_df", "No residual degrees of freedom.")
     return {
         "status": "PASS",
+        "readiness_scope": "R count-value/design checks only; upstream count_generation still required by check_counts and R configuration",
         "samples": len(metadata),
         "genes": len(counts),
         "design_rank": rank,

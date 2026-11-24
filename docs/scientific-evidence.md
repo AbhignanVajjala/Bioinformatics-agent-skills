@@ -1,5 +1,15 @@
 # Scientific evidence and its limits
 
+The [Phase 7 RNA-seq review](maintainer-reviews/2026-11-24-bulk-rnaseq-review.md)
+records Abhignan Vajjala's human-directed, AI-assisted maintainer investigation
+separately from new software checks. The 32 failed adversarial checks reflect
+shared defects across two methods, not 32 independent defects. Strict config/TSV
+contracts, exact identities, normalization/fitting diagnostics and scoped Python
+readiness now address those findings. Original synthetic effect/FDP observations
+remain historical; a realized FDP above 5% is not proof of broken FDR control.
+Independent external methodological review remains incomplete. No agent benchmark
+or claim of improved instruction-following accompanies these utility corrections.
+
 All 17 skills remain EXPERIMENTAL. The collection contains seven domain skills
 and ten foundation/maintainer instruction workflows. No independent biological
 validation, clinical validation or external peer review is established here.

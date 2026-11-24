@@ -87,6 +87,10 @@ The [Phase 5 maintainer review](docs/maintainer-reviews/2026-11-24-metabolic-mod
 The [Phase 6 multi-omics review](docs/maintainer-reviews/2026-11-24-multiomics-review.md)
 documents validation/numerical corrections and explicit subject, partition and
 normalization limits from the second AI-assisted maintainer investigation.
+
+The [Phase 7 RNA-seq review](docs/maintainer-reviews/2026-11-24-bulk-rnaseq-review.md)
+documents strict input contracts, identifier preservation and native fitting
+diagnostics from the scoped AI-assisted maintainer audit.
 Predicted flux does not measure cellular flux, demonstrate overexpression or
 prove an intervention.
 

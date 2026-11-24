@@ -4,7 +4,8 @@ This guide supports a human maintainer's own reproduction and methodological
 challenge. It does not record that Abhignan Vajjala or an independent reviewer
 has completed an entire independent review. The metabolic and multi-omics rows
 record scoped maintainer self-reviews supplied in Phases 5 and 6. The RNA-seq
-human completion field remains **NOT_REVIEWED**. New automated corrections and
+human completion field now records the scoped Phase 7 self-review. Independent
+external review remains **NOT_REVIEWED**. New automated corrections and
 regression tests are distinct from supplied maintainer observations.
 
 ## Preparation and evidence discipline
@@ -38,7 +39,7 @@ not differential-expression modeling.
 
 ### Follow the data and model
 
-`run.R` reads counts TSV with gene IDs in the first column, sample metadata
+`run.R` reads strict UTF-8 counts TSV with gene IDs in the first column, sample metadata
 with `sample_id`, `subject_id`, `condition` and applicable `batch`, and a JSON
 configuration declaring organism, reference, count generation, measurement type,
 design and reference/treatment levels. It accepts declared raw gene counts.
@@ -50,6 +51,14 @@ counts, missing/blank/duplicate identifiers and zero library totals. Count-colum
 and metadata sample sets must agree. A permuted sheet is rejected by default;
 `align_samples: true` explicitly permits `match`-based metadata ordering.
 Original input files are not rewritten.
+
+The Phase 7 parser validates every field count and header without implicit row
+names or categorical type inference. Required configuration values are nonblank
+scalar strings; duplicate JSON keys (including escaped aliases) and incorrectly
+typed Boolean options reject before fitting. Numeric-looking categorical IDs
+remain exact strings. Original metadata.tsv and explicit factor-code mappings
+separate external identities from model-only names. A named condition term
+identifies the coefficient; no positional last-column assumption is used.
 
 Two declared conditions and independent subjects are required. The two-subject
 minimum per condition supplies no power guarantee. Unpaired/batch recipes
@@ -67,13 +76,23 @@ NA. No effect-size shrinkage is executed. Normalized diagnostics use DESeq2's
 normalized counts; they are not replacement input counts for a second fit.
 
 edgeR constructs `DGEList`, uses `filterByExpr`, TMM normalization,
-`estimateDisp`, `glmQLFit(robust=FALSE)` and `glmQLFTest`. The last design column
-is the treatment coefficient for these constrained two-condition formulas.
+`estimateDisp`, `glmQLFit(robust=FALSE)` and `glmQLFTest`. The condition term and
+named coefficient identify the contrast independently of column position.
 `topTags(adjust.method="BH")` exports the tested family with `sort.by="none"`.
 Its `normalized.tsv` contains CPM, unlike the DESeq2 normalized-count diagnostic.
 DESeq2's adjusted results also use its native BH procedure. Neither choice
 supplies a study-wide multiplicity plan across additional contrasts/cell types.
 Do not select a method by whichever gives smaller p-values.
+
+Post-filter library totals now gate normalization explicitly. Requested and actual
+DESeq2 dispersion fitting are recorded, including native local fallback. Size
+factors or TMM/effective libraries, method-specific limitations, warning/message
+events and ignored covariates accompany staged success/failure statuses. An
+unpaired fit does not adjust a supplied batch; known confounding is disclosed.
+An unsupported ratio normalization stops without substituting another method.
+Independent filtering and Cook-related missing values remain native.
+The [dated RNA-seq review](maintainer-reviews/2026-11-24-bulk-rnaseq-review.md)
+preserves supplied historical numbers separately from new regression results.
 
 ### Reproduce and inspect
 
@@ -84,6 +103,7 @@ Use a fresh working copy without a previous `artifacts/rnaseq-ci` tree:
 ```text
 Rscript recipes/rnaseq/install.R
 Rscript recipes/rnaseq/test.R
+Rscript recipes/rnaseq/test-validation.R
 ```
 
 The test driver creates six real fits: both methods in unpaired, paired and
@@ -296,7 +316,7 @@ multiple people or environments are involved.
 
 | Workflow | Review status | Actual execution date | Human reviewer | Environment and source revision | Findings and artifact hashes | Unresolved issues |
 |---|---|---|---|---|---|---|
-| RNA-seq | NOT_REVIEWED | | | | | |
+| RNA-seq | MAINTAINER_SELF_REVIEW_REPORTED; not independent | 2026-11-24 | Abhignan Vajjala | Codespaces Python 3.12.3/R 4.4.3/Bioc 3.20; DESeq2 1.46.0/edgeR 4.4.2; 98a9456 | Supplied baseline/adversarial observations; original hashes unavailable locally; see dated review | External review, real-data calibration and biological validation incomplete |
 | Metabolic modeling | MAINTAINER_SELF_REVIEW_REPORTED; not independent | 2026-11-24 | Abhignan Vajjala | Codespaces Linux/Python 3.12.3; 98a9456, package 0.2.2 | Original artifacts preserved in Codespaces; hashes unavailable locally; see dated review | External review and biological validation incomplete |
 | Multi-omics | MAINTAINER_SELF_REVIEW_REPORTED; not independent | 2026-11-24 | Abhignan Vajjala | Codespaces Linux/Python 3.12.3, NumPy 2.2.6/pandas 2.2.3/SciPy 1.15.3; 98a9456, package 0.2.2 | Supplied baseline/adversarial observations; original artifact hashes unavailable locally; see dated review | External review, real-data and biological validation incomplete |
 

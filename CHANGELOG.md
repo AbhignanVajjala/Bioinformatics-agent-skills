@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.2.5 — bulk RNA-seq validation and identity correction (2026-11-24)
+
+Validates JSON structure/duplicates/types and every TSV record before fitting;
+preserves categorical identities as exact strings, with explicit model-factor
+coding and coefficient selection. Adds scoped R-readiness numeric limits and
+Boolean/metadata gates while retaining Phase 6 generic count safety. Records
+native dispersion fallback, normalization, diagnostics, post-filter library
+checks, ignored covariates and honest failure stages. Adds adversarial native R
+and Python regressions and a dated AI-assisted maintainer self-review, preserving
+historical observations separately from new execution. Retains all 17 skills,
+seven validators, Phases 5–6 corrections and the single universal ZIP URL.
+
 ## 0.2.4 — multi-omics validation correction (2026-11-24)
 
 Rejects empty/ambiguous feature maps, meaningless declarations and duplicate or

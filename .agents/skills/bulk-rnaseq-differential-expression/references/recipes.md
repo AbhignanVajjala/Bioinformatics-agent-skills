@@ -1,9 +1,9 @@
 # Bulk RNA-seq executable recipes
 
 These commands require the full repository or the executable toolkit, R 4.4.3,
-Bioconductor 3.20, DESeq2 1.46.0, edgeR 4.4.2 and jsonlite. The lightweight ZIP
-contains these instructions and references. Scientific scripts are external
-dependencies of that download.
+Bioconductor 3.20, DESeq2 1.46.0, edgeR 4.4.2 and jsonlite. The universal ZIP
+contains these instructions, scripts and synthetic resources. R and its pinned
+packages must be installed separately, as documented by the toolkit guide.
 
 | Input type | Question | Method | Software | Expected result | Failure conditions |
 |---|---|---|---|---|---|
@@ -19,6 +19,7 @@ in `recipes/rnaseq/environment.json`, then run:
 
 ```text
 Rscript recipes/rnaseq/test.R
+Rscript recipes/rnaseq/test-validation.R
 Rscript recipes/rnaseq/run.R deseq2 counts.tsv samples.tsv config.json new-output
 Rscript recipes/rnaseq/run.R edger counts.tsv samples.tsv config.json other-output
 ```
@@ -41,3 +42,12 @@ Select DESeq2 for its negative-binomial modeling workflow and edgeR QL when its
 filtering and QL inference suit the design. Both need independent replication,
 identifiable covariates and expert diagnostic review. Never select the package
 by comparing significance. Effect direction is treatment versus reference.
+
+The new validation driver needs the original test.R fixtures and a fresh
+artifacts/rnaseq-phase7 output directory. It preserves the original 18 checks
+and records new criterion-level outcomes separately. Inspect actual diagnostics:
+DESeq2 can legitimately replace requested parametric dispersion with local fitting.
+edgeR reports TMM/effective libraries and its own limitations. Neither workflow
+silently replaces an unsupported normalization policy. Undefined post-filter
+libraries stop before fitting. Exact input identities and an explicit model-factor
+mapping accompany the named contrast coefficient and original contrast labels.

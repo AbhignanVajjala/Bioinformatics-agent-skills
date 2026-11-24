@@ -19,10 +19,12 @@ jobs:
           Rscript -e 'install.packages("https://cran.r-project.org/src/contrib/Archive/BiocManager/BiocManager_1.30.25.tar.gz", repos=NULL, type="source")'
           Rscript recipes/rnaseq/install.R
       - run: Rscript recipes/rnaseq/test.R
+      - run: Rscript recipes/rnaseq/test-validation.R
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: rnaseq-execution-evidence
           path: |
             artifacts/rnaseq-ci/
+            artifacts/rnaseq-phase7/
             r-environment.txt

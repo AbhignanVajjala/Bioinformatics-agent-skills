@@ -1,5 +1,24 @@
 # Development progress
 
+## Phase 7 bulk RNA-seq scientific validation — 2026-11-24
+
+Version 0.2.5 corrects R config/TSV parsing and categorical identifier corruption,
+adds controlled Python metadata/Boolean/R-readiness checks, and reports native
+fitting/normalization diagnostics and post-filter failures honestly. Explicit
+model-factor mappings preserve external identities and avoid native naming
+collisions. Original methods, 18 R checks, 17 skills, seven validators, Phase 5/6
+corrections and benchmark judgments remain preserved. The new native R driver
+records criterion-level results separately from the original tests.
+
+[The maintainer review](maintainer-reviews/2026-11-24-bulk-rnaseq-review.md) credits
+Abhignan Vajjala's human-directed, AI-assisted investigation and preserves the
+supplied observations without inventing original artifacts. Counts, commands,
+actual failures/blockers and final hosted results belong to
+[implementation status](implementation-status.md). Local R is unavailable; native
+validation requires the pinned hosted workflow. Independent methodological,
+real-data and biological review remain incomplete. No new agent benchmark or
+library expansion is part of this correction.
+
 ## Phase 6 multi-omics scientific correction — 2026-11-24
 
 Supported hosted Python validation at e90d11c passed 360 tests/four Windows-only

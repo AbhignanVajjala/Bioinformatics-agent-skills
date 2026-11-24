@@ -29,6 +29,13 @@ are outside the supported binary64 count scope and fail before floating summatio
 Matrix labels must be homogeneous nonblank strings or finite numeric labels;
 mixed-type labels are rejected without coercion. Real finite values are required
 and complex observations cannot be silently cast.
+Boolean raw counts are rejected. Bulk validate_counts additionally checks the
+R recipe per-count limit of 2147483647; generic check_counts keeps its wider
+scope for other workflows. Metadata columns must be unique before field access.
+File readers preserve categorical identities, including leading zeros and long
+numeric-looking labels, as exact strings and reject ragged records. Homogeneous
+numeric labels in generic Python APIs remain supported; mixed numeric/text labels
+are rejected before serialization can collapse distinct identities.
 These gates do not authenticate the declared assay or its count universe.
 Provenance must be verified
 upstream. Sample matching rejects a permuted sheet by default. Configuration

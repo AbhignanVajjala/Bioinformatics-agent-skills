@@ -19,6 +19,8 @@ from bioskills.science import (
     require,
     sha256,
     validate_matrix,
+    validate_metadata,
+    validate_labels,
 )
 
 
@@ -78,6 +80,8 @@ def check_design_rank(design):
 
 def check_replication(metadata, *, paired=False):
     columns = ["subject_id", "condition"]
+    require(isinstance(paired, bool), "paired", "paired must be Boolean.")
+    validate_metadata(metadata, columns)
     require(
         set(columns) <= set(metadata), "metadata_fields", "Subject and condition fields required."
     )
@@ -212,11 +216,23 @@ def check_enrichment_background(data, *, organism, reference, multiple_testing):
 def read_table(path):
     delimiter = "\t" if path.suffix.lower() in {".tsv", ".txt"} else ","
     with path.open(encoding="utf-8", newline="") as file:
-        header = next(csv.reader(file, delimiter=delimiter))
+        rows = list(csv.reader(file, delimiter=delimiter, strict=True))
+    require(bool(rows) and len(rows[0]) >= 2, "table_structure", "Header and data fields required.")
+    header = rows[0]
     if len(set(header)) != len(header):
         raise ScientificValidationError("duplicate_ids: Duplicate input header.")
-    frame = pd.read_csv(path, sep=delimiter, index_col=0)
+    require(
+        len(rows) > 1 and all(len(row) == len(header) for row in rows[1:]),
+        "table_structure",
+        "Every record must have exactly the header field count.",
+    )
+    # Parse identities as exact text, including numeric-looking and literal NA IDs.
+    frame = pd.DataFrame(
+        [row[1:] for row in rows[1:]], columns=header[1:], index=[row[0] for row in rows[1:]]
+    )
     require(frame.index.is_unique, "duplicate_ids", "Duplicate input row identifiers.")
+    validate_labels(frame.index)
+    validate_labels(frame.columns)
     return frame
 
 
@@ -295,7 +311,7 @@ def evaluate(name, input_path, config, metadata_path=None):
             recommended_action="Install the documented optional environment.",
         )
         code = 3
-    except (OSError, ValueError, TypeError, KeyError, StopIteration):
+    except (OSError, ValueError, TypeError, KeyError, StopIteration, csv.Error):
         report.update(
             status="FAIL",
             reason="Input, format or configuration could not be parsed.",

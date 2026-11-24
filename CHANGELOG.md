@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.2.4 — multi-omics validation correction (2026-11-24)
+
+Rejects empty/ambiguous feature maps, meaningless declarations and duplicate or
+missing metadata fields through controlled scientific errors. Shares scaled,
+compensated Pearson calculations across both examples, with numerical failure
+evidence and explicit unsupported ranges. Preserves the entire declared RNA
+normalization universe and records denominators; reports specimens, subjects,
+repeats, timepoints and descriptive partitions separately. Constant unmapped
+features no longer invalidate valid mapped pairs. Records the second scoped
+human-directed maintainer investigation with AI assistance, preserving its
+historical observations separately from new automated/Decimal reference checks.
+Retains Phase 5 metabolic corrections, 17 skills, seven validator interfaces,
+historical benchmark judgments and the same single universal ZIP download URL.
+
 ## 0.2.3 — metabolic structure correction (2026-11-24)
 
 Corrects the synthetic compartment/boundary defect with a_e/e, a_c/c and explicit TRANSPORT. Biomass remains ten; pFBA total flux is now 30. Adds fixture-specific structural gates, scoped logging/Python warning evidence, corrected unbounded control, uptake-seven/growth-four trade-off, supplementary knockout controls and regression tests. Records supplied human-directed maintainer self-review with AI assistance separately from new automated execution. Historical results, other skills, public validator names and independent-review limits are preserved. Regenerates the same universal ZIP; SHA256SUMS records its checksum.

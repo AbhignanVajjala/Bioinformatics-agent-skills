@@ -1,5 +1,68 @@
 # Implementation status
 
+## Phase 6 multi-omics validation correction — 2026-11-24
+
+Baseline: merged Phase 5 `d8119c5167b98e92a6929596dc294b2acc49e893`.
+Branch: `phase6-multiomics-validation-correction`; release 0.2.4, 17 skills,
+seven public validators. Corrects MO-01–08, the MO-09 unused-constant limitation
+and methodological reporting, preserving historical observations, original
+benchmark judgments and metabolic structure/solver assertions.
+See the [scoped maintainer review](maintainer-reviews/2026-11-24-multiomics-review.md).
+
+Implementation: controlled metadata/key/type/column/map validation; no identifier
+coercion; shared scaled/compensated Pearson with scoped numerical failure evidence;
+complete intended RNA count universe declared before pair selection; exact library
+denominators/provenance; constant-unmapped inventory; matched specimen/subject,
+repeat, timepoint and partition reporting. All requested pairs must execute or
+the analysis raises ScientificValidationError with NOT_RUN evidence. Descriptive
+success is neither population inference nor held-out predictive validation.
+New shared count-sum overflow and complex-cast defects are also rejected.
+
+Local Windows commands use the existing Python 3.12.10 virtual environment,
+PYTHONPATH=src, PYTHONUTF8=1 and repository-local generated caches. NumPy 2.2.6,
+pandas 2.2.3, SciPy 1.15.3, pytest 8.3.5, Ruff 0.11.13. Generated logs and immutable
+new-run artifacts remain under ignored artifacts/phase6; private absolute runtime
+paths are not committed.
+
+| Command/check | Actual local result |
+|---|---|
+| `python -m pytest -q tests/test_multiomics_validation.py tests/test_domain_recipes.py -k 'not metabolic and not flux'` | 133 passed, 2 deselected; zero failures |
+| `python -m pytest -q --junitxml=artifacts/phase6/full-final.xml` | 338 passed, 11 failed, 14 errors, 1 skipped; 364 collected |
+| `python -m pytest -q tests/test_metabolic_structure.py` | 1 passed, 1 failed, 14 errors; native solver unavailable |
+| `ruff check .`; `ruff format --check .` | PASS |
+| `python scripts/validate_skills.py` | 17 skills; zero structural/link errors |
+| `python scripts/build_catalog.py --check`; `python scripts/sync_modes.py --check` | PASS after catalog regeneration |
+| `python examples/multiomics/run.py --output artifacts/phase6/readiness-final` | Executed; historical correlations retained within floating roundoff |
+| `python examples/domain-recipes/run.py multiomics --output artifacts/phase6/crossview-final` | Executed; four correlations, eight matched specimens/subjects, denominators recorded |
+| `python scripts/run_evals.py --output artifacts/phase6/evals.json` | 6 PASS, 1 FAIL (metabolic native runtime), 5 NOT_RUN; no model sessions |
+| Artifact/CFF validation | Two analysis-run schemas, cross-view schema, 47 actual input/output hashes and CFF 1.2.0 passed |
+| `python scripts/package_skills.py`; `python scripts/package_skills.py --check` | Regenerated single universal archive; deterministic integrity/extraction/freshness checks passed |
+
+All local full-suite failures/errors involve the unavailable native COBRA/GLPK
+runtime: `SolverNotFound: None is not a valid solver interface. Pick one from scipy.`
+The subprocess metabolic example also fails native-library initialization. These
+are unresolved local environment failures, not passing scientific evidence. No
+policy or solver requirement was weakened. The Windows symlink case is skipped
+because symlink creation is unavailable. The first test command had two collection
+errors before PYTHONPATH was set; corrected. The initial independent-reference
+test exposed rounding from maximum-value division; exact power-of-two scaling
+fixed it without loosening its 2e-15 tolerance. An earlier full attempt before
+the final seven regressions had 331 passed/11 failed/14 errors/1 skipped.
+
+Decimal 100-digit independent reference for the extreme observed fixture:
+0.1125037320033151; production 0.11250373200331505. Known positive/negative/zero
+fixtures give +1/-1/0. This is an independent algorithmic reference, not external
+human review. Supported counts/totals <=2^53-1; near-constant or underflowing
+dynamic ranges reject rather than inventing correlations. External denominators,
+advanced integration, inference and prediction remain unsupported/NOT_RUN.
+
+Hosted Linux scientific regression, Windows/Linux isolated archive installations
+and the unchanged pinned R/Bioconductor workflow must pass before merging.
+Publication is explicitly authorized by Phase 6; the PR remains gated on actual
+hosted results. No agent benchmark or skill-library expansion was performed.
+
+Historical records below retain their original meaning and counts.
+
 ## Phase 5 metabolic structure correction — 2026-11-24
 
 Hosted supported execution at source `40a7d3b`:

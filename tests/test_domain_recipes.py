@@ -34,6 +34,8 @@ def views():
             "scale": "raw_counts",
             "modality": "rna",
             "count_generation": "synthetic",
+            "count_universe": "complete_supplied_matrix",
+            "normalization_scope": "All synthetic generated genes",
             "namespace": "genes",
             "reference": "synthetic-v1",
         },

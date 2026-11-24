@@ -9,6 +9,8 @@ from __future__ import annotations
 import hashlib
 import importlib.metadata
 import json
+from collections.abc import Mapping
+from numbers import Real
 from pathlib import Path
 import platform
 import shutil
@@ -24,30 +26,63 @@ import pandas as pd
 class ScientificValidationError(ValueError):
     """A named scientific gate failed; analysis must not continue."""
 
+    def __init__(self, message, *, evidence=None):
+        super().__init__(message)
+        self.evidence = evidence or {"analysis_status": "NOT_RUN", "numerical_events": []}
+
 
 def require(condition, check, message):
     if not condition:
         raise ScientificValidationError(f"{check}: {message}")
 
 
+def validate_labels(labels, check="identifiers"):
+    """Accept homogeneous strings or finite real labels without coercion/trimming."""
+    labels = list(labels)
+    strings = all(isinstance(x, str) and bool(x.strip()) for x in labels)
+    numbers = all(
+        isinstance(x, Real) and not isinstance(x, (bool, np.bool_)) and np.isfinite(x)
+        for x in labels
+    )
+    require(
+        bool(labels) and (strings or numbers),
+        check,
+        "Use nonblank strings or finite numeric labels; mixed types are ambiguous.",
+    )
+
+
+def validate_mapping(mapping, matrix, *, timepoint=False):
+    require(isinstance(mapping, pd.DataFrame), "mapping_type", "Mapping must be a DataFrame.")
+    require(mapping.columns.is_unique, "mapping_columns", "Duplicate metadata columns.")
+    fields = ["specimen_id", "subject_id", "split"] + (["timepoint"] if timepoint else [])
+    require(set(fields) <= set(mapping), "mapping_fields", f"Required columns: {fields}.")
+    validate_labels(mapping.index, "sample_ids")
+    require(
+        mapping.index.is_unique and list(mapping.index) == list(matrix.columns),
+        "sample_alignment",
+        "Exact matrix/metadata sample alignment required.",
+    )
+    for field in fields:
+        validate_labels(mapping[field], field)
+    require(mapping.specimen_id.is_unique, "duplicate_specimen", "Duplicate specimen.")
+
+
 def validate_matrix(matrix):
+    require(isinstance(matrix, pd.DataFrame), "matrix_type", "Matrix must be a DataFrame.")
     require(not matrix.empty, "empty_matrix", "Supply features by samples.")
     require(
         matrix.index.is_unique and matrix.columns.is_unique, "duplicate_ids", "IDs must be unique."
     )
+    validate_labels(matrix.index)
+    validate_labels(matrix.columns)
     require(
-        not matrix.index.isna().any() and not matrix.columns.isna().any(),
-        "missing_ids",
-        "IDs cannot be missing.",
-    )
-    require(
-        all(str(v).strip() for v in [*matrix.index, *matrix.columns]),
-        "blank_ids",
-        "Identifiers cannot be blank.",
+        not np.iscomplexobj(matrix.to_numpy()),
+        "numeric_matrix",
+        "Real-valued observations required.",
     )
     try:
         values = matrix.to_numpy(dtype=float)
-    except (ValueError, TypeError) as exc:
+    except (ValueError, TypeError, OverflowError) as exc:
         raise ScientificValidationError("numeric_matrix: Non-numeric values") from exc
     require(
         np.isfinite(values).all(),
@@ -75,14 +110,7 @@ def check_counts(
         "context",
         "Organism and annotation/reference are required.",
     )
-    require(
-        (values >= 0).all() and (values == np.floor(values)).all(),
-        "count_values",
-        "Counts must be nonnegative integers.",
-    )
-    require(
-        (values.sum(axis=0) > 0).all(), "empty_library", "A zero-depth library cannot be modeled."
-    )
+    exact_count_totals(values)
     if require_provenance:
         require(
             isinstance(count_generation, str) and bool(count_generation.strip()),
@@ -95,6 +123,26 @@ def check_counts(
         "genes": len(counts),
         "limitations": ["Integer appearance cannot verify declared raw-count provenance"],
     }
+
+
+def exact_count_totals(values):
+    """Count denominator gate shared with cross-view normalization; no float summation."""
+    require(
+        (values >= 0).all() and (values == np.floor(values)).all(),
+        "count_values",
+        "Counts must be nonnegative integers.",
+    )
+    require(
+        (values <= 2**53 - 1).all(), "count_range", "Counts exceed exact binary64 integer scope."
+    )
+    totals = [sum(int(v) for v in values[:, i]) for i in range(values.shape[1])]
+    require(all(t > 0 for t in totals), "empty_library", "A zero-depth library cannot be modeled.")
+    require(
+        all(t <= 2**53 - 1 for t in totals),
+        "count_range",
+        "Library sum exceeds exact binary64 integer scope; unsupported normalization.",
+    )
+    return totals
 
 
 def validate_counts(counts, metadata, *, scale, organism, reference):
@@ -169,6 +217,11 @@ def reconcile_omics(matrices, mappings):
     specimen_id, subject_id, split. Missing modalities are reported as exclusions.
     """
     require(
+        isinstance(matrices, Mapping) and isinstance(mappings, Mapping),
+        "modalities",
+        "Matrices/maps must be mappings.",
+    )
+    require(
         len(matrices) >= 2 and set(matrices) == set(mappings),
         "modalities",
         "Need matching matrices/maps for >=2 assays.",
@@ -178,32 +231,11 @@ def reconcile_omics(matrices, mappings):
     specimens = {}
     for name, matrix in matrices.items():
         validate_matrix(matrix)
+        validate_mapping(mappings[name], matrix)
+    for field in ["specimen_id", "subject_id"]:
+        validate_labels([x for mapping in mappings.values() for x in mapping[field]], field)
+    for name, matrix in matrices.items():
         mapping = mappings[name]
-        require(
-            mapping.index.is_unique and list(mapping.index) == list(matrix.columns),
-            "sample_alignment",
-            f"{name}: exact assay sample alignment required.",
-        )
-        require(
-            {"specimen_id", "subject_id", "split"} <= set(mapping),
-            "mapping_fields",
-            "Need specimen, subject and split.",
-        )
-        require(
-            not mapping[["specimen_id", "subject_id", "split"]].isna().any().any()
-            and mapping[["specimen_id", "subject_id", "split"]]
-            .astype(str)
-            .map(lambda v: bool(v.strip()))
-            .all()
-            .all(),
-            "mapping_missing",
-            "Identity fields cannot be missing.",
-        )
-        require(
-            mapping.specimen_id.is_unique,
-            "duplicate_specimen",
-            "Aggregate technical replicates with a documented rule first.",
-        )
         require(
             set(mapping.split) <= {"train", "test", "validation"},
             "split_labels",
@@ -235,10 +267,32 @@ def reconcile_omics(matrices, mappings):
         renamed = matrix.copy()
         renamed.columns = mappings[name].specimen_id
         aligned[name] = renamed[common]
+    matched = mappings[next(iter(matrices))].set_index("specimen_id").loc[common]
+    subject_counts = matched.subject_id.value_counts()
+    partition_counts = {
+        split: {"specimens": int(len(group)), "subjects": int(group.subject_id.nunique())}
+        for split, group in matched.groupby("split", sort=True)
+    }
+    warnings = ["Descriptive specimen-level association only; no independent-subject inference."]
+    if (subject_counts > 1).any():
+        warnings.append("Repeated specimens are not independent biological subjects.")
+    if len(subject_counts) == 1:
+        warnings.append("Single-subject observations cannot establish population generalization.")
+    if any(split in partition_counts for split in ["test", "validation"]):
+        warnings.append("Inspecting held-out data may compromise future confirmatory evaluation.")
     return aligned, {
         "status": "PASS",
         "matched_specimens": common,
         "excluded_specimens": {k: sorted(v - set(common)) for k, v in specimens.items()},
+        "matched_specimen_count": len(common),
+        "matched_subject_count": len(subject_counts),
+        "specimens_per_subject": [
+            {"subject_id": subject, "specimens": int(count)}
+            for subject, count in subject_counts.items()
+        ],
+        "partitions": partition_counts,
+        "partition_semantics": "All matched partitions contribute; no train-only fitting or held-out prediction.",
+        "warnings": warnings,
         "limitations": [
             "Sample identities are declarations, not genotype authentication",
             "No predictive performance has been evaluated",

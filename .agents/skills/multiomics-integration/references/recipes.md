@@ -6,8 +6,8 @@ From the full repository or executable toolkit with Python example dependencies:
 python examples/domain-recipes/run.py multiomics --output new-multiomics-output
 ```
 
-The lightweight ZIP provides instructions. Running the command requires the
-external repository/toolkit implementation. The example writes synthetic RNA
+The universal ZIP includes the Python implementation and synthetic resources;
+install its declared dependencies before running. The example writes synthetic RNA
 counts and protein log2 intensities and reloads their matrices and mappings.
 It computes actual Pearson associations between explicitly mapped features
 after specimen reconciliation. RNA is transformed with log2(CPM+1) for this

@@ -2,8 +2,10 @@
 
 This guide supports a human maintainer's own reproduction and methodological
 challenge. It does not record that Abhignan Vajjala or an independent reviewer
-has completed that work. Only the metabolic row now records a scoped maintainer self-review, as supplied in Phase 5. Other human completion fields remain **NOT_REVIEWED**.
-The Phase 5 metabolic correction and its new automated tests are distinct from the supplied maintainer observations.
+has completed an entire independent review. The metabolic and multi-omics rows
+record scoped maintainer self-reviews supplied in Phases 5 and 6. The RNA-seq
+human completion field remains **NOT_REVIEWED**. New automated corrections and
+regression tests are distinct from supplied maintainer observations.
 
 ## Preparation and evidence discipline
 
@@ -202,7 +204,8 @@ not prove engineering benefit, mechanism or therapeutic efficacy.
 
 ### Entry points, identity and computation
 
-[Domain implementation](../src/bioskills/domain_workflows.py): `cross_view_analysis`.
+[Domain entry point](../src/bioskills/domain_workflows.py): `cross_view_analysis`,
+implemented in [omics](../src/bioskills/omics.py).
 [Shared implementation](../src/bioskills/science.py): `reconcile_omics` and
 `validate_matrix`. [Synthetic driver](../examples/domain-recipes/run.py):
 `multiomics_example`. This baseline uses NumPy/pandas and exactly two assays.
@@ -227,11 +230,27 @@ Declared raw RNA counts must be nonnegative integers with count-generation
 provenance and positive library totals; the baseline uses log2(CPM+1).
 Declared protein/metabolite log2 intensities are left unchanged. Feature
 namespaces and annotation releases must be declared. Missing/nonfinite values
-are rejected, not universally zero-imputed. Constant features are rejected.
+are rejected, not universally zero-imputed. Constant mapped features are rejected;
+constant unmapped features are reported without blocking other valid pairs.
 A supplied one-to-one feature map identifies pairs; no automatic biological
-mapping is inferred. `np.corrcoef` computes a descriptive Pearson correlation
+mapping is inferred. Shared `stable_pearson` computes a descriptive Pearson correlation
 across matched samples for each mapped pair. There are no inferential p-values,
 prediction scores or claims of causal regulation.
+
+Require nonempty feature maps, unique mapping columns and all required fields
+before access. Whitespace-only declarations and mixed-type identifiers fail
+controlled validation. Legitimate synchronized assay/metadata reordering is valid.
+Declare `count_universe: complete_supplied_matrix` and nonblank normalization_scope;
+all supplied RNA rows contribute before pair selection. Report exact denominators
+and their source; external denominators/preselected universes are unsupported.
+Counts and totals over 2^53-1 fail the supported exact-integer numerical scope.
+Power-of-two scaling and compensated sums prevent the observed extreme-intensity
+overflow. Mapped constants, unreliable near-constants and arithmetic warnings
+reject the entire computation; no undefined pair is replaced with zero.
+Reports distinguish matched specimens/subjects, repeats, timepoints and partition
+counts. All matched partitions contribute; no predictive evaluation is performed.
+See the [dated investigation](maintainer-reviews/2026-11-24-multiomics-review.md)
+for historical values, defects, reference calculations and review limitations.
 
 ### Reproduce, evidence and negative controls
 
@@ -279,7 +298,7 @@ multiple people or environments are involved.
 |---|---|---|---|---|---|---|
 | RNA-seq | NOT_REVIEWED | | | | | |
 | Metabolic modeling | MAINTAINER_SELF_REVIEW_REPORTED; not independent | 2026-11-24 | Abhignan Vajjala | Codespaces Linux/Python 3.12.3; 98a9456, package 0.2.2 | Original artifacts preserved in Codespaces; hashes unavailable locally; see dated review | External review and biological validation incomplete |
-| Multi-omics | NOT_REVIEWED | | | | | |
+| Multi-omics | MAINTAINER_SELF_REVIEW_REPORTED; not independent | 2026-11-24 | Abhignan Vajjala | Codespaces Linux/Python 3.12.3, NumPy 2.2.6/pandas 2.2.3/SciPy 1.15.3; 98a9456, package 0.2.2 | Supplied baseline/adversarial observations; original artifact hashes unavailable locally; see dated review | External review, real-data and biological validation incomplete |
 
 - [ ] Reproduced commands and inspected actual artifacts, warnings and failures.
 - [ ] Challenged biological units, identity, contrasts, confounding and leakage.

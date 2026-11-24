@@ -46,6 +46,8 @@ def multiomics_example(output):
             "namespace": "synthetic_gene",
             "reference": "synthetic-v1",
             "count_generation": "Poisson seed731",
+            "count_universe": "complete_supplied_matrix",
+            "normalization_scope": "All four synthetic generated RNA features",
         },
         "protein": {
             "scale": "log2_intensity",
@@ -57,6 +59,11 @@ def multiomics_example(output):
     feature_map = pd.DataFrame({"rna": matrices["rna"].index, "protein": matrices["protein"].index})
     # Actual files are loaded again to exercise the normal input entry point.
     inputs = []
+    feature_path = output / "feature-map.csv"
+    feature_map.to_csv(feature_path, index=False)
+    declaration_path = output / "declarations.json"
+    write_json(declaration_path, declarations)
+    inputs.extend([feature_path, declaration_path])
     for name in matrices:
         for suffix, frame in (("matrix", matrices[name]), ("mapping", maps[name])):
             path = output / f"{name}-{suffix}.csv"

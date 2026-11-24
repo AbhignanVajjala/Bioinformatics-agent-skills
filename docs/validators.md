@@ -24,6 +24,13 @@ No patient or subject values are printed.
 
 Count configuration requires `scale: raw_counts`, `organism`, `reference`
 and `count_generation`. These are declared provenance and must be verified
+upstream. Counts and exact integer library sums must be <=2^53-1; larger inputs
+are outside the supported binary64 count scope and fail before floating summation.
+Matrix labels must be homogeneous nonblank strings or finite numeric labels;
+mixed-type labels are rejected without coercion. Real finite values are required
+and complex observations cannot be silently cast.
+These gates do not authenticate the declared assay or its count universe.
+Provenance must be verified
 upstream. Sample matching rejects a permuted sheet by default. Configuration
 `allow_reorder: true` returns metadata row positions for an explicit in-memory
 order. Replication configuration accepts `paired: true` for one specimen per

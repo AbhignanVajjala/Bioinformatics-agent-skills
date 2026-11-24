@@ -6,13 +6,12 @@ from pathlib import Path
 
 import numpy as np
 
+from bioskills.omics import cross_view_analysis  # noqa: F401 - public compatibility import
 from bioskills.science import (
     ScientificValidationError,
-    reconcile_omics,
     require,
     solve_model,
     toy_model,
-    validate_matrix,
 )
 
 
@@ -234,105 +233,5 @@ def _metabolic_recipe(output: Path, evidence):
             "Arbitrary toy flux units and synthetic GPRs",
             "Steady-state predictions require biological validation",
             "Warnings and cobra logging are scoped evidence, not a biological quality certificate",
-        ],
-    }
-
-
-def cross_view_analysis(matrices, mappings, declarations, feature_map):
-    """Descriptive matched-feature association after declared assay transformations.
-
-    The finite complete-case policy rejects missing values. No imputation or
-    supervised fit is performed, and no prediction performance is reported.
-    """
-    require(
-        set(declarations) == set(matrices) and len(matrices) == 2,
-        "modalities",
-        "This baseline supports exactly two declared assays.",
-    )
-    prepared_maps = {}
-    for name, mapping in mappings.items():
-        require(
-            "timepoint" in mapping and mapping.timepoint.notna().all(),
-            "timepoint",
-            "Declare timepoint for each specimen.",
-        )
-        require(mapping.specimen_id.is_unique, "duplicate_specimen", "Duplicate specimen.")
-        prepared_maps[name] = mapping.copy()
-    aligned, audit = reconcile_omics(matrices, prepared_maps)
-    names = list(matrices)
-    timepoints = {}
-    transformed = {}
-    for name in names:
-        mapping = mappings[name].set_index("specimen_id")
-        for specimen, time in mapping.timepoint.items():
-            require(
-                specimen not in timepoints or timepoints[specimen] == time,
-                "timepoint_mismatch",
-                "Cross-assay timepoints disagree.",
-            )
-            timepoints[specimen] = time
-        declaration = declarations[name]
-        require(
-            declaration.get("namespace") and declaration.get("reference"),
-            "namespace",
-            "Declare feature namespace and annotation release.",
-        )
-        values = validate_matrix(aligned[name])
-        scale = declaration.get("scale")
-        if scale == "raw_counts":
-            require(
-                (values >= 0).all() and (values == np.floor(values)).all(),
-                "count_values",
-                "RNA count declaration contradicts values.",
-            )
-            require(
-                declaration.get("modality") == "rna" and declaration.get("count_generation"),
-                "count_provenance",
-                "RNA count-generation provenance required.",
-            )
-            totals = values.sum(axis=0)
-            require((totals > 0).all(), "empty_library", "Zero library.")
-            transformed[name] = np.log2(1 + values / totals * 1e6)
-        elif scale == "log2_intensity":
-            require(
-                declaration.get("modality") in {"protein", "metabolite"},
-                "modality_scale",
-                "Log intensity baseline requires protein or metabolite assay.",
-            )
-            transformed[name] = values.copy()
-        else:
-            raise ScientificValidationError("scale: Unsupported or ambiguous assay scale.")
-        require((transformed[name].std(axis=1) > 0).all(), "constant_feature", "Constant feature.")
-    require(set(feature_map) == set(names), "feature_map", "Explicit cross-view mapping required.")
-    require(
-        not feature_map.isna().any().any() and all(feature_map[name].is_unique for name in names),
-        "feature_map",
-        "One-to-one known synthetic mapping required for this baseline.",
-    )
-    rows = []
-    for pair in feature_map.to_dict("records"):
-        for name in names:
-            require(pair[name] in aligned[name].index, "feature_map", "Unmapped feature.")
-        left, right = (transformed[name][aligned[name].index.get_loc(pair[name])] for name in names)
-        rows.append({**pair, "pearson_r": float(np.corrcoef(left, right)[0, 1])})
-    return {
-        "analysis_status": "EXECUTED",
-        "method": "descriptive cross-view Pearson association",
-        "audit": audit,
-        "correlations": rows,
-        "declarations": declarations,
-        "missingness_policy": "Reject missing/nonfinite values before analysis",
-        "transformations": {
-            name: (
-                "log2(CPM+1)"
-                if declarations[name]["scale"] == "raw_counts"
-                else "declared log2 intensity unchanged"
-            )
-            for name in names
-        },
-        "limitations": [
-            "No imputation, inference, MOFA2, SNF or prediction model executed",
-            "Pearson association is descriptive and depends on the supplied mapping",
-            "Independent biological identity is not established by metadata",
         ],
     }

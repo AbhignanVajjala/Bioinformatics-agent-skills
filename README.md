@@ -82,6 +82,7 @@ executes SBML round-trip, FBA/pFBA/FVA, gene versus reaction knockouts and
 temporary constraint changes on a synthetic model. Outputs include the model,
 FVA/deletion tables and reports covering residuals, solver statuses and restoration.
 [Tests](tests/test_domain_recipes.py) include infeasible/unbounded controls.
+The [Phase 5 maintainer review](docs/maintainer-reviews/2026-11-24-metabolic-model-review.md) documents the two-compartment correction and scoped self-review, with AI assistance. Independent review remains incomplete.
 Predicted flux does not measure cellular flux, demonstrate overexpression or
 prove an intervention.
 

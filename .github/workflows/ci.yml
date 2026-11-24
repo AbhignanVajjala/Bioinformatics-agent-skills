@@ -22,6 +22,7 @@ jobs:
       - name: Require exactly one published ZIP
         run: python -c "import pathlib, subprocess; expected = ['Bioinformatics-Agent-Skills-Complete.zip']; assert sorted(p.name for p in pathlib.Path('.').glob('*.zip')) == expected; assert subprocess.check_output(['git', 'ls-files', '*.zip'], text=True).splitlines() == expected"
       - run: pytest -q --junitxml=artifacts/pytest.xml
+      - run: pytest -q tests/test_metabolic_structure.py --junitxml=artifacts/metabolic-structure.xml
       - run: python examples/bulk-rnaseq/run.py --output artifacts/bulk-rnaseq
       - run: python examples/multiomics/run.py --output artifacts/multiomics
       - run: python examples/metabolic-modeling/run.py --output artifacts/metabolic-modeling

@@ -2,8 +2,8 @@
 
 This guide supports a human maintainer's own reproduction and methodological
 challenge. It does not record that Abhignan Vajjala or an independent reviewer
-has completed that work. All human completion fields below are **NOT_REVIEWED**.
-The scientific implementations and their assertions are unchanged by this guide.
+has completed that work. Only the metabolic row now records a scoped maintainer self-review, as supplied in Phase 5. Other human completion fields remain **NOT_REVIEWED**.
+The Phase 5 metabolic correction and its new automated tests are distinct from the supplied maintainer observations.
 
 ## Preparation and evidence discipline
 
@@ -126,6 +126,9 @@ clinical result. Unmeasured confounding and model adequacy still need review.
 
 ## Workflow 2: constraint-based metabolic modeling
 
+See the [dated maintainer investigation](maintainer-reviews/2026-11-24-metabolic-model-review.md). The corrected base has two metabolites and three reactions; the domain adds PRODUCT for four reactions. Named e/c compartments distinguish EX_a from intracellular demands. pFBA total flux is 30 (including transport), with biomass ten; FVA90 ranges are EX_a [-10,-9], TRANSPORT [9,10], BIOMASS [9,10], PRODUCT [0,1]. Uptake seven/growth four gives product three. Scoped warning evidence and knockout-controls.csv supplement numerical checks. validate_toy_structure is fixture-specific, not a general biological-model validator.
+
+
 ### Entry points and procedure
 
 [Domain implementation](../src/bioskills/domain_workflows.py): `metabolic_recipe`
@@ -137,8 +140,7 @@ pandas. External scientific libraries are installed, not vendored in the ZIP.
 The recipe builds an explicitly synthetic model, adds a product reaction and
 an OR gene rule for biomass, writes SBML/FBC and reads it back. It records
 reaction/metabolite/gene/compartment inventory, objective context, exchanges,
-`model.medium` and Python parsing warnings. Library logging can contain warnings
-not captured by Python's warnings mechanism.
+`model.medium` and Python parsing warnings. The report now captures scoped COBRApy logging and Python warnings with stage/expected-control labels; parsing_warnings remains a loading-only compatibility field.
 
 `solve_model` requires a nonzero objective and finite ordered bounds and checks
 actual optimal status. `check_fba_status` additionally requires finite fluxes
@@ -159,7 +161,7 @@ Medium uptake restricted to five yields growth five.
 
 All perturbations use `with model:` and the final medium and optimum are checked
 against baseline. An empty medium with forced positive growth is infeasible.
-A deliberately open source/uncapped drain is unbounded; COBRApy may raise an
+A deliberately open source, uncapped transport and uncapped biomass drain are unbounded; COBRApy may raise an
 optimization exception, so the actual solver status is retained and interpretation
 rejected. An exception or solver label must not become a fabricated flux result.
 
@@ -276,7 +278,7 @@ multiple people or environments are involved.
 | Workflow | Review status | Actual execution date | Human reviewer | Environment and source revision | Findings and artifact hashes | Unresolved issues |
 |---|---|---|---|---|---|---|
 | RNA-seq | NOT_REVIEWED | | | | | |
-| Metabolic modeling | NOT_REVIEWED | | | | | |
+| Metabolic modeling | MAINTAINER_SELF_REVIEW_REPORTED; not independent | 2026-11-24 | Abhignan Vajjala | Codespaces Linux/Python 3.12.3; 98a9456, package 0.2.2 | Original artifacts preserved in Codespaces; hashes unavailable locally; see dated review | External review and biological validation incomplete |
 | Multi-omics | NOT_REVIEWED | | | | | |
 
 - [ ] Reproduced commands and inspected actual artifacts, warnings and failures.
@@ -286,6 +288,6 @@ multiple people or environments are involved.
 - [ ] Recorded qualifications relevant to the review, scope and actual independence.
 - [ ] Recorded discrepancies and unresolved issues; no automatic promotion to validated.
 
-Human methodological review and independent biological validation remain
+Independent human methodological review and independent biological validation remain
 incomplete. See [scientific evidence](scientific-evidence.md) and
 [development transparency](development-and-ai-assistance.md).

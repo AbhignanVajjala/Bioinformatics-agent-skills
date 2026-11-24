@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import warnings
 from pathlib import Path
 
 import numpy as np
@@ -50,6 +49,16 @@ def check_fba_status(model, solution, *, tolerance=1e-7):
 
 
 def metabolic_recipe(output: Path):
+    from bioskills.metabolic import metabolic_evidence
+
+    with metabolic_evidence() as evidence:
+        with evidence.at("execution"):
+            report = _metabolic_recipe(output, evidence)
+    report["warning_evidence"] = evidence.events
+    return report
+
+
+def _metabolic_recipe(output: Path, evidence):
     """SBML round trip, GPR-aware perturbations and feasibility controls on a toy."""
     import cobra
     from cobra.flux_analysis import flux_variability_analysis, pfba, single_gene_deletion
@@ -63,11 +72,22 @@ def metabolic_recipe(output: Path):
     product.bounds = (0, 1000)
     product.add_metabolites({model.metabolites.a_c: -1})
     model.add_reactions([product])
+    from bioskills.metabolic import validate_toy_structure
+
+    structure_before = validate_toy_structure(model, product=True)
+    original_bounds = {r.id: r.bounds for r in model.reactions}
     file = output / "synthetic-model.xml"
     write_sbml_model(model, str(file))
-    with warnings.catch_warnings(record=True) as recorded:
-        warnings.simplefilter("always")
+    with evidence.at("sbml-load"):
         model = read_sbml_model(str(file))
+    with evidence.at("boundary-classification"):
+        structure_after = validate_toy_structure(model, product=True)
+    require(structure_before == structure_after, "roundtrip", "SBML structure changed.")
+    require(
+        model.reactions.BIOMASS.gene_reaction_rule == "synthetic_g1 or synthetic_g2",
+        "roundtrip",
+        "SBML GPR changed.",
+    )
     model.solver = "glpk"
     baseline = solve_model(model)
     baseline_check = check_fba_status(model, baseline)
@@ -98,13 +118,17 @@ def metabolic_recipe(output: Path):
                 {"minimum_growth": minimum_growth, "product": solve_model(model).objective_value}
             )
     with model:
+        model.medium = {"EX_a": 7}
+        model.reactions.BIOMASS.lower_bound = 4
+        model.objective = "PRODUCT"
+        uptake7_product = solve_model(model).objective_value
+    with model:
         model.medium = {"EX_a": 5}
         restricted = solve_model(model).objective_value
     with model:
         model.medium = {}
         model.reactions.BIOMASS.lower_bound = 1
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore")
+        with evidence.at("negative-control-infeasible"):
             infeasible = model.optimize(raise_error=False)
         try:
             check_fba_status(model, infeasible)
@@ -115,9 +139,9 @@ def metabolic_recipe(output: Path):
     with model:
         # A deliberately invalid open source and uncapped drain demonstrate unbounded LP behavior.
         model.reactions.EX_a.lower_bound = -float("inf")
+        model.reactions.TRANSPORT.upper_bound = float("inf")
         model.reactions.BIOMASS.upper_bound = float("inf")
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore")
+        with evidence.at("negative-control-unbounded"):
             try:
                 unbounded = model.optimize(raise_error=False)
             except cobra.exceptions.OptimizationError:
@@ -131,7 +155,40 @@ def metabolic_recipe(output: Path):
             pass
         else:
             raise AssertionError("Unbounded solution was interpreted")
+    knockout_controls = []
+    for label, genes, reaction in (
+        ("baseline", [], None),
+        ("single_g1", ["synthetic_g1"], None),
+        ("single_g2", ["synthetic_g2"], None),
+        ("double_gene", ["synthetic_g1", "synthetic_g2"], None),
+        ("biomass_reaction", [], "BIOMASS"),
+    ):
+        with model:
+            for gene in genes:
+                model.genes.get_by_id(gene).knock_out()
+            if reaction:
+                model.reactions.get_by_id(reaction).knock_out()
+            solution = solve_model(model)
+            knockout_controls.append(
+                {
+                    "control": label,
+                    "perturbation_type": "reaction"
+                    if reaction
+                    else ("gene" if genes else "baseline"),
+                    "status": solution.status,
+                    "predicted_biomass_flux": float(solution.fluxes.BIOMASS),
+                }
+            )
+    import pandas as pd
+
+    pd.DataFrame(knockout_controls).to_csv(output / "knockout-controls.csv", index=False)
     restored = solve_model(model).objective_value
+    validate_toy_structure(model, product=True)
+    require(
+        {r.id: r.bounds for r in model.reactions} == original_bounds,
+        "restoration",
+        "Reaction bounds changed.",
+    )
     require(
         model.medium == medium and np.isclose(restored, baseline.objective_value),
         "restoration",
@@ -152,7 +209,13 @@ def metabolic_recipe(output: Path):
             "genes": len(model.genes),
             "compartments": model.compartments,
         },
-        "parsing_warnings": [str(w.message) for w in recorded],
+        "parsing_warnings": [
+            event["message"] for event in evidence.events if event["stage"] == "sbml-load"
+        ],
+        "structure": structure_after,
+        "report_version": 2,
+        "knockout_controls": knockout_controls,
+        "uptake7_minimum_growth4_product": float(uptake7_product),
         "medium": medium,
         "exchange_bounds": {r.id: list(r.bounds) for r in model.exchanges},
         "fba": baseline_check,
@@ -170,7 +233,7 @@ def metabolic_recipe(output: Path):
         "limitations": [
             "Arbitrary toy flux units and synthetic GPRs",
             "Steady-state predictions require biological validation",
-            "SBML warnings captured via Python warnings; library logging may be separate",
+            "Warnings and cobra logging are scoped evidence, not a biological quality certificate",
         ],
     }
 

@@ -2,6 +2,15 @@
 
 ## Phase 8 consolidated scientific corrections — 2026-11-24
 
+Implementation **f2d2ba7** passed hosted **557 Python tests/six documented skips**,
+all targeted regressions and fresh Windows/Linux installations including native
+metabolic examples. Pinned R passed **18 original +125 Phase 7 checks**, followed
+by **five genuine cross-skill integration tests with zero skips**. Hosted
+deterministic cases: **7 PASS/5 NOT_RUN**. Final documentation-head CI,
+publication and archive verification are recorded in
+[PR #8](https://github.com/AbhignanVajjala/Bioinformatics-agent-skills/pull/8).
+Local native-runtime failures remain separately recorded below.
+
 Version 0.2.6 corrects checked pseudobulk arithmetic/unit reporting, ORA input
 identity and prespecified eligibility/BH accounting, bounded format parsing and
 source-specific public metadata response validation/provenance. Four dated

@@ -7,6 +7,36 @@ merged Phase 7 **71a52067575508c21c2cc2722815b65a203254c3** in the existing loca
 Windows checkout. Source/configuration work is complete; publication is gated
 on successful hosted validation. No new model sessions or benchmark expansion.
 
+### Hosted validation of implementation f2d2ba7
+
+The [offline PR run](https://github.com/AbhignanVajjala/Bioinformatics-agent-skills/actions/runs/45422895348)
+passed **557 Python tests / 6 skips / 0 failures** (563 collected). Four skips
+are Windows-only preflight cases and two native R integration cases execute in
+the separate R job. Two full-suite warnings and one targeted metabolic warning
+come from preserved deliberate infeasible/unbounded controls, not new overflow.
+Targeted metabolic **16**, RNA readiness **30**, consolidated integrity
+**165/two native skips**, and multi-omics **133/two deselected** passed.
+All affected examples and three metadata dry-run plans passed; deterministic
+cases returned **7 PASS / 5 NOT_RUN**, zero agent sessions. Both fresh Windows
+and Linux extracted installations passed, including actual metabolic execution
+and all seven validator help interfaces. These successes do not erase the local
+native runtime failures documented below.
+
+The [pinned R PR run](https://github.com/AbhignanVajjala/Bioinformatics-agent-skills/actions/runs/45422895766)
+passed **18 original +125 Phase 7 native R checks**, zero failures. Its subsequent
+Python integration step passed **all five tests, zero skips**, including exact
+pseudobulk-to-R import and actual native DE output-to-ORA identifiers. No R
+method/assertion was changed. Downloaded native evidence artifact14935357606:
+**fd0f5243f9f603a8de2add975f0002bf94251fa9b0d210f1b4488e752b90ca44**;
+its 18/125 summaries and five-test JUnit were read and verified. Raw artifact
+stays under ignored artifacts/phase8. CI artifact retention remains limited.
+
+Universal archive: **490139 bytes**, 17 skills/132 files, SHA-256
+**a4980e2041ff9b5d108cc462c88fbcb6ed30d0cd0065c613c8062480d1132887**.
+Final documentation-head checks, merge commit and published archive verification
+are recorded in [PR #8](https://github.com/AbhignanVajjala/Bioinformatics-agent-skills/pull/8).
+Merge requires every final-head check to pass; no protection bypass or force push.
+
 Four dated maintainer reviews preserve the supplied November 24 Codespaces
 observations at 98a9456132fb474996f4c5d566065925ed79551b: combined 100 checks
 (44 PASS/35 INVESTIGATE/21 ASSESS), not accuracy or distinct defect counts.

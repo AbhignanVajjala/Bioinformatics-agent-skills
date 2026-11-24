@@ -72,3 +72,31 @@ def test_invalid_timestamp_rejected():
     instance["started_at"] = "yesterday"
     with pytest.raises(jsonschema.ValidationError):
         validate("analysis_run", instance)
+
+
+@pytest.mark.parametrize(
+    "status", ["reported", "explicitly_unreported", "absent", "conflicting", "inapplicable"]
+)
+def test_extraction_evidence_states_are_distinct(status):
+    field = {
+        "value": "Human" if status == "reported" else None,
+        "status": status,
+        "evidence": [],
+        "reason": "Task-specific missingness or inapplicability reason",
+    }
+    if status in {"reported", "explicitly_unreported", "conflicting"}:
+        field["evidence"] = [{"locator": "sentence 1", "quote": "Synthetic source span"}]
+    if status == "conflicting":
+        field["evidence"].append({"locator": "correction", "quote": "Conflicting synthetic span"})
+    record = {"fields": {"example": field}}
+    validate("extraction_record", record)
+    if status == "reported":
+        field["value"] = None
+    elif status == "absent":
+        field["evidence"] = [{"locator": "invented", "quote": "fabricated absence quotation"}]
+    elif status in {"explicitly_unreported", "conflicting"}:
+        field["evidence"].pop()
+    else:
+        field["reason"] = None
+    with pytest.raises(jsonschema.ValidationError):
+        validate("extraction_record", record)

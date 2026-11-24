@@ -45,6 +45,8 @@ DOCUMENTS = (
     "docs/maintainer-reviews/2026-11-24-enrichment-review.md",
     "docs/maintainer-reviews/2026-11-24-file-formats-review.md",
     "docs/maintainer-reviews/2026-11-24-public-metadata-review.md",
+    "docs/maintainer-reviews/2026-11-24-instruction-behavioral-review.md",
+    "docs/behavioral-evaluation.md",
 )
 BINARY_EXTENSIONS = {".png", ".jpg", ".jpeg", ".gif", ".pdf", ".npy", ".npz"}
 RESOURCE_EXTENSIONS = {
@@ -72,6 +74,7 @@ TOOLKIT_TREES = (
     ("recipes/rnaseq", {".R", ".json"}),
     ("schemas", {".json"}),
     ("templates", {".json", ".md"}),
+    ("evals/benchmarks", {".json"}),
 )
 REQUIRED_RESOURCES = (
     "src/bioskills/omics.py",
@@ -88,6 +91,8 @@ REQUIRED_RESOURCES = (
     "src/bioskills/inputs.py",
     "src/bioskills/retrieval.py",
     "examples/expanded/run.py",
+    "examples/pseudobulk-to-enrichment/run.py",
+    "evals/benchmarks/phase9-v1.json",
     "recipes/rnaseq/run.R",
     "recipes/rnaseq/validation.R",
     "recipes/rnaseq/test-validation.R",

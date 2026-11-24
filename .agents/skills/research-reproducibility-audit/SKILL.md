@@ -22,6 +22,9 @@ Require source revision or source hashes, original input manifests, environment/
 2. Inspect input availability separately from authority: an accession may resolve but not identify the exact release; a private dataset may be legitimate but unavailable to the reviewer. Report these as distinct limitations.
 3. Recreate the declared environment using pinned versions or record where resolution is not exact. Capture interpreter, scientific packages, solver and operating system. Floating container tags and unversioned databases are reproducibility risks.
 4. Execute the documented command in a clean output directory. Record start/end timestamps, exit status, commands and hashes. A nonzero command must not be hidden by a logging pipeline. Never overwrite user data to reproduce a run.
+   Preserve failed-run evidence and distinguish cached artifacts from newly
+   produced outputs. To reproduce the original run, recover its exact inputs;
+   successful execution on changed inputs is a different run, not reproduction.
 5. Compare expected invariant outcomes. Use exact hashes for deterministic text/data, numerical tolerances justified by method/solver for floating point, and label-equivalence rather than raw order for arbitrary cluster labels. Predetermine tolerances rather than widen them until tests pass.
 6. Audit preprocessing, exclusions, random seeds, feature selection, fold assignment and multiple-testing universe. Confirm train/test separation includes imputation, scaling and tuning.
 7. Report technical repeatability, independent reproducibility and scientific validity separately. Reviewer access to the same cached output is not a rerun; a shared environment limits independence.

@@ -22,9 +22,14 @@ Collect the exact failing command, exit status, input hashes, environment/solver
 2. Reproduce the failure on the smallest subset that preserves the scientific dependency. For pairing, keep complete donor pairs; for rank deficiency, retain the design structure; for metabolic infeasibility, preserve the constraints causing it.
 3. Test one explicit hypothesis at a time. Examples: count columns and metadata order differ; a covariate duplicates treatment; proteomics uses log2 units while another table has raw intensity; exchange lower bounds close the carbon source.
 4. Inspect data types, dimensions, missingness, duplicate IDs, units and reference versions before changing algorithms. For regression check rank and residual degrees of freedom. For solvers inspect status, feasibility tolerances, objective and bounds before reading flux values.
+   For count corruption, check exact input, accumulator and output arithmetic before
+   conversion; a successful exit or absent warning cannot exclude silent overflow.
 5. Apply the smallest supported correction. Save a transformation/mapping record; do not silently relabel samples, round TPM to counts, drop awkward subjects or relax constraints solely to obtain the desired outcome.
 6. Add a regression case for the original failure plus a valid control. Rerun affected downstream stages with new provenance and compare intended invariants, not only exit codes.
 7. Explain scientific ramifications: changing sample mapping or a design formula changes the estimand; fixing a file delimiter may not. Mark previous outputs invalid where needed.
+   Numerical corruption invalidates the affected aggregate and every dependent
+   result until recomputed and verified. Preserve the failed inputs/logs and test
+   both the original failure and a valid small control; rejection alone is insufficient.
 
 ## Validation and stops
 A disappearing exception is insufficient if the scientific failure remains. Halt when repair requires unverifiable identities, irrecoverable confounding or an unsupported method. Escalate a disagreement about biological plausibility rather than deleting unusual but valid observations. Never retry unchanged operations indefinitely or disable TLS/checksum verification to obtain dependencies.

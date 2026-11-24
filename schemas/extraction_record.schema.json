@@ -1,0 +1,180 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Scoped extraction record; structure does not certify source grounding",
+  "type": "object",
+  "required": [
+    "fields"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "fields": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "value",
+          "status",
+          "evidence",
+          "reason"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "status": {
+            "enum": [
+              "reported",
+              "explicitly_unreported",
+              "absent",
+              "conflicting",
+              "inapplicable"
+            ]
+          },
+          "reason": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "locator",
+                "quote"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "locator": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "quote": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "status": {
+                  "const": "reported"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "value": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "evidence": {
+                  "minItems": 1
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "status": {
+                  "const": "explicitly_unreported"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "value": {
+                  "type": "null"
+                },
+                "evidence": {
+                  "minItems": 1
+                },
+                "reason": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "status": {
+                  "const": "absent"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "value": {
+                  "type": "null"
+                },
+                "evidence": {
+                  "maxItems": 0
+                },
+                "reason": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "status": {
+                  "const": "conflicting"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "value": {
+                  "type": "null"
+                },
+                "evidence": {
+                  "minItems": 2
+                },
+                "reason": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "status": {
+                  "const": "inapplicable"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "value": {
+                  "type": "null"
+                },
+                "reason": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

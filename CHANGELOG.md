@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.2.7 — instruction and behavioral evidence integrity (2026-11-24)
+
+Refines four instruction skills for specific evidence gaps, extraction missingness,
+checked arithmetic and faithful reproduction. Preserves the frozen 40-turn
+maintainer benchmark separately from provisional criterion-level review. Adds
+versioned 68-scenario trigger coverage plus ten compound held-out preparations,
+paired repeats, requested-configuration records, live progress, preserved partial
+results, strict fresh-session resume and blinded grading/export tooling. Adds a
+permanent 600-gene/48-cell/12-donor pseudobulk-to-native-DE-to-ORA fixture checking
+both R filtering exports, conservation, eligibility and provenance. Keeps Linux
+live execution blocked pending equivalent isolation proof. No new model benchmark,
+new skill, clinical validation or established effectiveness claim. Retains prior
+scientific fixes and the single universal archive with updated metadata/checksum.
+
 ## 0.2.6 — consolidated scientific domain corrections (2026-11-24)
 
 Checks exact pseudobulk arithmetic and conservation before int64 export, reports

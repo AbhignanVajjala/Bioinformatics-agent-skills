@@ -2,6 +2,14 @@
 
 ## Phase 6 multi-omics scientific correction — 2026-11-24
 
+Supported hosted Python validation at e90d11c passed 360 tests/four Windows-only
+skips, 133 targeted multi-omics checks and 16 metabolic regressions; deterministic
+evaluations returned seven PASS/five NOT_RUN. Fresh Windows/Linux extraction and
+normal installation both executed multi-omics and metabolic workflows. Local
+archive tests passed 56/one symlink skip. The final-head R/Bioconductor check
+remains separately required; final results and publication are linked from
+[PR #6](https://github.com/AbhignanVajjala/Bioinformatics-agent-skills/pull/6).
+
 Version 0.2.4 adds controlled metadata/feature-map validation, shared stable
 descriptive Pearson arithmetic, numerical failure evidence, exact count
 denominators with explicit normalization-universe declarations, and honest

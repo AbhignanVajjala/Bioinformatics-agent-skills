@@ -2,6 +2,34 @@
 
 ## Phase 6 multi-omics validation correction — 2026-11-24
 
+Supported hosted evidence at implementation commit
+`e90d11cad7b2713c8de4f72e5ab557df881e73a3`:
+[Python/installation run](https://github.com/AbhignanVajjala/Bioinformatics-agent-skills/actions/runs/45353784858)
+passed **360 tests, four Windows-only preflight skips, zero failures**. Its two
+warnings come from deliberately infeasible metabolic controls, not multi-omics
+overflow. Separate targeted runs passed **133 multi-omics checks** and all
+**16 metabolic regressions** (one deliberate infeasibility warning). Deterministic
+evaluations returned **7 PASS / 5 NOT_RUN**. Both examples for each of multi-omics
+and metabolism executed. Clean standalone archive installation/execution passed
+on Windows (Python 3.12.10) and Linux (Python 3.12.16), including all seven CLI
+help commands, dependency checks, both multi-omics paths, cross-view schema and
+both metabolic workflows. The local final archive suite passed **56 tests with
+one unavailable-symlink skip**. These supported executions do not erase the
+local native-runtime failures recorded below.
+
+Universal release 0.2.4: **17 skills, 119 files, 372,896 bytes**. SHA-256:
+`9a058f95c7b0177e4253e35cef0e7800c5a2919498b841b62d5ca1a239c57664`.
+The existing public URL is preserved; the archive includes the new shared module,
+cross-view schema/template and dated review. The benchmark score hash remains
+`fcdfd5c63f98d35a3845678d49dd1725c3f8a41866f245a756fe8702106de916`.
+
+The unchanged pinned R/Bioconductor job is a separate required execution;
+Python success does not establish its result. Final-head checks and publication
+are recorded in [PR #6](https://github.com/AbhignanVajjala/Bioinformatics-agent-skills/pull/6),
+which must remain unmerged unless **all** required jobs succeed. Its final
+description records actual R outcomes and final check links. This evidence-only
+follow-up leaves the implementation, archive and its checksum unchanged.
+
 Baseline: merged Phase 5 `d8119c5167b98e92a6929596dc294b2acc49e893`.
 Branch: `phase6-multiomics-validation-correction`; release 0.2.4, 17 skills,
 seven public validators. Corrects MO-01–08, the MO-09 unused-constant limitation
@@ -57,7 +85,7 @@ dynamic ranges reject rather than inventing correlations. External denominators,
 advanced integration, inference and prediction remain unsupported/NOT_RUN.
 
 Hosted Linux scientific regression, Windows/Linux isolated archive installations
-and the unchanged pinned R/Bioconductor workflow must pass before merging.
+and the unchanged pinned R/Bioconductor workflow must pass on the final head before merging.
 Publication is explicitly authorized by Phase 6; the PR remains gated on actual
 hosted results. No agent benchmark or skill-library expansion was performed.
 

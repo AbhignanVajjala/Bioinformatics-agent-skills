@@ -136,3 +136,32 @@ offline regressions and native R cross-skill lineage checks are reported in
 implementation status. No new model sessions or effectiveness benchmark ran.
 Independent methodological review, real-data calibration, differential-state
 modeling, full format conformance and biological validation remain incomplete.
+
+## Phase 9 instruction-skill behavioral evidence
+
+The [dated maintainer review](maintainer-reviews/2026-11-24-instruction-behavioral-review.md)
+preserves a separate November 24 benchmark at 98a9456: 20 cases, 40 completed
+turns, 19/20 target reads and 30 total reads. All original scientific evaluation
+statuses remain NOT_RUN and activation UNOBSERVABLE. Preliminary unblinded
+AI-assisted adjudication is baseline16 full passes/4 incomplete versus enabled18/2,
+with no observed frozen-rubric critical failures. The original 10-turn Phase 2
+judgments above are unchanged. Neither one-sample comparison establishes general
+or causal skill effectiveness; resolved model/effort and independent human
+adjudication remain unverified.
+
+A separate sanitized criterion review links exact excerpts and missing evidence
+to frozen prompts/responses/criteria and artifact hashes. Four instruction skills
+receive narrow evidence/missingness/debugging/reproduction refinements; six retain
+their scientifically appropriate observed behavior. The [evaluation guide](behavioral-evaluation.md)
+describes 68 new development triggers, ten author-visible held-out preparations,
+blinded exports and strict compatible resume. All post-correction live evaluations
+remain NOT_RUN. Linux/Codespaces execution remains blocked until equivalent
+isolation has been demonstrated; no sandbox weakening is a remedy.
+
+The permanent synthetic interoperability fixture checks 600 exact leading-zero
+gene IDs through both R filtering exports, exact pseudobulk conservation,
+eligibility, Fisher/BH references and downstream provenance. Its new seed is not
+a reconstruction of unavailable original inputs. Manually constructed executable
+interoperability is distinct from autonomous agent orchestration. Computational
+verification and this maintainer self-review do not supply independent biological
+or clinical validation.

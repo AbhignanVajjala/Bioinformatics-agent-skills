@@ -1,5 +1,41 @@
 # Development progress
 
+## Phase 9 instruction and behavioral measurement integrity — 2026-11-24
+
+Version 0.2.7 makes targeted improvements to four instruction skills after
+reviewing all ten. It preserves the original 40-turn behavioral audit and its
+160 turn hashes plus auxiliary evidence; a separate unblinded AI-assisted
+criterion review retains the supplied baseline16/4 and enabled18/2 provisional
+pass/incomplete counts. No new live model session or effectiveness claim.
+
+New versioned fixtures cover all 17 skills with 68 task-specific development
+triggers and ten compound held-out preparations. Availability, reads, relevance,
+adherence, scientific/grounding/critical judgments, efficiency and execution
+remain separate. Repeats, requested configuration, progress, interruption,
+preserved compatible fresh-session resume, blinded exports and evidence-valid
+review records have offline regressions. Linux live operation remains blocked
+pending equivalent isolation proof; Windows MXC restrictions remain intact.
+
+A permanent synthetic pseudobulk-to-native-DE-to-ORA recipe checks exact counts,
+both R filtering exports, eligibility and downstream provenance. Its seed-9421
+600-gene/48-cell/12-donor fixture is new; supplied historical integration outcomes
+are preserved separately. Native R remains unavailable locally. Current local
+GLPK checks execute successfully without changing solver/security policy; earlier
+Phase 8 local failures remain historical evidence.
+
+Local final regression passed **603 tests/five documented skips**, with two
+expected metabolic negative-control warnings. Targeted checks passed **110/two
+native-R skips**; deterministic cases returned **7 PASS/5 NOT_RUN**. Native R
+remains a hosted merge gate.
+
+[Implementation status](implementation-status.md) records exact counts, commands,
+failed attempts, source/evidence hashes, runtime limits and hosted validation as
+it completes. The ZIP/version/catalog/checksum are updated and include scientific
+fixtures and benchmark inputs without raw private reports or development scripts.
+Publication is gated on completed deterministic checks and green hosted CI.
+The proposed post-correction pilot requires separate approval; independently
+sealed cases, blinded human adjudication and biological validation remain pending.
+
 ## Phase 8 consolidated scientific corrections — 2026-11-24
 
 Implementation **f2d2ba7** passed hosted **557 Python tests/six documented skips**,

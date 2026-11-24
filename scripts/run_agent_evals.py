@@ -16,7 +16,18 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import threading
+import time
 import uuid
+
+from agent_benchmark import (
+    attempt_records,
+    decode_json,
+    fingerprint,
+    load_definition,
+    paired_plan,
+    resource_summary,
+)
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -59,7 +70,7 @@ def save_json(path: Path, value: dict) -> None:
 
 def load_inputs(root: Path) -> tuple[dict, dict, dict]:
     sources = {name: (root / name).read_bytes() for name in (*MANIFESTS, RUBRIC)}
-    triggers, scientific = (json.loads(sources[name]) for name in MANIFESTS)
+    triggers, scientific = (decode_json(sources[name]) for name in MANIFESTS)
     cases = {}
     for track, rows in (
         ("trigger", triggers),
@@ -181,22 +192,38 @@ def invoke(
     result = {"command": command, "started_at": now(), "exit_status": None}
     with stdout.open("xb") as out, stderr.open("xb") as err:
         try:
-            completed = subprocess.run(
+            process = subprocess.Popen(
                 command,
                 cwd=cwd,
                 env=env,
-                input=prompt,
-                stdin=subprocess.DEVNULL if prompt is None else None,
+                stdin=subprocess.PIPE if prompt is not None else subprocess.DEVNULL,
                 stdout=out,
                 stderr=err,
-                timeout=timeout,
-                check=False,
             )
-            result["exit_status"] = completed.returncode
-        except subprocess.TimeoutExpired:
-            result["problem"] = f"Timed out after {timeout} seconds."
+            try:
+                process.communicate(input=prompt, timeout=timeout)
+                result["exit_status"] = process.returncode
+            except (subprocess.TimeoutExpired, KeyboardInterrupt) as error:
+                result["interrupted"] = isinstance(error, KeyboardInterrupt)
+                result["timed_out"] = isinstance(error, subprocess.TimeoutExpired)
+                result["problem"] = (
+                    "Interrupted; child termination requested."
+                    if result["interrupted"]
+                    else f"Timed out after {timeout} seconds."
+                )
+                process.terminate()
+                try:
+                    process.communicate(timeout=5)
+                except subprocess.TimeoutExpired:
+                    process.kill()
+                    process.communicate(timeout=5)
+                result["child_exit_status"] = process.returncode
         except OSError as error:
             result["problem"] = f"Could not start process ({type(error).__name__}, {error.errno})."
+        except subprocess.TimeoutExpired:
+            result.update(
+                problem=f"Process startup timed out after {timeout} seconds.", timed_out=True
+            )
     result["ended_at"] = now()
     return result
 
@@ -280,7 +307,7 @@ def actions_in_stream(
             for line_number, line in enumerate(lines, start=1):
                 if not line.strip():
                     continue
-                event = json.loads(line)
+                event = decode_json(line)
                 kind = event["type"]
                 if not isinstance(kind, str):
                     raise ValueError("Invalid event type")
@@ -356,6 +383,7 @@ def execute_case(
     timeout: int,
     *,
     skills_enabled: bool,
+    reasoning_effort: str | None = None,
 ) -> dict:
     env = isolated_env(scratch, codex_home)
     workspace = scratch / "workspace"
@@ -383,6 +411,7 @@ def execute_case(
         "--output-last-message",
         str(final),
         *overrides(workspace),
+        *(["-c", f'model_reasoning_effort="{reasoning_effort}"'] if reasoning_effort else []),
         "-",
     ]
     result = invoke(command, workspace, env, stream, stderr, timeout, prompt)
@@ -392,7 +421,13 @@ def execute_case(
     result.update(observed)
     if result["exit_status"] not in (None, 0):
         problem = "Codex exited unsuccessfully. See stderr and JSONL evidence."
-    result["status"] = "COMPLETED" if result["exit_status"] == 0 and not problem else "FAILED"
+    result["status"] = (
+        "INCOMPLETE"
+        if result.get("interrupted") or result.get("timed_out")
+        else "COMPLETED"
+        if result["exit_status"] == 0 and not problem
+        else "FAILED"
+    )
     result["reason"] = problem
     result["artifacts"] = {
         path.name: digest(path.read_bytes())
@@ -489,11 +524,43 @@ def preflight(
     return steps, None if logged_in else "Dedicated Codex home lacks a verified ChatGPT login."
 
 
+def verify_saved_attempt(row, output, skills):
+    if not row.get("artifact_dir"):
+        return
+    directory = row["artifact_dir"]
+    if not re.fullmatch(r"attempt-[0-9]+", directory):
+        raise ValueError("Invalid saved attempt")
+    for name, expected in row.get("artifacts", {}).items():
+        if name not in {"prompt.txt", "response.txt", "events.jsonl", "stderr.txt"}:
+            raise ValueError("Unexpected saved artifact")
+        path = output / directory / name
+        if path.resolve() != path or digest(path.read_bytes()) != expected:
+            raise ValueError("Modified saved artifact")
+    if row["status"] == "COMPLETED":
+        if set(row["artifacts"]) != {
+            "prompt.txt",
+            "response.txt",
+            "events.jsonl",
+            "stderr.txt",
+        }:
+            raise ValueError("Incomplete completed evidence")
+        cmd = row["command"]
+        parsed = actions_in_stream(
+            output / directory / "events.jsonl",
+            output / directory / "response.txt",
+            cmd[cmd.index("--cd") + 1],
+            skills,
+            skills_enabled=row["mode"] == "skills",
+        )
+        if "problem" in parsed or parsed["thread_id"] != row["thread_id"]:
+            raise ValueError("Unverified saved completion")
+
+
 def inspect_report(report_path: Path, skills: dict, hashes: dict) -> dict:
     """Replay verified saved artifacts without starting Codex or changing the report."""
     raw = report_path.read_bytes()
-    report = json.loads(raw)
-    if report["schema_version"] != 1:
+    report = decode_json(raw)
+    if report["schema_version"] not in (1, 2):
         raise ValueError("Unsupported saved report schema")
     if any(report["input_hashes"].get(name) != hashes[name] for name in (*MANIFESTS, RUBRIC)):
         raise ValueError("Saved manifests or rubric do not match the checkout")
@@ -560,6 +627,21 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--mode", choices=MODES)
     parser.add_argument("--model", help="explicit CLI model identifier for live runs")
     parser.add_argument(
+        "--benchmark",
+        type=Path,
+        help="versioned benchmark definition; default preserves legacy manifests",
+    )
+    parser.add_argument("--split", choices=("development", "heldout", "all"))
+    parser.add_argument("--trials", type=int)
+    parser.add_argument("--seed", type=int)
+    parser.add_argument("--reasoning-effort", choices=("minimal", "low", "medium", "high", "xhigh"))
+    parser.add_argument(
+        "--resume", type=Path, help="resume an interrupted compatible report with fresh sessions"
+    )
+    parser.add_argument(
+        "--progress-interval", type=float, default=10, help="live status interval in seconds"
+    )
+    parser.add_argument(
         "--codex-home", type=Path, help="dedicated ChatGPT-authenticated Codex home"
     )
     parser.add_argument("--codex", default="codex", help="CLI executable name or path")
@@ -567,8 +649,68 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--output-dir", type=Path, default=Path(tempfile.gettempdir()) / "bioskills-evals"
     )
-    args = parser.parse_args(argv)
+    arguments = list(sys.argv[1:] if argv is None else argv)
+    args = parser.parse_args(arguments)
+    resumed = None
+    if args.resume:
+        if not args.execute or args.probe or args.inspect_report:
+            parser.error("--resume requires --execute and cannot inspect or probe")
+        try:
+            resumed = decode_json(args.resume.read_bytes())
+            if resumed["schema_version"] != 2:
+                raise ValueError("Legacy evidence is immutable; start a new experiment")
+            saved = resumed["configuration"]
+            for flag, name in (
+                ("--model", "model"),
+                ("--reasoning-effort", "reasoning_effort"),
+                ("--timeout", "timeout"),
+                ("--trials", "trials"),
+                ("--seed", "seed"),
+                ("--split", "split"),
+            ):
+                if flag in arguments and getattr(args, name) != saved[name]:
+                    raise ValueError("Resume configuration differs from the frozen experiment")
+                setattr(args, name, saved[name])
+            supplied = str(args.benchmark.resolve()) if args.benchmark else None
+            if "--benchmark" in arguments and supplied != saved["benchmark_path"]:
+                raise ValueError("Resume benchmark differs")
+            args.benchmark = Path(saved["benchmark_path"]) if saved["benchmark_path"] else None
+            if any(
+                flag in arguments for flag in ("--case", "--pilot", "--smoke", "--all", "--mode")
+            ):
+                raise ValueError(
+                    "Resume uses the frozen selection/conditions; do not override them"
+                )
+            args.case = saved["case_selection"]
+            args.pilot, args.smoke, args.mode = saved["pilot"], saved["smoke"], saved["mode"]
+            if args.pilot or args.smoke:
+                args.case = None
+        except (OSError, ValueError, KeyError, TypeError):
+            parser.error("Resume needs an intact version-2 report and identical configuration")
+    args.trials = 1 if args.trials is None else args.trials
+    args.seed = 0 if args.seed is None else args.seed
+    args.split = args.split or "development"
+    if args.split != "development" and not args.benchmark:
+        parser.error("--split requires a versioned --benchmark")
     cases, skills, hashes = load_inputs(ROOT)
+    hashes["scripts/agent_benchmark.py"] = digest(
+        Path(__file__).with_name("agent_benchmark.py").read_bytes()
+    )
+    if args.benchmark:
+        if args.pilot or args.smoke:
+            parser.error("Versioned benchmarks cannot use legacy smoke/pilot selectors")
+        try:
+            definition, benchmark_hash = load_definition(
+                args.benchmark, {p.parent.name for p in skills if p.name == "SKILL.md"}
+            )
+        except (OSError, ValueError, KeyError, TypeError):
+            parser.error("Invalid versioned benchmark definition")
+        hashes["benchmark_definition"] = benchmark_hash
+        cases = {
+            case["id"]: ("trigger", case["input"].encode("utf-8"))
+            for case in definition["cases"]
+            if args.split == "all" or case["split"] == args.split
+        }
     if args.inspect_report is not None:
         try:
             evidence = inspect_report(args.inspect_report.resolve(), skills, hashes)
@@ -581,12 +723,16 @@ def main(argv: list[str] | None = None) -> int:
             parser.error(message)
         print(json.dumps(evidence, indent=2))
         return 0
-    if args.timeout < 1:
-        parser.error("--timeout must be positive")
+    if args.timeout < 1 or not 1 <= args.trials <= 100 or args.progress_interval <= 0:
+        parser.error("Positive timeout/progress interval and 1–100 trials required")
     if args.execute and not (
-        (args.case or args.all or args.smoke or args.pilot) and args.model and args.codex_home
+        (args.case or args.all or args.smoke or args.pilot or args.resume)
+        and args.model
+        and args.codex_home
     ):
         parser.error("--execute requires explicit selection, --model and --codex-home")
+    if args.execute and args.benchmark and not args.reasoning_effort:
+        parser.error("Versioned live benchmarks require an explicit --reasoning-effort")
     if args.codex_home is not None:
         args.codex_home = args.codex_home.resolve()
         personal = {Path.home() / ".codex"}
@@ -632,26 +778,93 @@ def main(argv: list[str] | None = None) -> int:
             parser.error(f"Unknown cases: {', '.join(unknown)}")
         cases = {case: cases[case] for case in dict.fromkeys(args.case)}
 
-    run_id = "agent-eval-" + uuid.uuid4().hex
-    output = args.output_dir.resolve() / run_id
-    output.mkdir(parents=True, exist_ok=False)
-    pending = []
+    run_id = resumed["run_id"] if resumed else "agent-eval-" + uuid.uuid4().hex
+    output = args.resume.resolve().parent if resumed else args.output_dir.resolve() / run_id
+    if not resumed:
+        output.mkdir(parents=True, exist_ok=False)
     modes = (args.mode,) if args.mode else (("baseline",) if args.smoke else MODES)
-    if not args.probe:
-        for case_id, (track, prompt) in cases.items():
-            for mode in modes:
-                pending.append(
-                    {
-                        "id": case_id,
-                        "track": track,
-                        "mode": mode,
-                        "status": "NOT_RUN",
-                        "evaluation_status": "NOT_RUN",
-                        "prompt_sha256": digest(prompt),
-                    }
-                )
+    planned = [] if args.probe else paired_plan(cases, modes, args.trials, args.seed)
+    pending = resumed["results"] if resumed else planned
+    configuration = {
+        "model": args.model,
+        "reasoning_effort": args.reasoning_effort,
+        "timeout": args.timeout,
+        "trials": args.trials,
+        "seed": args.seed,
+        "split": args.split,
+        "benchmark_path": str(args.benchmark.resolve()) if args.benchmark else None,
+        "case_selection": list(cases),
+        "pilot": args.pilot,
+        "smoke": args.smoke,
+        "mode": args.mode,
+        "input_hashes": hashes,
+        "skill_hashes": {p.as_posix(): digest(b) for p, b in skills.items()},
+        "platform": sys.platform,
+        "python": sys.version,
+        "windows_version": list(sys.getwindowsversion()) if os.name == "nt" else None,
+        "permission_profile": PROFILE,
+        "network": False,
+        "approval": "never",
+        "authentication_scope_sha256": digest(str(args.codex_home).encode())
+        if args.codex_home
+        else None,
+    }
+    signature = fingerprint(configuration)
+    if resumed:
+        try:
+            if (
+                resumed["configuration_sha256"] != signature
+                or fingerprint(resumed["configuration"]) != signature
+            ):
+                raise ValueError("Source or configuration changed")
+            if len(pending) != len(planned):
+                raise ValueError("Changed selection")
+            for row, plan in zip(pending, planned, strict=True):
+                if row["status"] not in {
+                    "COMPLETED",
+                    "FAILED",
+                    "INCOMPLETE",
+                    "NOT_RUN",
+                    "BLOCKED",
+                    "RUNNING",
+                }:
+                    raise ValueError("Unknown saved status")
+                if any(
+                    row[k] != plan[k] for k in ("id", "mode", "trial", "prompt_sha256", "track")
+                ):
+                    raise ValueError("Changed experiment row")
+                if row["status"] == "FAILED":
+                    raise ValueError(
+                        "Failed turns require a new diagnosed experiment, not an automatic retry"
+                    )
+                if row["status"] == "RUNNING":
+                    raise ValueError(
+                        "Uncheckpointed turn requires orphan-process review and a new experiment"
+                    )
+                for attempt in [row, *row.get("previous_attempts", [])]:
+                    if any(
+                        attempt[k] != row[k]
+                        for k in ("id", "mode", "trial", "prompt_sha256", "track")
+                    ):
+                        raise ValueError("Attempt history belongs to a different experiment row")
+                    verify_saved_attempt(attempt, output, skills)
+        except (OSError, ValueError, KeyError, TypeError, IndexError):
+            parser.error(
+                "Resume rejected: source, configuration, selection or saved evidence is incompatible"
+            )
+        executable = shutil.which(args.codex)
+        if (
+            not executable
+            or not Path(executable).is_file()
+            or resumed.get("codex_executable_sha256") != digest(Path(executable).read_bytes())
+        ):
+            parser.error("Resume rejected: Codex executable bytes changed or cannot be verified")
+        if all(row["status"] == "COMPLETED" for row in pending):
+            print(output / "report.json")
+            print(json.dumps({"summary": resumed["summary"], "blocker": None}))
+            return 0
     report = {
-        "schema_version": 1,
+        "schema_version": 2,
         "run_id": run_id,
         "started_at": now(),
         "host": {
@@ -662,16 +875,70 @@ def main(argv: list[str] | None = None) -> int:
         "provider": "ChatGPT",
         "requested_model": args.model,
         "resolved_model": None,
+        "requested_reasoning_effort": args.reasoning_effort,
+        "resolved_reasoning_effort": None,
+        "configuration_verification": "REQUESTED_ONLY_RESOLVED_CONFIGURATION_UNVERIFIED",
+        "configuration": configuration,
+        "configuration_sha256": signature,
         "timeout_seconds": args.timeout,
         "input_hashes": hashes,
         "skill_hashes": {path.as_posix(): digest(data) for path, data in skills.items()},
         "preflight": [],
         "results": pending,
     }
+    if resumed:
+        report = resumed
+        checkpoint_bytes = args.resume.read_bytes()
+        checkpoint_name = (
+            f"report-before-resume-{len(report.get('resume_history', [])) + 1:03d}.json"
+        )
+        with (output / checkpoint_name).open("xb") as checkpoint_file:
+            checkpoint_file.write(checkpoint_bytes)
+        report.setdefault("resume_history", []).append(
+            {
+                "resumed_at": now(),
+                "source_report_sha256": digest(checkpoint_bytes),
+                "checkpoint_file": checkpoint_name,
+            }
+        )
+        report.pop("blocker", None)
+        report.pop("ended_at", None)
 
     def checkpoint():
         report["summary"] = dict(Counter(row["status"] for row in pending))
+        attempts = attempt_records(pending)
+        report["attempt_summary"] = dict(Counter(row["status"] for row in attempts))
+        report["resource_usage"] = resource_summary(attempts)
         save_json(output / "report.json", report)
+
+    clock_started = time.monotonic()
+    progress_stop = threading.Event()
+
+    def progress():
+        completed = sum(row["status"] == "COMPLETED" for row in pending)
+        remaining = sum(row["status"] in {"NOT_RUN", "BLOCKED", "RUNNING"} for row in pending)
+        current = next((row for row in pending if row["status"] == "RUNNING"), None)
+        print(
+            json.dumps(
+                {
+                    "event": "progress",
+                    "completed": completed,
+                    "remaining": remaining,
+                    "failed": sum(row["status"] == "FAILED" for row in pending),
+                    "incomplete": sum(row["status"] == "INCOMPLETE" for row in pending),
+                    "current_case": current["id"] if current else None,
+                    "condition": current["mode"] if current else None,
+                    "trial": current["trial"] if current else None,
+                    "elapsed_seconds": round(time.monotonic() - clock_started, 1),
+                }
+            ),
+            file=sys.stderr,
+            flush=True,
+        )
+
+    def progress_loop():
+        while not progress_stop.wait(args.progress_interval):
+            progress()
 
     checkpoint()
     blocked = None
@@ -680,52 +947,141 @@ def main(argv: list[str] | None = None) -> int:
         if not executable or Path(executable).suffix.lower() in {".cmd", ".bat", ".ps1"}:
             blocked = "Native Codex executable unavailable."
         else:
+            cli_digest = (
+                digest(Path(executable).read_bytes()) if Path(executable).is_file() else None
+            )
+            if resumed and (
+                cli_digest is None or report.get("codex_executable_sha256") != cli_digest
+            ):
+                parser.error(
+                    "Resume rejected: Codex executable bytes changed or cannot be verified"
+                )
+            report["codex_executable_sha256"] = cli_digest
             temp_root = Path(tempfile.gettempdir()).resolve()
             if any((parent / ".git").exists() for parent in (temp_root, *temp_root.parents)):
                 blocked = "System temp directory is inside a Git checkout."
             else:
                 with tempfile.TemporaryDirectory(prefix="bioskills-probe-", dir=temp_root) as probe:
+                    preflight_output = output
+                    if resumed:
+                        preflight_output = (
+                            output / f"resume-preflight-{len(report['resume_history']):03d}"
+                        )
+                        preflight_output.mkdir()
+                    previous_preflight = report.get("preflight", [])
                     report["preflight"], blocked = preflight(
                         str(Path(executable).resolve()),
                         Path(probe),
-                        output,
+                        preflight_output,
                         args.codex_home,
                         args.probe,
                     )
+                    if resumed:
+                        report.setdefault("preflight_history", []).append(previous_preflight)
                 if args.execute and not blocked:
-                    threads = set()
-                    for index, row in enumerate(pending, start=1):
-                        evidence = output / f"attempt-{index:03d}"
-                        with tempfile.TemporaryDirectory(
-                            prefix="bioskills-turn-", dir=temp_root
-                        ) as scratch:
-                            row.update(
-                                execute_case(
-                                    str(Path(executable).resolve()),
-                                    args.model,
-                                    args.codex_home,
-                                    Path(scratch),
-                                    evidence,
-                                    cases[row["id"]][1],
-                                    skills,
-                                    args.timeout,
-                                    skills_enabled=row["mode"] == "skills",
+                    threads = {
+                        attempt["thread_id"]
+                        for row in pending
+                        for attempt in [row, *row.get("previous_attempts", [])]
+                        if attempt.get("thread_id")
+                    }
+                    attempt_number = max(
+                        (
+                            int(p.name.split("-")[-1])
+                            for p in output.glob("attempt-*")
+                            if re.fullmatch(r"attempt-[0-9]+", p.name)
+                        ),
+                        default=0,
+                    )
+                    watcher = threading.Thread(target=progress_loop, daemon=True)
+                    watcher.start()
+                    try:
+                        for row in pending:
+                            if row["status"] == "COMPLETED":
+                                continue
+                            attempt_number += 1
+                            evidence = output / f"attempt-{attempt_number:03d}"
+                            if row.get("artifact_dir"):
+                                history = row.setdefault("previous_attempts", [])
+                                history.append(
+                                    {
+                                        key: value
+                                        for key, value in row.items()
+                                        if key not in {"previous_attempts"}
+                                    }
                                 )
-                            )
-                        row["artifact_dir"] = evidence.name
-                        if row.get("thread_id") in threads:
-                            row.update(status="FAILED", reason="Codex reused a thread ID.")
-                        threads.add(row.get("thread_id"))
+                            for key in list(row):
+                                if key not in {
+                                    "id",
+                                    "track",
+                                    "mode",
+                                    "trial",
+                                    "prompt_sha256",
+                                    "evaluation_status",
+                                    "previous_attempts",
+                                }:
+                                    row.pop(key)
+                            row.update(status="RUNNING", artifact_dir=evidence.name)
+                            checkpoint()
+                            progress()
+                            with tempfile.TemporaryDirectory(
+                                prefix="bioskills-turn-", dir=temp_root
+                            ) as scratch:
+                                try:
+                                    row.update(
+                                        execute_case(
+                                            str(Path(executable).resolve()),
+                                            args.model,
+                                            args.codex_home,
+                                            Path(scratch),
+                                            evidence,
+                                            cases[row["id"]][1],
+                                            skills,
+                                            args.timeout,
+                                            skills_enabled=row["mode"] == "skills",
+                                            reasoning_effort=args.reasoning_effort,
+                                        )
+                                    )
+                                except KeyboardInterrupt:
+                                    row.update(
+                                        status="INCOMPLETE",
+                                        reason="Interrupted outside child execution; attempt preserved",
+                                    )
+                                    row["artifacts"] = {
+                                        p.name: digest(p.read_bytes())
+                                        for p in evidence.glob("*")
+                                        if p.is_file()
+                                    }
+                            if row.get("thread_id") in threads:
+                                row.update(status="FAILED", reason="Codex reused a thread ID.")
+                            if row.get("thread_id"):
+                                threads.add(row["thread_id"])
+                            checkpoint()
+                            progress()
+                            if row["status"] in {"FAILED", "INCOMPLETE"}:
+                                blocked = "Batch stopped at the first unsuccessful turn. No retry attempted."
+                                break
+                    except KeyboardInterrupt:
+                        blocked = (
+                            "Operator interruption; partial attempts preserved for explicit resume."
+                        )
+                        for row in pending:
+                            if row["status"] == "RUNNING":
+                                row.update(status="INCOMPLETE", reason=blocked)
+                                directory = output / row["artifact_dir"]
+                                row["artifacts"] = {
+                                    p.name: digest(p.read_bytes())
+                                    for p in directory.glob("*")
+                                    if p.is_file()
+                                }
+                    finally:
+                        progress_stop.set()
+                        watcher.join(timeout=1)
                         checkpoint()
-                        if row["status"] == "FAILED":
-                            blocked = (
-                                "Batch stopped at the first unsuccessful turn. No retry attempted."
-                            )
-                            break
     if blocked:
         report["blocker"] = blocked
         for row in pending:
-            if row["status"] == "NOT_RUN":
+            if row["status"] == "NOT_RUN" and not any(x["status"] == "INCOMPLETE" for x in pending):
                 row.update(status="BLOCKED", reason=blocked)
     report["ended_at"] = now()
     checkpoint()

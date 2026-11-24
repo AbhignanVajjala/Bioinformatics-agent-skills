@@ -22,6 +22,7 @@ evals/reports/eval-*/cache/
 # Retain only the reviewed publication evidence snapshot
 /evals/reports/*
 !/evals/reports/publication/
+!/evals/reports/behavioral-audit-2026-11-24.json
 evals/reports/**/cache/
 
 # Distribute exactly one reviewed universal archive from the repository root.

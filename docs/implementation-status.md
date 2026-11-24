@@ -1,5 +1,114 @@
 # Implementation status
 
+## Phase 9 instruction refinement and behavioral evidence integrity — 2026-11-24
+
+Version **0.2.7**, branch phase9-instruction-benchmark-correction, starts from
+verified merged Phase 8 **27f27671f49a7d8dab835f1d2ffe6cf29364acb7** in the same
+local Windows checkout. No new skill, scientific-library rewrite or live model
+session is part of this phase. Existing scientific code/recipes, original
+manifests/rubric and Phase 2 judgments remain unchanged.
+
+The [dated instruction review](maintainer-reviews/2026-11-24-instruction-behavioral-review.md)
+records supplied maintainer observations at 98a9456 separately from newly verified
+artifact integrity and provisional AI-assisted adjudication. The original source
+ZIP, all original input/skill hashes, **160 benchmark turn artifacts**, and **16
+additional preflight/smoke-family artifact hashes** verify. JSONL replay with the
+original snapshot reproduces **19/20 target reads, 30 total reads and 40 completed
+turns**. Original evaluation remains NOT_RUN and activation UNOBSERVABLE. One
+unlocated script hash stays explicitly UNVERIFIED. Raw original evidence is
+unchanged; private commands/authentication/home paths/thread IDs are excluded
+from the published derived review.
+
+The supplied preliminary scores remain **baseline16 full passes/4 incomplete,
+enabled18/2**, zero observed frozen-rubric critical failures. A separate unblinded
+AI-assisted criterion review records exact excerpts/offsets, missing requirements,
+critical observations, provenance and hashes; it is not a recovered original
+adjudication file or independent human review. One sample per condition/case,
+high baseline performance and unknown resolved model/effort preclude established
+effectiveness. No historical score is revised.
+
+Four skills receive narrow evidence-gap/extraction/debugging/reproduction changes;
+six retain their appropriate observed behavior and shared QUICK policy. The new
+versioned definition has **68 task-specific development triggers for 17 skills**
+and **ten compound held-out preparations**, separating out-of-scope negatives
+from invalid in-scope safeguards. Held-outs are author-visible, not independently
+sealed or proven difficult. Offline planning recorded **408 development** and
+**60 held-out** turns for three paired repeats, all NOT_RUN.
+
+Runner changes separate availability, reads, judged adherence/trigger relevance,
+scientific/grounding criteria, critical failures, efficiency and completion.
+Requested model/effort stay separate from unverified resolution. Live progress,
+bounded termination, partial checkpoints, saved pre-resume reports, fresh-session
+compatible resume and retained attempt/resource history are tested offline.
+Source/configuration/runtime/evidence drift rejects before another turn. FAILED
+or uncheckpointed RUNNING turns do not auto-retry. Blinded exports withhold condition,
+read and resource metadata until complete criterion grading; content can still
+reveal condition. Review remains provisional pending independent human validation.
+
+Windows preserves explicit MXC, strict configuration, read-only permissions,
+disabled network and never-approve restrictions. Current CLI **0.171.0-alpha.13.2**
+version/help was inspected; new live compatibility/cancellation is NOT_TESTED.
+Original successful live evidence used **0.168.0**, requested gpt-6.1-sol, with
+resolved model/effort unverified. Official Linux/WSL bubblewrap/seccomp and Windows
+documentation was consulted. Equivalent Linux/Codespaces isolation was not tested;
+live Linux remains BLOCKED without weakening security or using unrestricted execution.
+
+The permanent seed-9421 synthetic interoperability fixture has 600 genes, 48 cells,
+12 donors and 50 planted upregulated genes. It checks exact conservation, both R
+methods' 600 filtering identifiers and retained exports, eligible positive-effect
+FDR selection, independent integer-combination Fisher/manual BH and downstream
+hashes. The supplied historical workflow remains **11/13 checks passed**, with
+two all-600 filtering-ID corruption failures and historical DESeq2/edgeR selection
+counts preserved in the review. New inputs are not a reconstruction of unavailable
+original files. This is executable interoperability, not autonomous orchestration.
+
+Local environment: Windows/PowerShell, Python **3.12.10** virtual environment,
+NumPy2.2.6, pandas2.2.3, SciPy1.15.3, pytest8.3.5, Ruff0.11.13. Commands use
+PYTHONPATH=src, PYTHONUTF8=1 and repository cache locations for examples.
+Rscript is absent. Current native interfaces are **glpk, glpk_exact and scipy**,
+with **optlang.glpk_interface** configured. Metabolic checks now execute in this
+process without a solver/security-policy change. The reason availability differs
+from Phase 8 is not established; Phase 8's 11 local failures/14 errors remain
+historically recorded and are not retroactively changed.
+
+Targeted harness/archive/grading/schema/preparation tests: **110 passed, two native
+R skips** (artifacts/phase9/targeted-current2.xml). Initial full suite:
+**602 passed, one failed, five skipped**, two expected negative metabolic-control
+warnings (artifacts/phase9/full.xml). The failure was the old installation-test
+assertion excluding every evals path. It now permits exactly the newly packaged
+benchmark JSON inputs while still excluding reports, tests, Git and development
+scripts; no scientific assertion was weakened. Final full suite: **603 passed, five skipped, zero failures/errors**,
+two expected negative-control warnings, 608 collected, 125.90 seconds
+(artifacts/phase9/full-final.xml). Skips are four native-R-dependent checks
+and one unavailable-symlink case. The packaging subset passed **56/one skip**. An earlier collection attempt omitted PYTHONPATH and failed importing
+bioskills; rerunning with the declared environment resolved that setup error.
+
+New exact fixture preparation and the expanded pseudobulk/ORA/FASTQ example
+executed; their two analysis-run schemas and **52 input/output hashes** verified.
+CFF1.2.0 schema validation passed. Native DE/ORA in preparation mode remains NOT_RUN. Local deterministic
+evaluation now reports **7 PASS/5 NOT_RUN**, with no agent inference. Native R
+execution remains unavailable locally and must pass in pinned hosted CI, including
+the unchanged original18 and Phase7 125 checks plus nine Python integration cases.
+The long shell documentation-write command was rejected by automatic policy;
+repository documentation was written safely with apply_patch instead.
+
+Ruff, 17-skill validation, catalog and QUICK/FULL checks pass. The single universal
+ZIP includes corrected skills, documentation, extraction schema/template,
+versioned benchmark inputs and the reproducible cross-component recipe. Raw
+evaluation reports, private artifacts, tests and development scripts stay out.
+Current archive: **139 files / 674905 bytes**, SHA-256
+**758984b05535f896b2f43ccb133605ef06d5cc329060da359e272670ccdf781a**.
+Freshness, extraction, schemas, installation and publication remain gated on
+final checks; completed results and hosted evidence are recorded below and in
+the eventual Phase 9 PR. No unrelated lock/environment file is included.
+
+The [migration protocol](phase9-benchmark-migration.md) proposes an approval-gated
+harmless turn followed by a four-case, three-repeat paired pilot (24 turns) with
+frozen configuration/resource limits and blinded independent adjudication, before
+larger prepared comparisons. No such live evaluation is initiated here.
+Independent methodological/biological review, real-data calibration, a sealed
+harder evaluation set and established general agent effectiveness remain incomplete.
+
 ## Phase 8 consolidated scientific domain corrections — 2026-11-24
 
 Version **0.2.6**, branch phase8-consolidated-domain-corrections, starts from

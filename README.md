@@ -115,6 +115,14 @@ establish regulation, causality or predictive accuracy.
 The [maintainer technical walkthrough](docs/maintainer-technical-walkthrough.md)
 provides commands, artifacts, reviewer questions and an uncompleted human checklist.
 
+The [Phase 9 instruction/behavior review](docs/maintainer-reviews/2026-11-24-instruction-behavioral-review.md)
+preserves a separate 40-turn historical benchmark: provisional unblinded baseline
+16 full passes/4 incomplete, skill-enabled18/2, with no observed frozen-rubric
+critical failure. These are not repeated, blinded or independently validated
+effectiveness results. The [evaluation guide](docs/behavioral-evaluation.md)
+explains separate execution, read, adherence and scientific judgments, new unrun
+versioned fixtures, and reproducible cross-skill computational checks.
+
 ## Scientific validation and evidence
 
 | Evidence category | What is established | Record and boundary |

@@ -211,7 +211,12 @@ def test_universal_extracts_installs_and_first_use_executes(packager, tmp_path):
     files = packager.package_files(ROOT)
     archive = (ROOT / packager.ARCHIVE_NAME).read_bytes()
     packager.validate_archive(archive, files)
-    assert not any(name.startswith(("tests/", "evals/", ".git/")) for name in files)
+    assert not any(
+        name.startswith(("tests/", "evals/reports/", ".git/", "scripts/")) for name in files
+    )
+    assert {name for name in files if name.startswith("evals/")} == {
+        p.relative_to(ROOT).as_posix() for p in (ROOT / "evals/benchmarks").rglob("*.json")
+    }
     extracted = tmp_path / "universal"
     with zipfile.ZipFile(io.BytesIO(archive)) as zip_file:
         zip_file.extractall(extracted)

@@ -11,6 +11,7 @@ import pytest
 
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "scripts"))
 spec = importlib.util.spec_from_file_location(
     "run_agent_evals", ROOT / "scripts/run_agent_evals.py"
 )
@@ -42,6 +43,7 @@ def test_plan_expands_paired_cases_without_invoking_codex(tmp_path, monkeypatch)
         pytest.fail("Planning touched the runtime")
 
     monkeypatch.setattr(runner.subprocess, "run", forbidden)
+    monkeypatch.setattr(runner.subprocess, "Popen", forbidden)
     assert runner.main(["--output-dir", str(tmp_path)]) == 0
     _, report = report_in(tmp_path)
     assert report["summary"] == {"NOT_RUN": 114}
@@ -420,7 +422,7 @@ def test_launch_failures_have_timestamps_and_stream_files(tmp_path, monkeypatch,
     def fail(*args, **kwargs):
         raise failure
 
-    monkeypatch.setattr(runner.subprocess, "run", fail)
+    monkeypatch.setattr(runner.subprocess, "Popen", fail)
     stdout, stderr = tmp_path / "stdout", tmp_path / "stderr"
     result = runner.invoke(["codex"], tmp_path, {}, stdout, stderr, 1)
     assert result["exit_status"] is None

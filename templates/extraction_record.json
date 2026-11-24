@@ -1,0 +1,21 @@
+{
+  "fields": {
+    "organism": {
+      "value": "Human",
+      "status": "reported",
+      "evidence": [
+        {
+          "locator": "sentence 1",
+          "quote": "Human tissue"
+        }
+      ],
+      "reason": null
+    },
+    "platform": {
+      "value": null,
+      "status": "absent",
+      "evidence": [],
+      "reason": "The supplied source is silent on platform."
+    }
+  }
+}

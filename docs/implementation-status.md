@@ -1,5 +1,93 @@
 # Implementation status
 
+## Phase 8 consolidated scientific domain corrections — 2026-11-24
+
+Version **0.2.6**, branch phase8-consolidated-domain-corrections, starts from
+merged Phase 7 **71a52067575508c21c2cc2722815b65a203254c3** in the existing local
+Windows checkout. Source/configuration work is complete; publication is gated
+on successful hosted validation. No new model sessions or benchmark expansion.
+
+Four dated maintainer reviews preserve the supplied November 24 Codespaces
+observations at 98a9456132fb474996f4c5d566065925ed79551b: combined 100 checks
+(44 PASS/35 INVESTIGATE/21 ASSESS), not accuracy or distinct defect counts.
+Abhignan Vajjala directed the investigation with ChatGPT-assisted scripts;
+original files/hashes are unavailable and not invented. Independent review remains
+incomplete. Earlier Phase 1–7 evidence and agent scores remain unchanged.
+
+Corrections: exact checked pseudobulk aggregation/conservation before int64
+export, paired versus unpaired expectations and per-population design reasons;
+strict ORA identities/structure and prespecified >=1-universe-member eligibility
+with eligible zero-overlap pathways retained in BH; bounded content-based format
+parsing with exact categorical IDs and explicit partial-format scope; source-
+specific metadata identity/UID/pagination/XML relationships, status and bounded
+raw provenance. The expanded module preserves its three public imports, and all
+seven validator names remain. Shared parsing avoids duplicated identity inference.
+
+Local environment: Windows NT 10.0.26300, PowerShell, Python **3.12.10** in the
+existing repository virtual environment; NumPy 2.2.6, pandas 2.2.3, SciPy 1.15.3,
+pytest 8.3.5, Ruff 0.11.13. Rscript is absent. Native COBRA/GLPK remains unavailable
+in this local process (SolverNotFound: None is not a valid solver interface;
+available interface scipy). No solver substitution, policy change or weaker
+assertion is used. Pinned native R and supported metabolic execution gate merge.
+
+Commands use that Python with PYTHONPATH=src, PYTHONUTF8=1 and repository-local
+XDG_CACHE_HOME/MPLCONFIGDIR. Targeted command:
+
+```text
+python -m pytest -q tests/test_pseudobulk_integrity.py tests/test_enrichment_integrity.py tests/test_format_integrity.py tests/test_retrieval_integrity.py tests/test_domain_integration.py tests/test_expanded.py tests/test_schemas.py --junitxml=artifacts/phase8/targeted-final.xml
+```
+
+Result: **209 passed, 2 skipped**, zero failures; skips require native R import
+and genuine DE output. The R CI job explicitly enables and requires these two
+checks, after the unchanged 18 original and 125 Phase 7 native checks. Regular
+Python CI remains offline; no native-R success is inferred from skips.
+
+Initial full run: **533 passed, 12 failed, 14 errors, 3 skipped**, 562 collected.
+Eleven failures and fourteen errors are the native metabolic blocker; one
+archive-installation test correctly detected documentation edited after archive
+generation. The archive was regenerated; no freshness assertion was weakened.
+An initial new-test setup error from a megabyte-long pytest parameter filename
+was fixed using bounded explicit test IDs; it was not a scientific failure.
+Final local full suite: **535 passed, 11 failed, 14 errors, 3 skipped**,
+563 collected (109.28 seconds), artifacts/phase8/full-final.xml. All failures
+and errors are native metabolic paths listed above. Packaging/extraction/offline
+normal-installation subset: **56 passed/one symlink skip**. Two additional skips
+require R; none is an execution success. After requiring native evidence in the
+R job, the integration/retrieval follow-up passed **51/two native skips**.
+
+Executed examples: expanded pseudobulk/ORA/FASTQ, bulk readiness, original
+multi-omics and cross-view multi-omics. All four analysis-run schemas and **103
+input/output hashes** checked. Three metadata dry runs returned NOT_RUN.
+Deterministic scientific evaluation: **6 PASS / 1 FAIL / 5 NOT_RUN** locally;
+the failure is the native metabolic runtime, not an agent turn. Native R is
+NOT_RUN locally. No result is upgraded from unavailable execution.
+
+Separately, corrected-client live metadata checks completed at HTTP200, one
+attempt per request: GEO GSE10072 (110 matches/20 records/20 relationships),
+SRA SRP000001 (9/9/9) and Ensembl ENSG00000141510 (Gene TP53/version21).
+All report METADATA_RETRIEVED / VERIFIED_SCOPE with live transport. Five raw
+body hashes/lengths, three report schemas/hashes and source hashes are recorded
+in the public-metadata review; bounded raw bodies remain in ignored local
+artifacts/phase8/live-validated. These are new scoped observations, separate from
+three supplied historical live requests. Earlier release NOT_RUN records stand.
+No raw sequencing, protected data or credentials were fetched.
+
+Ruff check/format, 17-skill validation, catalog and QUICK/FULL synchronization,
+CFF 1.2.0 schema and git diff checks pass. The regenerated single universal ZIP
+contains 17 skills/132 files; exact inventory, CRCs, deterministic metadata,
+links, commands and temporary extraction are verified by the packager. Its
+checksum is in SHA256SUMS. Fresh extracted installation also gates hosted CI.
+All raw local environments/evidence remain ignored; no poetry.lock or
+r-environment.txt is included. Final commit, CI and publication evidence are
+recorded below and in the pull request once verified.
+
+Limitations: this is scoped utility correctness, not scientific certification.
+Differential state, ranked enrichment, full binary/format validation, exhaustive
+provider schema coverage, real-data calibration and independent external review
+remain incomplete. Metadata identity does not establish assay provenance;
+computational success is not biological or clinical validation. All 17 skills,
+MIT licensing, attribution and AI-assistance disclosure are retained.
+
 ## Phase 7 bulk RNA-seq validation and identifier correction — 2026-11-24
 
 Hosted canonical implementation at **4450e6d** passed the original **18 R checks**

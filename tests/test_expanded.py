@@ -146,9 +146,25 @@ def test_metadata_dry_run_and_bounded_pagination():
     def transport(url):
         calls.append(url)
         return (
-            json.dumps({"esearchresult": {"idlist": ["123"], "count": "25"}}).encode()
+            json.dumps(
+                {
+                    "esearchresult": {
+                        "idlist": [str(x) for x in range(123, 143)],
+                        "count": "25",
+                        "retstart": "0",
+                        "retmax": "20",
+                    }
+                }
+            ).encode()
             if "esearch" in url
-            else b'{"result": {"uid": "123"}}'
+            else json.dumps(
+                {
+                    "result": {
+                        "uids": [str(x) for x in range(123, 143)],
+                        **{str(x): {"uid": str(x), "accession": "GSE123"} for x in range(123, 143)},
+                    }
+                }
+            ).encode()
         )
 
     assert retrieve_metadata("geo", "GSE123")["download_status"] == "NOT_RUN"
@@ -162,7 +178,9 @@ def test_metadata_dry_run_and_bounded_pagination():
     assert "lookup/id/ENSG00000141510" in metadata_plan("ensembl", "ENSG00000141510")["url"]
     with pytest.raises(ScientificValidationError):
         metadata_plan("sra", "controlled-secret")
-    with pytest.raises(KeyError):
+    assert (
         retrieve_metadata(
             "geo", "GSE123", dry_run=False, transport=lambda url: b"{}", pause=lambda n: None
-        )
+        )["download_status"]
+        == "MALFORMED_RESPONSE"
+    )

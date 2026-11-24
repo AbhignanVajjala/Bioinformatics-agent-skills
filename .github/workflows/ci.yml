@@ -24,12 +24,17 @@ jobs:
       - run: pytest -q --junitxml=artifacts/pytest.xml
       - run: pytest -q tests/test_metabolic_structure.py --junitxml=artifacts/metabolic-structure.xml
       - run: pytest -q tests/test_rnaseq_validation.py --junitxml=artifacts/rnaseq-validation.xml
+      - run: pytest -q tests/test_pseudobulk_integrity.py tests/test_enrichment_integrity.py tests/test_format_integrity.py tests/test_retrieval_integrity.py tests/test_domain_integration.py --junitxml=artifacts/domain-integrity.xml
       - run: pytest -q tests/test_multiomics_validation.py tests/test_domain_recipes.py -k 'not metabolic and not flux' --junitxml=artifacts/multiomics-validation.xml
       - run: python examples/bulk-rnaseq/run.py --output artifacts/bulk-rnaseq
       - run: python examples/multiomics/run.py --output artifacts/multiomics
       - run: python examples/metabolic-modeling/run.py --output artifacts/metabolic-modeling
       - run: python examples/domain-recipes/run.py metabolic --output artifacts/metabolic-recipe
       - run: python examples/domain-recipes/run.py multiomics --output artifacts/multiomics-recipe
+      - run: python examples/expanded/run.py --output artifacts/expanded
+      - run: python examples/public-metadata/run.py geo GSE10072 --output artifacts/geo-plan.json
+      - run: python examples/public-metadata/run.py sra SRP000001 --output artifacts/sra-plan.json
+      - run: python examples/public-metadata/run.py ensembl ENSG00000141510 --output artifacts/ensembl-plan.json
       - run: python scripts/run_evals.py --output artifacts/evals.json
       - uses: actions/upload-artifact@v4
         if: always()

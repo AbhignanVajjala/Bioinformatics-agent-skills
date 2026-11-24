@@ -330,3 +330,39 @@ multiple people or environments are involved.
 Independent human methodological review and independent biological validation remain
 incomplete. See [scientific evidence](scientific-evidence.md) and
 [development transparency](development-and-ai-assistance.md).
+
+## Phase 8: four additional scoped reproductions
+
+Human-directed maintainer self-review by Abhignan Vajjala, assisted by ChatGPT
+scripts, is recorded for [pseudobulk](maintainer-reviews/2026-11-24-pseudobulk-review.md),
+[ORA](maintainer-reviews/2026-11-24-enrichment-review.md),
+[formats](maintainer-reviews/2026-11-24-file-formats-review.md) and
+[public metadata](maintainer-reviews/2026-11-24-public-metadata-review.md).
+This updates the scope of recorded maintainer investigation, not the independent
+review checklist or all-17-skill certification. Historical observations and
+new automated corrections are explicitly separate.
+
+From the full universal extraction after installing toolkit dependencies:
+
+```text
+python examples/expanded/run.py --output new-domain-reproduction
+python examples/public-metadata/run.py geo GSE10072 --output new-geo-plan.json
+```
+
+Inspect pseudobulk exact conservation and per-population design reasons;
+differential_state must remain NOT_RUN. Verify ORA family_audit, prespecified
+eligibility and BH denominator, retaining eligible zero-overlap pathways.
+Compare exact string IDs through table inspection, bulk input and ORA mapping.
+Format/signature recognition is partial; request the required optional parser.
+Metadata dry runs make no requests; live execution needs explicit --live and
+a new output path. Check transport_status separately from validation_status,
+decode/hash bounded raw bodies, and inspect source-specific relationships.
+Verified metadata is not proof of raw counts, biological identity or complete
+study coverage. The review records three new bounded live checks separately
+from earlier NOT_RUN releases and supplied historical observations.
+
+Developer regressions live in the repository tests/test_*_integrity.py and
+tests/test_domain_integration.py. Native count import and genuine DE-to-ORA
+lineage run in pinned R CI; unavailable native execution is skipped or blocked
+explicitly, never counted as scientific success. Record commands, source, hashes
+and failed criteria when reproducing; independent external review remains pending.

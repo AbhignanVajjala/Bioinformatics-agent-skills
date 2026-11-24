@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.2.6 — consolidated scientific domain corrections (2026-11-24)
+
+Checks exact pseudobulk arithmetic and conservation before int64 export, reports
+donor/paired/batch design limits separately from aggregation, validates exact ORA
+identities and a prespecified eligible BH family, and strengthens bounded format
+triage without claiming complete conformance. Adds source-specific public metadata
+identity/relationship and pagination checks with separate transport/status/raw
+evidence. Records four scoped AI-assisted maintainer reviews, separate live checks
+and cross-skill identifier regressions. Preserves all 17 skills, seven validators,
+Phase 5–7 corrections, historical scientific/agent evidence and the universal ZIP.
+
 ## 0.2.5 — bulk RNA-seq validation and identity correction (2026-11-24)
 
 Validates JSON structure/duplicates/types and every TSV record before fitting;

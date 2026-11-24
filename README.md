@@ -50,7 +50,7 @@ It does not certify a real study or an agent's scientific reasoning.
 | Genome-scale metabolic modeling | SBML/FBC inspection; toy FBA, pFBA, FVA, GPR/knockout and feasibility controls | COBRApy/GLPK, libsbml | Original and domain recipes executed in Linux and Windows distribution CI | Synthetic tested model; optimized flux is a conditional prediction |
 | Multi-omics integration | Specimen reconciliation and descriptive matched-feature cross-view association | NumPy/pandas | Synthetic examples and valid/invalid fixtures | Exactly two assays in cross-view baseline; no MOFA2, SNF or predictor |
 | Single-cell RNA-seq pseudobulk | Raw counts summed by specimen and cell population; donor-aware readiness | NumPy/pandas | Aggregation and scientifically invalid-unit fixtures | No full differential-state fit; upstream cell QC is not executed |
-| Public data metadata | Bounded GEO, SRA and Ensembl metadata client; dry-run default | Python standard-library HTTP client | Offline mocked requests and dry-run example | Live retrieval NOT_RUN; no large or controlled-access downloads |
+| Public data metadata | Bounded GEO, SRA and Ensembl metadata client; dry-run default | Python standard-library HTTP client | Offline mocked requests and dry-run example | Scoped live GEO/SRA/Ensembl metadata verified in Phase 8; no large or controlled-access downloads |
 | Enrichment and identifier mapping | One-to-one mapping audit, tested universe, Fisher ORA and BH correction | SciPy | Known-result and multiple-testing regressions | Ambiguous mappings rejected; ranked enrichment NOT_RUN; association is not activation |
 | Bioinformatics file formats | Small text-record inspection and binary signature triage | Python standard library | Text/signature fixtures and FASTQ example | Signatures do not fully validate BAM/CRAM/BCF/H5AD; external parsers needed |
 | `check_counts` | Structure, finite nonnegative integer values, unique IDs and declared provenance | NumPy/pandas | Valid, scientific-invalid and malformed API/CLI fixtures | Integer appearance cannot authenticate raw counts |
@@ -61,8 +61,8 @@ It does not certify a real study or an agent's scientific reasoning.
 | `check_leakage` | Demonstrable subject overlap and partition-label checks | pandas | API/CLI overlap fixtures | Cannot detect hidden identity errors or all preprocessing leakage |
 | `check_enrichment_background` | Selected/tested universe, species/release, mapping and BH declaration | Python | API/CLI background and mapping fixtures | Checks declared policy; ORA calculation is a separate workflow |
 
-[Validator interface](docs/validators.md) · [Scientific evidence](docs/scientific-evidence.md)
-· [Tests](tests/test_validators.py) · [Capability status](docs/phase3-status.md)
+[Validator interface](docs/validators.md) Â· [Scientific evidence](docs/scientific-evidence.md)
+Â· [Tests](tests/test_validators.py) Â· [Capability status](docs/phase3-status.md)
 
 ## Example research workflows
 
@@ -93,6 +93,14 @@ documents strict input contracts, identifier preservation and native fitting
 diagnostics from the scoped AI-assisted maintainer audit.
 Predicted flux does not measure cellular flux, demonstrate overexpression or
 prove an intervention.
+
+Phase 8 records four additional scoped maintainer investigations:
+[pseudobulk](docs/maintainer-reviews/2026-11-24-pseudobulk-review.md),
+[enrichment](docs/maintainer-reviews/2026-11-24-enrichment-review.md),
+[formats](docs/maintainer-reviews/2026-11-24-file-formats-review.md) and
+[public metadata](docs/maintainer-reviews/2026-11-24-public-metadata-review.md).
+These correct scientific utilities and document evidence; they do not demonstrate
+improved agent effectiveness or independent biological validation.
 
 **Multi-omics integration.** Supply assay matrices, assay-sample to
 subject/specimen/timepoint mappings, scales, partitions and a feature map.

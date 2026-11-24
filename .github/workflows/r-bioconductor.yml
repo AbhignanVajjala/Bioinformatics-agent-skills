@@ -20,6 +20,15 @@ jobs:
           Rscript recipes/rnaseq/install.R
       - run: Rscript recipes/rnaseq/test.R
       - run: Rscript recipes/rnaseq/test-validation.R
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify native R and Python identifier integration
+        env:
+          BIOSKILLS_NATIVE_R_TESTS: '1'
+        run: |
+          python -m pip install -e . scipy==1.15.3 pytest==8.3.5
+          python -m pytest -q tests/test_domain_integration.py --junitxml=artifacts/domain-integration.xml
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -27,4 +36,5 @@ jobs:
           path: |
             artifacts/rnaseq-ci/
             artifacts/rnaseq-phase7/
+            artifacts/domain-integration.xml
             r-environment.txt

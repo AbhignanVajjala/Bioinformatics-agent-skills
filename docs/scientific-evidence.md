@@ -113,3 +113,26 @@ The ±1e308 example now agrees with the independently calculated reference rathe
 than returning an unreliable zero. No advanced integration, inferential/predictive
 validation, independent external review or improved agent effectiveness is claimed.
 Original benchmark prompts and judgments remain unchanged.
+
+## Phase 8 consolidated domain investigation
+
+Four human-directed maintainer self-reviews with AI-assisted scripts cover
+[pseudobulk](maintainer-reviews/2026-11-24-pseudobulk-review.md),
+[ORA](maintainer-reviews/2026-11-24-enrichment-review.md),
+[formats](maintainer-reviews/2026-11-24-file-formats-review.md) and
+[public metadata](maintainer-reviews/2026-11-24-public-metadata-review.md).
+Supplied Codespaces observations at 98a9456 comprise 100 checks (44 PASS,
+35 INVESTIGATE, 21 ASSESS), not distinct defect counts or accuracy rates.
+Original files/hashes are unavailable; none are fabricated. Assessment cases
+also expose confirmed arithmetic defects. Exact combinatorial ORA references
+are separate from biological evidence.
+
+Three historical live requests were observed on November 24, 2026 at that
+source revision; earlier release NOT_RUN records remain unchanged. The new
+corrected client separately completed scoped live GEO/SRA/Ensembl checks, with
+bounded raw response hashes recorded in its review. HTTP success, identity
+relationships and computational correctness remain distinct claims. New
+offline regressions and native R cross-skill lineage checks are reported in
+implementation status. No new model sessions or effectiveness benchmark ran.
+Independent methodological review, real-data calibration, differential-state
+modeling, full format conformance and biological validation remain incomplete.

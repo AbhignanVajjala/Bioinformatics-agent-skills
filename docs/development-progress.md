@@ -26,7 +26,18 @@ Phase 8 local failures remain historical evidence.
 Local final regression passed **603 tests/five documented skips**, with two
 expected metabolic negative-control warnings. Targeted checks passed **110/two
 native-R skips**; deterministic cases returned **7 PASS/5 NOT_RUN**. Native R
-remains a hosted merge gate.
+is verified in hosted CI: **18 original +125 Phase 7 R checks and nine integration
+tests passed**, zero failures/skips. Both new native methods preserve all 600 IDs
+and recover all 50 planted genes, selecting one additional nonplanted gene each.
+Independent Fisher/BH, count conservation and downstream hashes verify. These
+seed-9421 results remain separate from the supplied historical workflow.
+
+Implementation **78608c9** passed hosted **600 Python tests/eight documented skips**
+and all targeted checks. Fresh Windows/Linux archive installations passed,
+including metabolic workflows. The four native-R skips run in the dedicated R
+job; four Windows-only checks run locally. All eight push/PR contexts passed.
+Final documentation-head and post-merge publication evidence is recorded in
+[PR #9](https://github.com/AbhignanVajjala/Bioinformatics-agent-skills/pull/9).
 
 [Implementation status](implementation-status.md) records exact counts, commands,
 failed attempts, source/evidence hashes, runtime limits and hosted validation as

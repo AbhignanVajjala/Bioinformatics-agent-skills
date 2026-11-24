@@ -98,9 +98,43 @@ versioned benchmark inputs and the reproducible cross-component recipe. Raw
 evaluation reports, private artifacts, tests and development scripts stay out.
 Current archive: **139 files / 674905 bytes**, SHA-256
 **758984b05535f896b2f43ccb133605ef06d5cc329060da359e272670ccdf781a**.
-Freshness, extraction, schemas, installation and publication remain gated on
-final checks; completed results and hosted evidence are recorded below and in
-the eventual Phase 9 PR. No unrelated lock/environment file is included.
+Freshness, extraction, schemas and installation checks passed. No unrelated
+lock/environment file is included. Publication and final-head/post-merge evidence
+are recorded in [PR #9](https://github.com/AbhignanVajjala/Bioinformatics-agent-skills/pull/9).
+
+### Hosted validation of implementation 78608c9
+
+Implementation **78608c9faa317255abe61037ec4942e03448be95** passed all eight
+push/pull-request check contexts. The
+[offline PR run](https://github.com/AbhignanVajjala/Bioinformatics-agent-skills/actions/runs/45438927448)
+passed **600 tests/eight skips/zero failures or errors**, two expected warnings,
+608 collected. Skips were four Windows-native preflight cases and four native-R
+checks; the latter execute in the separate pinned R job. Targeted checks passed
+**16 metabolic, 30 RNA readiness, 71 harness/six skips, 165 domain/two skips and
+133 multi-omics** (two deselected). These overlapping subsets are not additive.
+Deterministic evaluations remained **7 PASS/5 NOT_RUN**. Fresh standalone Linux
+and Windows installations both passed, including their extracted native metabolic
+workflows; extracted R execution remained NOT_RUN in those installation jobs.
+
+The [native R PR run](https://github.com/AbhignanVajjala/Bioinformatics-agent-skills/actions/runs/45438927706)
+passed **18 original R checks +125 Phase 7 checks +nine Python integration tests**,
+zero failures/skips. R 4.4.3/Bioconductor 3.20 executed both seed-9421 methods.
+Each preserved all **600 filtering identifiers**, tested 600 genes and selected
+**51 positive-effect genes at BH-adjusted p<0.05: 50 planted and one nonplanted**.
+Both methods passed independent Fisher/BH references, retained-export identity,
+count conservation and downstream lineage checks. All **34 input/output hash
+entries** in the new pipeline report verified against the downloaded artifact.
+These new synthetic results do not replace the supplied historical 52/50 counts.
+
+The native evidence artifact **14942373123** is 5629382 bytes, SHA-256
+**8d4f09e6713268cfd8e63ecf8382729ab5a775fe70c6733b2e74e73ef6f31aee**.
+The offline evidence artifact **14941558660** is 124095 bytes, SHA-256
+**6879f9ac805b3decdcebbdc2db24b8ca967fc1e361e28ab19e69973b2a26a677**.
+Both downloaded archive digests matched GitHub metadata. Artifacts remain outside
+tracked source. The final documentation checkpoint must retain green checks before
+merge; final commit IDs, post-merge runs and published archive verification belong
+to the existing PR publication record. No new model session or live database
+request was used for these checks.
 
 The [migration protocol](phase9-benchmark-migration.md) proposes an approval-gated
 harmless turn followed by a four-case, three-repeat paired pilot (24 turns) with

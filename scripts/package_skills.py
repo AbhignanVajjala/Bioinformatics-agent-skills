@@ -39,6 +39,7 @@ DOCUMENTS = (
     "docs/scientific-evidence.md",
     "docs/scientific-integrity.md",
     "docs/maintainer-reviews/2026-11-24-metabolic-model-review.md",
+    "docs/maintainer-reviews/2026-11-24-multiomics-review.md",
 )
 BINARY_EXTENSIONS = {".png", ".jpg", ".jpeg", ".gif", ".pdf", ".npy", ".npz"}
 RESOURCE_EXTENSIONS = {
@@ -68,6 +69,7 @@ TOOLKIT_TREES = (
     ("templates", {".json", ".md"}),
 )
 REQUIRED_RESOURCES = (
+    "src/bioskills/omics.py",
     "src/bioskills/metabolic.py",
     "src/bioskills/__init__.py",
     "src/bioskills/__main__.py",

@@ -1,5 +1,45 @@
 # Development progress
 
+## Phase 6 multi-omics scientific correction — 2026-11-24
+
+Supported hosted Python validation at e90d11c passed 360 tests/four Windows-only
+skips, 133 targeted multi-omics checks and 16 metabolic regressions; deterministic
+evaluations returned seven PASS/five NOT_RUN. Fresh Windows/Linux extraction and
+normal installation both executed multi-omics and metabolic workflows. Local
+archive tests passed 56/one symlink skip. The final-head R/Bioconductor check
+remains separately required; final results and publication are linked from
+[PR #6](https://github.com/AbhignanVajjala/Bioinformatics-agent-skills/pull/6).
+
+Version 0.2.4 adds controlled metadata/feature-map validation, shared stable
+descriptive Pearson arithmetic, numerical failure evidence, exact count
+denominators with explicit normalization-universe declarations, and honest
+specimen/subject/repeat/timepoint/partition reporting. The original log2-intensity
+readiness example remains distinct from the expanded count/intensity baseline.
+Neither fits an advanced integration or predictive model. Undefined mapped
+pairs reject the entire analysis; unmapped constant features no longer block it.
+
+[The dated review](maintainer-reviews/2026-11-24-multiomics-review.md) attributes
+the second human-directed investigation to Abhignan Vajjala, with AI-assisted
+diagnostic scripts. Historical supplied observations, source findings, new
+automated executions and Decimal reference results are separated. Original
+Codespaces artifact hashes are unavailable; none were fabricated.
+
+Local targeted checks: 133 passed. Full local suite: 338 passed, 11 failed,
+14 errors, 1 skipped, all failures/errors in native metabolic runtime paths.
+The original and expanded multi-omics examples, provenance/hashes, lint, skill,
+catalog and mode checks pass. Hosted execution gates merge and is recorded in
+[implementation status](implementation-status.md). The single universal ZIP,
+release/citation version and checksums are regenerated consistently. The 17 skills,
+seven validator names, Phase 5 assertions and historical benchmark judgments
+remain preserved. Independent external methodological review and biological
+validation remain incomplete; no agent-effectiveness improvement is claimed.
+
+Remaining scope: real-data evaluation, external domain review, authenticating
+declared identities/count universes, advanced integrations and grouped predictive
+evaluation require separate work. External normalization denominators remain
+unsupported. The local native-library restriction remains unresolved. No further
+skill expansion or agent benchmark was started.
+
 ## Phase 4 research credibility and authorship transparency
 
 Version 0.2.2 introduces a scientific project overview, explicit implementation

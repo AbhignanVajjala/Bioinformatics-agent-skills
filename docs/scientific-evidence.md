@@ -89,3 +89,17 @@ before making stronger claims. No new agent sessions were run for Phase 4.
 ## Phase 5 maintainer self-review and structural correction
 
 [Abhignan Vajjala's dated reproduction](maintainer-reviews/2026-11-24-metabolic-model-review.md) records human-directed, AI-assisted investigation of the single-compartment defect. The original artifacts are in Codespaces and are unavailable here; manual results are supplied observations, not reconstructed original evidence. The permanent fixture uses extracellular uptake, transport and cytoplasmic drains. New automated assertions cover structure, pFBA30, FVA90, knockouts, warning capture and solver rejection. This scoped self-review does not complete independent methodological or biological review. Original Phase 1–4 outputs and agent judgments remain historical and unchanged.
+
+## Phase 6 multi-omics maintainer investigation
+
+[Abhignan Vajjala's second scoped investigation](maintainer-reviews/2026-11-24-multiomics-review.md)
+records human-directed, ChatGPT-assisted Codespaces observations at 0.2.2 separately
+from source inspection, new automated regressions and a Decimal mathematical
+reference. It identifies eight validation/numerical defects, the constant-unmapped
+feature limitation and three methodological considerations. New code requires
+meaningful metadata and nonempty maps, uses shared stable correlation, records
+normalization denominators and reports subjects/repeats/partitions honestly.
+The ±1e308 example now agrees with the independently calculated reference rather
+than returning an unreliable zero. No advanced integration, inferential/predictive
+validation, independent external review or improved agent effectiveness is claimed.
+Original benchmark prompts and judgments remain unchanged.

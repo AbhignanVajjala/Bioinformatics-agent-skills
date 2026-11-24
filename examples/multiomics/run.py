@@ -4,6 +4,7 @@ import argparse
 from pathlib import Path
 import numpy as np
 import pandas as pd
+from bioskills.omics import stable_pearson
 from bioskills.science import (
     ScientificValidationError,
     begin_run,
@@ -38,6 +39,7 @@ for name, prefix in [("transcript", "gene"), ("protein", "protein")]:
             "specimen_id": [f"specimen_{i}" for i in range(8)],
             "subject_id": [f"subject_{i}" for i in range(8)],
             "split": ["train"] * 6 + ["test"] * 2,
+            "timepoint": ["baseline"] * 8,
         },
         index=samples,
     )
@@ -62,15 +64,16 @@ feature_map.to_csv(args.output / "synthetic-feature-map.csv", index=False)
 # Scales are explicitly simulated log2 assay intensities. Correlate each declared
 # one-to-one synthetic feature pair across matched specimens, without concatenation.
 correlations = []
+numerical_events = []
 for row in feature_map.itertuples():
     correlations.append(
         {
             "gene": row.transcript,
             "protein": row.protein,
-            "pearson_r": float(
-                np.corrcoef(
-                    aligned["transcript"].loc[row.transcript], aligned["protein"].loc[row.protein]
-                )[0, 1]
+            "pearson_r": stable_pearson(
+                aligned["transcript"].loc[row.transcript],
+                aligned["protein"].loc[row.protein],
+                events=numerical_events,
             ),
         }
     )
@@ -88,6 +91,16 @@ report.update(
     {
         "analysis": "Descriptive matched-feature Pearson correlation of simulated log2 intensities",
         "integration_model": "NOT_RUN",
+        "analysis_status": "EXECUTED",
+        "numerical_evidence": {
+            "status": "PASS",
+            "events": numerical_events,
+            "method": "shared stable_pearson; scoped numerical failure guards",
+        },
+        "timepoints": [
+            {"specimen_id": specimen, "timepoint": "baseline"}
+            for specimen in report["matched_specimens"]
+        ],
         "limitations": report["limitations"]
         + [
             "Shared synthetic latent trend intentionally produces concordance",

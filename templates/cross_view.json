@@ -1,0 +1,12 @@
+{
+  "template_only": true,
+  "description": "Contract illustration for perfectly aligned [1,2,3] vectors; not a recorded execution.",
+  "report_version": 2,
+  "analysis_status": "EXECUTED",
+  "inference_status": "NOT_RUN",
+  "prediction_status": "NOT_RUN",
+  "correlations": [{"left": "example", "right": "example", "pearson_r": 1}],
+  "audit": {"matched_specimen_count": 3, "matched_subject_count": 3, "partitions": {}, "specimens_per_subject": [], "warnings": []},
+  "normalization": {},
+  "numerical_evidence": {"status": "PASS", "events": [], "method": "Illustrative template; replace with actual execution evidence"}
+}

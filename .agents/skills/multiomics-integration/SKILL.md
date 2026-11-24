@@ -18,6 +18,11 @@ apply to FULL execution when relevant. Essential safeguards apply in both modes.
 Require each modality's feature-by-sample table, assay/units, organism, specimen/timepoint and subject mapping, reference/feature namespaces, QC/missingness information, batch/covariates and research objective. Identify which labels are outcomes, which are covariates, and whether repeated specimens belong to one subject. Verify access permits any planned transfer; keep patient data local unless authorized. Estimate matrix memory and sample-to-feature ratio before selecting a model.
 
 ## Method selection
+In QUICK and FULL, reject missing/blank declarations, duplicate metadata columns,
+ambiguous identifiers and empty feature maps through controlled validation errors.
+Do not coerce or trim identifiers to manufacture matches. Numerical success
+requires reliable intermediate calculations, not merely finite final output.
+
 Choose the method to answer the question, not to maximize the number of assays in a plot. For shared unsupervised variation, consider MOFA-family factor models when their likelihood and missingness handling fit the data. For patient similarity/fusion, similarity network fusion requires defensible modality-specific distances and stable neighborhoods. Multiblock approaches require justified scaling and evaluation. For supervised prediction, use a simple regularized baseline and grouped nested evaluation before more complex models. Tiny fixtures support readiness and descriptive association only. Unmatched cohorts cannot be treated as paired specimens; cohort-level integration needs a distinct explicitly justified design.
 
 ## Procedure
@@ -40,6 +45,16 @@ python examples/multiomics/run.py --output artifacts/multiomics
 The synthetic example exercises overlap, identity/leakage checks and a limited descriptive computation. Inspect its report for what was actually integrated; do not label it a validated MOFA/SNF or predictive workflow unless that method was executed separately.
 
 ## Validation, stops and outputs
+The cross-view baseline requires a declared complete intended RNA count universe
+before selecting feature pairs; it records library denominators and their source.
+CPM does not universally remove compositional bias. Mapped constant or unreliable
+near-constant features stop the entire analysis; unmapped constant features do
+not invalidate valid pairs. Inspect numerical evidence, matched specimen/subject
+counts, repeat counts, timepoints and contributing partitions. Repeated specimens
+are not independent subjects. All partitions enter this descriptive computation;
+no held-out prediction is performed. Inspecting held-out data can compromise
+future confirmatory evaluation. See the input contract for numerical limits.
+
 Stop paired integration for unresolved specimen mismatches, duplicate mapping keys or incompatible timepoints. Block predictive claims for patient overlap across train/test or preprocessing leakage until grouped evaluation is rerun. Output a reconciliation/exclusion table, feature-mapping audit, QC/scaling decisions, split manifest, results and exact run provenance. A report must retain unintegrated modalities and limitations rather than implying complete coverage.
 
 ## Examples, evaluation and definition of done

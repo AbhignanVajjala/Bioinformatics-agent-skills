@@ -1,5 +1,40 @@
 # Development progress
 
+## Phase 8 consolidated scientific corrections — 2026-11-24
+
+Implementation **f2d2ba7** passed hosted **557 Python tests/six documented skips**,
+all targeted regressions and fresh Windows/Linux installations including native
+metabolic examples. Pinned R passed **18 original +125 Phase 7 checks**, followed
+by **five genuine cross-skill integration tests with zero skips**. Hosted
+deterministic cases: **7 PASS/5 NOT_RUN**. Final documentation-head CI,
+publication and archive verification are recorded in
+[PR #8](https://github.com/AbhignanVajjala/Bioinformatics-agent-skills/pull/8).
+Local native-runtime failures remain separately recorded below.
+
+Version 0.2.6 corrects checked pseudobulk arithmetic/unit reporting, ORA input
+identity and prespecified eligibility/BH accounting, bounded format parsing and
+source-specific public metadata response validation/provenance. Four dated
+maintainer self-reviews preserve supplied original observations separately
+from newly executed tests/live checks, with explicit AI assistance and no claim
+of independent peer review. Shared parser/identity helpers and public expanded
+imports preserve the seven-validator and 17-skill interfaces and prior fixes.
+
+Targeted regressions: 209 passed/two native-R skips. Four synthetic examples,
+103 evidence hashes, separate three-provider live checks, dry-run plans and
+schema/lint/skill/catalog/mode checks executed. Full Python and exact hosted
+counts, native runtime blockers, failed attempts and commands are recorded in
+[implementation status](implementation-status.md). The original 18 and Phase 7
+125 native R checks remain unchanged; a separate five-case Python integration
+step requires actual R count import and DE-to-ORA lineage in the pinned R job.
+No new agent sessions, benchmark expansion or extra scientific methods.
+
+The single universal ZIP, version/citation/catalog and SHA256SUMS are updated.
+Publication is explicitly authorized but gated on all hosted checks passing;
+final commit/PR/merge and archive verification are recorded in implementation
+status. Independent review, real-study validation, advanced methods and full
+format/provider coverage remain outstanding. Historical benchmarks and original
+private maintainer artifacts are preserved, not republished or regraded.
+
 ## Phase 7 bulk RNA-seq scientific validation — 2026-11-24
 
 Canonical implementation 4450e6d passed **18 original +125 new R checks**;

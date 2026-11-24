@@ -274,7 +274,7 @@ def test_universal_extracts_installs_and_first_use_executes(packager, tmp_path):
     probe = run(
         "-c",
         "import bioskills, importlib, json; from pathlib import Path; "
-        "names=['science','validators','expanded','retrieval','domain_workflows']; "
+        "names=['science','validators','expanded','retrieval','domain_workflows','inputs','aggregation','enrichment','formats']; "
         "print(json.dumps([str(Path(bioskills.__file__).resolve())] + "
         "[str(Path(importlib.import_module('bioskills.'+n).__file__).resolve()) for n in names]))",
     )

@@ -21,12 +21,17 @@ Raw counts, cell-to-specimen/donor/timepoint/condition/population mapping, organ
 1. Require gene-by-cell raw counts and an exact cell metadata table with donor,
    specimen, condition, timepoint, batch and cell population. Verify upstream
    cell QC, doublets, ambient RNA and annotation quality before aggregation.
-2. Preserve original cell records. Sum raw counts by specimen and cell population
-   using the implemented baseline. Record cell totals and missing donor-condition
-   combinations. Keep technical libraries distinguishable from biological subjects.
+2. Preserve original cell records and exact string identities. Use checked exact
+   integer sums by specimen and population, reject unsupported source or aggregate
+   values, and verify gene/library conservation before export. Distinguish generic
+   int64 aggregation limits from the stricter downstream R input limits.
+   Record cells, specimens and independent subjects separately. Only paired designs
+   imply expected donor-condition combinations; unpaired absence is structural.
 3. Evaluate independent subjects and paired structure per population. Validate the
    design matrix and residual degrees of freedom before testing. Missing replication
    blocks population inference and can permit labeled descriptive aggregation.
+   Check declared batch-condition confounding and report each blocked population's
+   reasons. Require a Boolean paired flag; readiness is not design approval.
 4. For differential state, use a prespecified donor-level edgeR or muscat workflow.
    Define filtering, contrasts, gene/cell-population testing families and FDR.
    Aggregation alone leaves differential-state modeling NOT_RUN.

@@ -1,0 +1,139 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Scoped public metadata retrieval; transport is separate from validation",
+  "type": "object",
+  "required": [
+    "source",
+    "identifier",
+    "page",
+    "download_status",
+    "transport_status",
+    "validation_status"
+  ],
+  "properties": {
+    "source": {
+      "enum": [
+        "geo",
+        "sra",
+        "ensembl"
+      ]
+    },
+    "identifier": {
+      "type": "string",
+      "minLength": 1
+    },
+    "page": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "download_status": {
+      "enum": [
+        "NOT_RUN",
+        "METADATA_RETRIEVED",
+        "NO_MATCHING_RECORDS",
+        "EMPTY_PAGE",
+        "PARTIAL_UNVERIFIED",
+        "MALFORMED_RESPONSE",
+        "IDENTITY_MISMATCH",
+        "SERVICE_ERROR",
+        "NETWORK_ERROR"
+      ]
+    },
+    "transport_status": {
+      "enum": [
+        "NOT_RUN",
+        "COMPLETED",
+        "PARTIAL",
+        "FAILED"
+      ]
+    },
+    "validation_status": {
+      "enum": [
+        "NOT_RUN",
+        "VERIFIED_SCOPE",
+        "VALID_NO_RECORDS",
+        "FAIL",
+        "UNVERIFIED"
+      ]
+    },
+    "requests": {
+      "type": "array",
+      "maxItems": 2,
+      "items": {
+        "type": "object",
+        "required": [
+          "url",
+          "bytes",
+          "sha256",
+          "body_base64",
+          "transport_kind"
+        ],
+        "properties": {
+          "bytes": {
+            "type": "integer",
+            "maximum": 1048576,
+            "minimum": 0
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "body_base64": {
+            "type": "string",
+            "contentEncoding": "base64"
+          }
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "download_status": {
+            "const": "METADATA_RETRIEVED"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "relationship_evidence",
+          "requests",
+          "transport_kind"
+        ],
+        "properties": {
+          "validation_status": {
+            "const": "VERIFIED_SCOPE"
+          },
+          "relationship_evidence": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": [
+                "state",
+                "relationship"
+              ],
+              "properties": {
+                "state": {
+                  "const": "VERIFIED"
+                },
+                "relationship": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          },
+          "transport_status": {
+            "const": "COMPLETED"
+          },
+          "requests": {
+            "type": "array",
+            "minItems": 1
+          }
+        }
+      }
+    }
+  ]
+}

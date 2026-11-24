@@ -10,7 +10,7 @@ import hashlib
 import importlib.metadata
 import json
 from collections.abc import Mapping
-from numbers import Real
+from numbers import Real, Integral
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
 import platform
@@ -68,7 +68,7 @@ def validate_mapping(mapping, matrix, *, timepoint=False):
     require(mapping.specimen_id.is_unique, "duplicate_specimen", "Duplicate specimen.")
 
 
-def validate_matrix(matrix):
+def validate_axes(matrix):
     require(isinstance(matrix, pd.DataFrame), "matrix_type", "Matrix must be a DataFrame.")
     require(not matrix.empty, "empty_matrix", "Supply features by samples.")
     require(
@@ -76,6 +76,10 @@ def validate_matrix(matrix):
     )
     validate_labels(matrix.index)
     validate_labels(matrix.columns)
+
+
+def validate_matrix(matrix):
+    validate_axes(matrix)
     require(
         not np.iscomplexobj(matrix.to_numpy()),
         "numeric_matrix",
@@ -90,6 +94,47 @@ def validate_matrix(matrix):
         "nonfinite",
         "Resolve missing/nonfinite values before this demonstration.",
     )
+    return values
+
+
+def exact_count_values(counts, *, maximum=2**63 - 1):
+    """Python-integer count arithmetic; wide aggregation never passes through float.
+
+    Integer/text/Decimal sources support the declared bound. Float inputs must
+    already be exact integers <=2^53-1; upstream rounding cannot be authenticated.
+    """
+    validate_axes(counts)
+    reject_boolean_counts(counts)
+    values = np.empty(counts.shape, dtype=object)
+    for index, value in np.ndenumerate(counts.to_numpy()):
+        if isinstance(value, Integral):
+            number = int(value)
+        elif isinstance(value, (str, Decimal)):
+            try:
+                decimal = Decimal(value)
+            except InvalidOperation as error:
+                raise ScientificValidationError("count_values: Invalid count token.") from error
+            require(
+                decimal.is_finite()
+                and 0 <= decimal <= maximum
+                and decimal == decimal.to_integral_value(),
+                "count_values",
+                "Exact nonnegative integer counts within the declared scope required.",
+            )
+            number = int(decimal)
+        elif isinstance(value, Real):
+            require(
+                np.isfinite(value)
+                and 0 <= value <= min(maximum, 2**53 - 1)
+                and value == np.floor(value),
+                "count_values",
+                "Float counts must be integral and within exact binary64 scope.",
+            )
+            number = int(value)
+        else:
+            raise ScientificValidationError("count_values: Unsupported count type.")
+        require(0 <= number <= maximum, "count_range", "Count exceeds supported integer range.")
+        values[index] = number
     return values
 
 

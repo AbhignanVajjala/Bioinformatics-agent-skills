@@ -41,6 +41,10 @@ DOCUMENTS = (
     "docs/maintainer-reviews/2026-11-24-metabolic-model-review.md",
     "docs/maintainer-reviews/2026-11-24-multiomics-review.md",
     "docs/maintainer-reviews/2026-11-24-bulk-rnaseq-review.md",
+    "docs/maintainer-reviews/2026-11-24-pseudobulk-review.md",
+    "docs/maintainer-reviews/2026-11-24-enrichment-review.md",
+    "docs/maintainer-reviews/2026-11-24-file-formats-review.md",
+    "docs/maintainer-reviews/2026-11-24-public-metadata-review.md",
 )
 BINARY_EXTENSIONS = {".png", ".jpg", ".jpeg", ".gif", ".pdf", ".npy", ".npz"}
 RESOURCE_EXTENSIONS = {
@@ -78,6 +82,10 @@ REQUIRED_RESOURCES = (
     "src/bioskills/validators.py",
     "src/bioskills/domain_workflows.py",
     "src/bioskills/expanded.py",
+    "src/bioskills/aggregation.py",
+    "src/bioskills/enrichment.py",
+    "src/bioskills/formats.py",
+    "src/bioskills/inputs.py",
     "src/bioskills/retrieval.py",
     "examples/expanded/run.py",
     "recipes/rnaseq/run.R",

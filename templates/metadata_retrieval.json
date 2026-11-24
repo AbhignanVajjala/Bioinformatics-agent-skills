@@ -1,0 +1,9 @@
+{
+  "template_only": true,
+  "source": "ensembl",
+  "identifier": "ENSG00000141510",
+  "page": 0,
+  "download_status": "NOT_RUN",
+  "transport_status": "NOT_RUN",
+  "validation_status": "NOT_RUN"
+}

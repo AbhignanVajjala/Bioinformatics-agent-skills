@@ -11,6 +11,7 @@ import platform
 
 import numpy as np
 import pandas as pd
+from bioskills.inputs import parse_table_text, require_text, strict_json
 
 from bioskills.domain_workflows import check_fba_status
 from bioskills.science import (
@@ -20,7 +21,6 @@ from bioskills.science import (
     sha256,
     validate_matrix,
     validate_metadata,
-    validate_labels,
 )
 
 
@@ -146,8 +146,12 @@ def check_leakage(metadata):
 
 
 def check_enrichment_background(data, *, organism, reference, multiple_testing):
+    require_text(organism, "organism")
+    require_text(reference, "reference")
     require(
-        bool(organism) and bool(reference), "context", "Organism and annotation release required."
+        isinstance(data, dict) and {"selected", "tested", "mappings"} <= data.keys(),
+        "structure",
+        "Selected, tested and mappings fields required.",
     )
     selected, tested, mappings = data["selected"], data["tested"], data["mappings"]
     require(
@@ -174,6 +178,16 @@ def check_enrichment_background(data, *, organism, reference, multiple_testing):
         "multiplicity",
         "This workflow requires BH across tested pathways.",
     )
+    require(bool(mappings), "mapping", "Mapping records required.")
+    for record in mappings:
+        require(
+            isinstance(record, dict)
+            and {"source", "target", "organism", "reference"} <= record.keys(),
+            "mapping",
+            "Complete mapping record required.",
+        )
+        for field in ("source", "target", "organism", "reference"):
+            require_text(record[field], "mapping")
     mapping = pd.DataFrame(mappings)
     require(
         {"source", "target", "organism", "reference"} <= set(mapping),
@@ -215,25 +229,7 @@ def check_enrichment_background(data, *, organism, reference, multiple_testing):
 
 def read_table(path):
     delimiter = "\t" if path.suffix.lower() in {".tsv", ".txt"} else ","
-    with path.open(encoding="utf-8", newline="") as file:
-        rows = list(csv.reader(file, delimiter=delimiter, strict=True))
-    require(bool(rows) and len(rows[0]) >= 2, "table_structure", "Header and data fields required.")
-    header = rows[0]
-    if len(set(header)) != len(header):
-        raise ScientificValidationError("duplicate_ids: Duplicate input header.")
-    require(
-        len(rows) > 1 and all(len(row) == len(header) for row in rows[1:]),
-        "table_structure",
-        "Every record must have exactly the header field count.",
-    )
-    # Parse identities as exact text, including numeric-looking and literal NA IDs.
-    frame = pd.DataFrame(
-        [row[1:] for row in rows[1:]], columns=header[1:], index=[row[0] for row in rows[1:]]
-    )
-    require(frame.index.is_unique, "duplicate_ids", "Duplicate input row identifiers.")
-    validate_labels(frame.index)
-    validate_labels(frame.columns)
-    return frame
+    return parse_table_text(path.read_text(encoding="utf-8"), delimiter)
 
 
 def evaluate(name, input_path, config, metadata_path=None):
@@ -279,7 +275,7 @@ def evaluate(name, input_path, config, metadata_path=None):
 
             result = check_fba_status(model, solve_model(model))
         elif name == "check_enrichment_background":
-            result = check_enrichment_background(json.loads(files["input"].read_bytes()), **config)
+            result = check_enrichment_background(strict_json(files["input"].read_bytes()), **config)
         else:
             table = read_table(files["input"])
             if name == "check_counts":
@@ -337,7 +333,7 @@ def main(argv=None):
     ):
         parser.error("Output must be a new path distinct from every input.")
     try:
-        config = json.loads(args.config.read_bytes()) if args.config else {}
+        config = strict_json(args.config.read_bytes()) if args.config else {}
     except (OSError, ValueError):
         config = None
     report, code = evaluate(args.validator, args.input, config, args.metadata)

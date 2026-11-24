@@ -21,7 +21,13 @@ def main():
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
     print(result["download_status"])
+    return (
+        0
+        if result["download_status"]
+        in {"NOT_RUN", "METADATA_RETRIEVED", "NO_MATCHING_RECORDS", "EMPTY_PAGE"}
+        else 2
+    )
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

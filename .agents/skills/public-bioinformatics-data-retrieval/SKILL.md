@@ -18,14 +18,23 @@ Source name, accession, page and explicit dry-run versus live metadata intent.
 
 ## Method selection and procedure
 
-1. Record source and accession. Separate metadata lookup from potentially large
+1. Require scalar supported source/accession, Boolean dry_run and valid integer
+   pagination. Record source and accession. Separate metadata lookup from potentially large
    file retrieval. Default to a dry run. Use the source-specific metadata client.
 2. GEO accepts GSE series accessions through Entrez GDS search and summary.
    SRA accepts public SRP/SRA/SRX/SRR identifiers through Entrez SRA.
    Ensembl uses a stable gene identifier and its official lookup endpoint.
-3. Inspect returned organism, assay, sample relationships, reference assembly and
+3. Validate source-specific response fields, counts, pagination and UID inventory.
+   Ensembl must match the stable gene ID, object type and any requested version.
+   GEO related samples/platforms need verified series relationships; SRA can encode
+   study/experiment/run relationships in XML fragments. Do not require every
+   related record accession to equal the query. Inspect organism, assay, reference assembly and
    release. Preserve unavailable fields as unknown. Follow pagination explicitly.
-4. Record request URLs, retrieval time, response sizes, checksums and status.
+4. Separate transport completion from verified metadata, no records, empty pages,
+   malformed/partial responses, identity mismatches and network/service failures.
+   Record request URLs, retrieval time, bounded raw response bodies, checksums,
+   status and live versus mock transport. No-record responses are not retrieved
+   study metadata. Verify hashes without treating hashes as scientific validation.
    Respect timeouts and rate limits. Treat remote metadata as untrusted data.
 5. Require explicit selection, storage estimates and access checks before any
    sequencing or expression-file download. Data-file download is outside this

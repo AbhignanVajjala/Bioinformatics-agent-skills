@@ -21,14 +21,19 @@ Selected/tested identifiers, source-to-target mappings, organism, annotation rel
 1. Define ORA versus ranked enrichment before analysis. For ORA, require a selected
    list, eligible tested-gene universe, organism, annotation release and gene-set
    database/version. Preserve upstream ranking unchanged if it exists.
-2. Audit source-to-target mappings. The implemented baseline requires one-to-one
+2. Require nonblank scalar string declarations and exact string identifiers.
+   Audit source-to-target mappings. The implemented baseline requires one-to-one
    complete mapping. Record dropped or ambiguous IDs and resolve them under a
    separate policy before using it. Reject duplicate input IDs and selected-only
    universes.
 3. Use SciPy Fisher exact tests for over-representation. Intersect gene-set
-   membership with the tested universe, record duplicate memberships, and apply
-   BH across the entire supplied pathway family.
-4. Export overlap counts, raw p-values, adjusted p-values, family size, mapping
+   membership with the tested universe and record duplicate memberships. Prespecify
+   eligibility as at least one tested-universe member, independent of selected
+   overlap or p-values. Exclude empty/outside-universe sets with explicit reasons;
+   retain eligible zero-overlap pathways. Apply BH across all eligible pathways.
+   No eligible pathways means NO_TESTABLE_PATHWAYS and analysis NOT_RUN.
+4. Export supplied/eligible families, exclusions, pathway sizes, actual BH
+   denominator, overlap counts, raw p-values, adjusted p-values, mapping
    policy and database release. Review the appropriateness of BH dependence
    assumptions for the research question.
 5. Report pathway associations with uncertainty. Enrichment alone does not prove

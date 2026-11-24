@@ -9,3 +9,7 @@ Use the official hts-specs for complex binary and coordinate-sensitive work. The
 Implemented scope and executed test status are recorded in the repository's
 Phase 3 development documentation. Successful tests do not establish clinical
 validity or general agent behavior.
+
+## Phase 8 failure interpretation
+
+Malformed gzip/UTF-8/XML reject through scientific validation. Supply format_hint when coordinates and numeric tables are ambiguous. BED zero-length insertion warnings and XML_STRUCTURE_ONLY/OPTIONAL parser results are limited triage.

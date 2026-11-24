@@ -137,10 +137,16 @@ bh_audit <- function(p, adjusted) {
     family <- !is.na(adjusted)
     if (any(family & !is.finite(p))) stop("Adjusted values require corresponding finite p-values")
     # Native independent filtering determines the DESeq2 adjustment family.
-    expected <- p.adjust(p[family], method = "BH")
+    raw <- p[family]
+    ordering <- order(raw)
+    m <- length(raw)
+    expected <- numeric(m)
+    # Independent ordered/monotone BH implementation, not the package's p.adjust.
+    if (m) expected[ordering] <- pmin(1, rev(cummin(rev(raw[ordering] * m / seq_len(m)))))
     if (any(!is.finite(adjusted[family])) || any(abs(expected - adjusted[family]) > 1e-12))
         stop("Independent BH verification failed")
     list(finite_p_values = sum(is.finite(p)), adjusted_family = sum(family),
          missing_p_values = sum(is.na(p)), missing_adjusted = sum(is.na(adjusted)),
-         status = if (any(family)) "PASS" else "NOT_RUN", tolerance = 1e-12)
+         status = if (any(family)) "PASS" else "NOT_RUN", tolerance = 1e-12,
+         comparison = "independent ordered monotone BH on the native adjustment family")
 }

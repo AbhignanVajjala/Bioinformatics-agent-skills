@@ -7,7 +7,9 @@ out <- args[5]
 if (dir.exists(out) && length(list.files(out, all.files = TRUE, no.. = TRUE))) stop("Output directory must be empty")
 dir.create(out, recursive = TRUE, showWarnings = FALSE)
 status <- list(analysis_status = "NOT_RUN", status = "NOT_RUN", method = method,
-    stage = "configuration", model_fit_status = "NOT_RUN")
+    stage = "configuration", model_fit_status = "NOT_RUN", command = commandArgs(),
+    started_at = format(Sys.time(), "%Y-%m-%dT%H:%M:%OS6Z", tz = "UTC"),
+    source_md5 = as.list(tools::md5sum(c("recipes/rnaseq/run.R", "recipes/rnaseq/validation.R", "recipes/rnaseq/environment.json"))))
 diagnostics <- list()
 record_diagnostic <- function(condition, kind) {
     diagnostics[[length(diagnostics) + 1L]] <<- list(stage = status$stage, kind = kind,
@@ -185,17 +187,19 @@ tryCatch(withCallingHandlers({
     status$status <- "PASS"
     status$stage <- "complete"
     status$diagnostics <- diagnostics
+    status$finished_at <- format(Sys.time(), "%Y-%m-%dT%H:%M:%OS6Z", tz = "UTC")
     writeLines(capture.output(sessionInfo()), file.path(out, "sessionInfo.txt"))
-    jsonlite::write_json(status, file.path(out, "analysis-status.json"), auto_unbox = TRUE, pretty = TRUE)
+    jsonlite::write_json(status, file.path(out, "analysis-status.json"), auto_unbox = TRUE, pretty = TRUE, digits = NA)
 }, warning = function(w) record_diagnostic(w, "warning"), message = function(m) record_diagnostic(m, "message")), error = function(e) {
     status$status <- "FAIL"
     if (status$model_fit_status != "NOT_RUN") status$analysis_status <- "FAILED"
     if (status$model_fit_status == "STARTED") status$model_fit_status <- "FAILED"
     status$reason <- conditionMessage(e)
+    status$finished_at <- format(Sys.time(), "%Y-%m-%dT%H:%M:%OS6Z", tz = "UTC")
     status$diagnostics <- diagnostics
     status$emitted_artifacts <- list.files(out)
     status$inputs_md5 <- as.list(tools::md5sum(args[2:4]))
-    jsonlite::write_json(status, file.path(out, "analysis-status.json"), auto_unbox = TRUE, pretty = TRUE)
+    jsonlite::write_json(status, file.path(out, "analysis-status.json"), auto_unbox = TRUE, pretty = TRUE, digits = NA)
     message(conditionMessage(e))
     quit(status = 1)
 })

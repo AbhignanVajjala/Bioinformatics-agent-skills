@@ -2,6 +2,14 @@
 
 ## Phase 7 bulk RNA-seq scientific validation — 2026-11-24
 
+Canonical implementation 4450e6d passed **18 original +125 new R checks**;
+Python passed **390/four platform skips**, with targeted RNA/multi-omics/metabolic
+checks and isolated Windows/Linux installs passing. Six reversed contrasts had
+zero observed effect/p discrepancies; native local-dispersion fallback was
+recorded correctly. Earlier three DESeq2 reversal failures remain documented.
+Final BH/precision/provenance follow-ups require green final-head CI, recorded
+with publication evidence in [PR #7](https://github.com/AbhignanVajjala/Bioinformatics-agent-skills/pull/7).
+
 Version 0.2.5 corrects R config/TSV parsing and categorical identifier corruption,
 adds controlled Python metadata/Boolean/R-readiness checks, and reports native
 fitting/normalization diagnostics and post-filter failures honestly. Explicit

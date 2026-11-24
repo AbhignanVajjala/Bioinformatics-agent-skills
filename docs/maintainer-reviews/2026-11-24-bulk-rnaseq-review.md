@@ -125,6 +125,11 @@ model status, stage, reason, diagnostics and any emitted artifacts. No partial
 artifacts imply successful execution. Legitimate missing p/padj values remain NA;
 BH is checked over the native adjustment family, with missingness counts and
 DESeq2 filter metadata. Readiness PASS never implies a fitted model or biology.
+The current BH audit explicitly computes sorted, monotone adjusted values rather
+than calling the same p.adjust routine as the fitted packages. It checks numeric
+agreement, not the study-wide appropriateness of the family or filter policy.
+R status/summary JSON preserves full numeric precision (digits=NA); commands,
+actual UTC start/end times, source/input hashes and versions are recorded.
 
 Primary references: [R table import semantics](https://stat.ethz.ch/R-manual/R-patched/library/utils/html/read.table.html),
 [DESeq2 documentation](https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html),
@@ -149,11 +154,26 @@ types/duplicates, TSV structure, identity round trips, integer limits, BH/NA
 semantics, Wald p-values, all three reversed contrasts, alignment, filtering,
 normalization failure, covariate reporting and real native fit-failure statuses.
 
+Supported canonical-orientation execution at source
+4450e6d86d7b0b6086c9c4df73134deb8979b065 passed the preserved 18 R checks and
+all **125 new checks**, zero failures, in
+[R run 45411668477](https://github.com/AbhignanVajjala/Bioinformatics-agent-skills/actions/runs/45411668477).
+The downloaded artifact SHA-256 is
+5bf3a58984be7fcd41b1f1f33d0ea13a7f77ba7f340d7b2894c9d1fe9a499cc3.
+Its genuine new observations recovered all 50 planted genes in every design;
+DESeq2 false positives were 7/7/6 and edgeR 2/2/2. All six reversal comparisons
+had zero log2FC and p-value discrepancies. All three requested parametric DESeq2
+fits recorded native local fallback. These are new synthetic execution observations,
+not reconstructed original maintainer files or independent external validation.
+Final follow-ups strengthen the independent BH reference and JSON precision;
+[PR #7](https://github.com/AbhignanVajjala/Bioinformatics-agent-skills/pull/7)
+retains final-head CI, artifacts and publication status for those changes.
+
 Local Python uses the existing 3.12.10 virtual environment, NumPy 2.2.6, pandas
 2.2.3, pytest 8.3.5 and Ruff 0.11.13. Rscript is not installed on the local PATH;
 native R validation is NOT_RUN locally and must pass in pinned hosted CI before
 merge. See [implementation status](https://github.com/AbhignanVajjala/Bioinformatics-agent-skills/blob/main/docs/implementation-status.md)
-and the eventual PR for genuine counts, failures, warnings and evidence links.
+and PR #7 for genuine counts, failures, warnings and evidence links.
 No original Codespaces artifact is reconstructed and relabelled as historical.
 
 Independent external methodological review, real-data/power assessment, genuine

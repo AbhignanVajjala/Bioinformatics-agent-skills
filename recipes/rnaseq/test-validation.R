@@ -246,7 +246,7 @@ summary <- list(tests = length(checks), passed = sum(vapply(checks, function(x) 
     failed = sum(vapply(checks, function(x) x$status == "FAIL", logical(1))), checks = checks,
     new_synthetic_observations = observations, software = capture.output(sessionInfo()),
     source_md5 = as.list(tools::md5sum(c("recipes/rnaseq/run.R", "recipes/rnaseq/validation.R", "recipes/rnaseq/test-validation.R"))))
-jsonlite::write_json(summary, file.path(base, "test-summary.json"), auto_unbox = TRUE, pretty = TRUE, null = "null")
+jsonlite::write_json(summary, file.path(base, "test-summary.json"), auto_unbox = TRUE, pretty = TRUE, null = "null", digits = NA)
 print(c(tests = summary$tests, passed = summary$passed, failed = summary$failed))
 if (summary$failed) {
     for (case in checks) if (case$status == "FAIL") message(case$name, ": ", case$reason)

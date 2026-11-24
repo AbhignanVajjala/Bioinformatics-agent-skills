@@ -2,6 +2,28 @@
 
 ## Phase 7 bulk RNA-seq validation and identifier correction — 2026-11-24
 
+Hosted canonical implementation at **4450e6d** passed the original **18 R checks**
+and all **125 new native checks**, zero failures:
+[R/Bioconductor run](https://github.com/AbhignanVajjala/Bioinformatics-agent-skills/actions/runs/45411668477).
+The [Python/installation run](https://github.com/AbhignanVajjala/Bioinformatics-agent-skills/actions/runs/45411668422)
+passed **390 tests/four Windows-only preflight skips**, targeted RNA readiness
+**30**, multi-omics **133**, and metabolic **16**. Native negative metabolic
+controls emitted two expected full-suite warnings and one targeted warning;
+there were no multi-omics overflow warnings. Deterministic cases: **7 PASS /
+5 NOT_RUN**, with no agent inference. Fresh Windows/Linux archive installations
+executed successfully. These hosted successes do not erase local native failures.
+
+Downloaded native artifact hash:
+`5bf3a58984be7fcd41b1f1f33d0ea13a7f77ba7f340d7b2894c9d1fe9a499cc3`.
+All six contrasts now reverse with zero observed effect/p discrepancies.
+All planted true positives (50) and historical false-positive counts (DESeq2
+7/7/6; edgeR 2/2/2) were recovered in this synthetic run. Actual DESeq2 trend
+fitting was local for all three requested parametric fits. Final follow-up adds
+an independent manual BH reference, full-precision JSON and explicit command/time/
+source provenance. Final-head checks remain gated; final results and merge/public
+archive verification are recorded in
+[PR #7](https://github.com/AbhignanVajjala/Bioinformatics-agent-skills/pull/7).
+
 Latest local full Python suite (exact-token checks included): **368 passed,
 11 failed, 14 errors, one symlink skip**, 394 collected. All failures/errors
 remain confined to unavailable native metabolic runtime paths. Current targeted

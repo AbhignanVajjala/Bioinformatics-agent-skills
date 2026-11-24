@@ -49,6 +49,8 @@ metadata.tsv and contrast labels retain exact identities. design.tsv uses an
 explicit sample_id column. The normalization table preserves sample headers and
 its input gene-ID header. Native fit warnings/messages, actual dispersion type,
 normalization factors, ignored covariates and known confounding are auditable.
+Canonical model orientation is independent of contrast direction; reversing the
+requested comparison changes the named contrast/sign, not the fit parameterization.
 Undefined DESeq2 ratio size factors stop rather than auto-switching methods.
 Preflight rejection is NOT_RUN; a started analysis that fails is FAILED; only
 complete verified output is EXECUTED. Readiness is not fitting or validation.

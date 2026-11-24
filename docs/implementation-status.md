@@ -2,6 +2,23 @@
 
 ## Phase 7 bulk RNA-seq validation and identifier correction — 2026-11-24
 
+Latest local full Python suite (exact-token checks included): **368 passed,
+11 failed, 14 errors, one symlink skip**, 394 collected. All failures/errors
+remain confined to unavailable native metabolic runtime paths. Current targeted
+RNA readiness + Phase 6 cross-view checks: **163 passed/two deselected**.
+No local R execution is claimed.
+
+First hosted R run [45410406637](https://github.com/AbhignanVajjala/Bioinformatics-agent-skills/actions/runs/45410406637)
+passed the preserved 18 checks, then the new driver reported **119 PASS/3 FAIL
+of 122**. The three failures were DESeq2 reversal comparisons, with maximum
+log2FC differences 1.25–1.78e-6 and p-value differences up to 2.94e-6. Recorded
+size factors and dispersion methods matched. The implementation now uses one
+canonical fitting orientation and a separate named signed contrast, preserving
+native safeguards and the original 1e-6 assertion. No tolerance was loosened.
+Failed-run evidence is retained, separately from subsequent validations.
+Exact-token follow-up checks reject sub-ulp fractions/underflow before conversion;
+valid integral decimal/exponent representations remain supported.
+
 Baseline: merged Phase 6 `19ae86864c6e331554f7ff66b9c17ea4b14610a7`.
 Branch phase7-rnaseq-validation-correction, release 0.2.5. The R recipe now checks
 configuration grammar/duplicate keys/types, strict TSV widths/headers and exact

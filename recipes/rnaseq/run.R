@@ -36,10 +36,18 @@ tryCatch(withCallingHandlers({
     if (any(replication < 2L)) stop("Absent independent biological replication; minimum does not establish power")
     # Preserve external text in metadata.tsv. Explicit internal coding prevents
     # modeling-package make.names collisions, never merges original identities.
-    model_md <- data.frame(condition = factor(ifelse(md$condition == cfg$reference_level,
-        "reference", "treatment"), levels = c("reference", "treatment")), row.names = md$sample_id)
-    mappings <- list(condition = data.frame(original = c(cfg$reference_level, cfg$treatment_level),
-        model_level = c("reference", "treatment")))
+    # Fit in one canonical orientation independent of requested contrast. Native
+    # refitting with a different reference can introduce small numerical changes.
+    # Reversal should change the contrast, not normalization/dispersion/fitting.
+    condition_levels <- sort(unique(md$condition), method = "radix")
+    condition_codes <- setNames(c("level1", "level2"), condition_levels)
+    treatment_code <- condition_codes[[cfg$treatment_level]]
+    reference_code <- condition_codes[[cfg$reference_level]]
+    contrast_sign <- if (treatment_code == "level2") 1 else -1
+    model_md <- data.frame(condition = factor(unname(condition_codes[md$condition]),
+        levels = c("level1", "level2")), row.names = md$sample_id)
+    mappings <- list(condition = data.frame(original = condition_levels,
+        model_level = c("level1", "level2")))
     used <- "condition"
     if (cfg$design == "paired") {
         pairs <- table(md$subject_id, md$condition)
@@ -116,10 +124,10 @@ tryCatch(withCallingHandlers({
         normalization <- list(requested = "ratio", actual = "median-of-ratios",
             size_factors = as.list(setNames(DESeq2::sizeFactors(dds), md$sample_id)))
         dispersion_fit <- list(requested = "parametric", actual = actual_fit)
-        result_object <- DESeq2::results(dds, contrast = c("condition", "treatment", "reference"), alpha = 0.05)
+        result_object <- DESeq2::results(dds, contrast = c("condition", treatment_code, reference_code), alpha = 0.05)
         result <- as.data.frame(result_object)
-        if (!"condition_treatment_vs_reference" %in% DESeq2::resultsNames(dds)) stop("Named DESeq2 contrast coefficient absent")
-        status$native_contrast_coefficient <- "condition_treatment_vs_reference"
+        if (!"condition_level2_vs_level1" %in% DESeq2::resultsNames(dds)) stop("Named DESeq2 contrast coefficient absent")
+        status$native_contrast_coefficient <- "condition_level2_vs_level1"
         normalized <- DESeq2::counts(dds, normalized = TRUE)
         diagnostic <- data.frame(gene_id = rownames(dds), dispersion = DESeq2::dispersions(dds))
         adjustment_audit <- bh_audit(result$pvalue, result$padj)
@@ -135,7 +143,7 @@ tryCatch(withCallingHandlers({
         y <- edgeR::estimateDisp(y, design)
         fit <- edgeR::glmQLFit(y, design, robust = FALSE)
         contrast <- setNames(rep(0, ncol(design)), colnames(design))
-        contrast[[coefficient]] <- 1
+        contrast[[coefficient]] <- contrast_sign
         status$native_contrast_coefficient <- coefficient
         test <- edgeR::glmQLFTest(fit, contrast = contrast)
         result <- edgeR::topTags(test, n = Inf, sort.by = "none", adjust.method = "BH")$table
@@ -168,6 +176,7 @@ tryCatch(withCallingHandlers({
     write.table(md, file.path(out, "metadata.tsv"), sep = "\t", row.names = FALSE, quote = FALSE)
     status <- c(status, list(design = paste(deparse(formula), collapse = ""), rank = rank, residual_df = residual_df,
         contrast = c(cfg$treatment_level, cfg$reference_level), contrast_coefficient = coefficient,
+        contrast_sign = contrast_sign, fit_orientation = condition_levels,
         aligned_metadata = reordered, retained_genes = sum(keep),
         inputs_md5 = as.list(tools::md5sum(args[2:4])),
         adjustment = "BH", alpha = 0.05, shrinkage = "NOT_RUN", biological_validation = "NOT_RUN",

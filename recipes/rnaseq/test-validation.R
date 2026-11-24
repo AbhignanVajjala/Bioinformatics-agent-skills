@@ -125,6 +125,8 @@ for (method in c("deseq2", "edger")) {
         reverse <- read_result(reversed$output)
         stopifnot(identical(forward[[1]], reverse[[1]]))
         reverse_effect <- number(reverse[[if (method == "deseq2") "log2FoldChange" else "logFC"]])
+        observations[[paste(method, design, sep = "-")]]$max_reversal_log2FC_error <- max(abs(effect + reverse_effect))
+        observations[[paste(method, design, sep = "-")]]$max_reversal_p_error <- max(abs(p - number(reverse[[if (method == "deseq2") "pvalue" else "PValue"]])), na.rm = TRUE)
         stopifnot(max(abs(effect + reverse_effect)) < 1e-6)
         stopifnot(max(abs(p - number(reverse[[if (method == "deseq2") "pvalue" else "PValue"]])), na.rm = TRUE) < 1e-6)
     })

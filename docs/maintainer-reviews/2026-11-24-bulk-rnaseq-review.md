@@ -89,6 +89,21 @@ filtering and dispersion outputs; sample IDs persist in normalized headers.
 Condition coefficients are identified by the named formula term, never assumed
 to occupy the last column. Reversed contrasts remain separately tested.
 
+The first new native R run passed 119 of 122 checks and failed the three DESeq2
+refitted reversal comparisons. Recorded maximum log2FC discrepancies were
+1.2541192839776727e-6 (unpaired), 1.7811446750004567e-6 (paired) and
+1.243911191994851e-6 (batch); maximum p-value discrepancy was 2.934293566014823e-6.
+Both directions used identical size factors and native local dispersion fits.
+This is a new observation of small parameterization-dependent refitting differences,
+not evidence of general statistical invalidity. The correction fits in a stable
+canonical condition orientation and changes the named contrast/sign when the
+requested direction reverses. Native fitting safeguards and the original 1e-6
+regression tolerance are retained, rather than loosening the check or removing
+native regularization. Original input labels and requested direction remain
+explicit in the report. Failed-run evidence is preserved in hosted run 45410406637;
+its artifact ZIP SHA-256 is
+6fa53a9d35c6ed3f9015e97b85287f278b9a48ead13034f0b4683d971544924e.
+
 Post-filter library totals are checked before normalization. DESeq2 keeps ratio
 size factors and native parametric fitting with automatic local fallback; no
 alternative normalization is silently substituted. Requested/actual dispersion,
